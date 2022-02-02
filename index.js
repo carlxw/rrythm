@@ -4,7 +4,7 @@ const play = require("./commands/play.js");
 const disconnect = require("./commands/disconnect.js");
 
 const client = new Client({
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES]
 });
 
 client.on("ready", () => {
@@ -18,7 +18,7 @@ client.on("messageCreate", async message => {
     const command = args.shift().toLowerCase();
 
     if (command === "play" || command === "p") {
-        play(message);
+        play(message, args);
     } else if (command === "disconnect" || command === "dc") {
         disconnect(message);
     }
