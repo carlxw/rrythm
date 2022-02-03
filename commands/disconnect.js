@@ -7,5 +7,6 @@ module.exports = disonnect = (message, client, connection, player) => {
         connection.destroy();
         player.stop();
         message.channel.send("📭 **Successfully disconnected**");
+        return [null, null];
     }
 }

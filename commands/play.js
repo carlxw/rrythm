@@ -11,12 +11,12 @@ module.exports = play = (message, args, client) => {
     const argument = format(args);
     if (!argument) {
         message.channel.send("❌ **There is nothing to play**");
-        return null;
+        return [null, null];
     }
     // Not connected to voice channel
     else if (!message.member.voice.channel) {
         message.channel.send("❌ **You have to be in a voice channel to use this command.**");
-        return null;
+        return [null, null];
     }
     // Run, join voice channel
     else {

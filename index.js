@@ -7,6 +7,8 @@ const config = require("./config.json");
 const play = require("./commands/play.js");
 const disconnect = require("./commands/disconnect.js");
 const destroy = require("./commands/destroy.js");
+const pause = require("./commands/pause.js");
+const unpause = require("./commands/unpause.js");
 
 // Voice player
 let connection;
@@ -37,13 +39,20 @@ client.on("messageCreate", async message => {
 
     // Command handling
     if (command === "play" || command === "p") {
-        [connection, player] = play(message, args, client);
+        if (!connection && !player) { // No connection
+            [connection, player] = play(message, args, client);
+        } else { // Unpause 
+            unpause(message, client, connection, player);
+        }
     } else if (command === "disconnect" || command === "dc") {
-        disconnect(message, client, connection, player);
+        [connection, player] = disconnect(message, client, connection, player);
     } else if (command === "destroy" || command === "d") {
         destroy(message);
+    } else if (command === "pause") {
+        pause(message, client, connection, player);
     }
 });
+
 
 // Activate bot
 client.login(config.token);
