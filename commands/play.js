@@ -6,7 +6,7 @@ let connection;
 /**
  * @return voice connection
  */
-module.earrports = play = (message, args) => {
+module.exports = play = (message, args) => {
     // No second argument (link, search keyword)
     if (!args[0]) {
         message.channel.send("❌ **There is nothing to play**");
