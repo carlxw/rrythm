@@ -15,9 +15,9 @@ let connection = null;
 // Initialize bot
 const client = new Client({
     intents: [
+        Intents.FLAGS.GUILD_VOICE_STATES,
         Intents.FLAGS.GUILDS, 
-        Intents.FLAGS.GUILD_MESSAGES, 
-        Intents.FLAGS.GUILD_VOICE_STATES
+        Intents.FLAGS.GUILD_MESSAGES
     ]
 });
 
@@ -37,7 +37,7 @@ client.on("messageCreate", async message => {
 
     // Command handling
     if (command === "play" || command === "p") {
-        connection = await play(message, args);
+        connection = await play(message, args, client);
     } else if (command === "disconnect" || command === "dc") {
         await disconnect(message, client, connection);
         connection = null;

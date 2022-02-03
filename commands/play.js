@@ -6,7 +6,7 @@ let connection;
 /**
  * @return voice connection
  */
-module.exports = play = (message, args) => {
+module.exports = play = (message, args, client) => {
     // No second argument (link, search keyword)
     const argument = format(args);
     if (!argument) {
@@ -26,13 +26,15 @@ module.exports = play = (message, args) => {
         connection = Discord.joinVoiceChannel({
             channelId: message.member.voice.channel.id,
             guildId: message.guild.id,
-            adapterCreator: message.guild.voiceAdapterCreator
+            adapterCreator: message.guild.voiceAdapterCreator,
+            selfMute: false,
+            selfDeaf: false
         });
         const player = Discord.createAudioPlayer();
-        const resource = Discord.createAudioResource("https://discord.com/channels/938100003224829952/938100003677810728/938885655763750994");
+        const resource = Discord.createAudioResource("./music.mp3");
         
-        player.play(resource);
         connection.subscribe(player);
+        player.play(resource);
         return connection;
     }
 }
