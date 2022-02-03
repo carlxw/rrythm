@@ -6,18 +6,23 @@ const config = require("./config.json");
 // Import from ./commands/.js
 const play = require("./commands/play.js");
 const disconnect = require("./commands/disconnect.js");
+const destroy = require("./commands/destroy.js");
 
 // Voice connection
 let connection = null;
 
 // Initialize bot
 const client = new Client({
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES]
+    intents: [
+        Intents.FLAGS.GUILDS, 
+        Intents.FLAGS.GUILD_MESSAGES, 
+        Intents.FLAGS.GUILD_VOICE_STATES
+    ]
 });
 
 // Bot active
 client.on("ready", () => {
-    console.log("Rrythm is active!");
+    console.log("Rythm is active!");
 });
 
 // On event: new message created
@@ -35,6 +40,8 @@ client.on("messageCreate", async message => {
     } else if (command === "disconnect" || command === "dc") {
         disconnect(message, client, connection);
         connection = null;
+    } else if (command === "destroy" || command === "d") {
+        destroy(message);
     }
 });
 
