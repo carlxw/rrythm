@@ -1,4 +1,4 @@
-const { joinVoiceChannel } = require("@discord.js/voice");
+const Discord = require("@discordjs/voice");
 
 // Voice channel connection
 let connection; 
@@ -22,11 +22,17 @@ module.exports = play = (message, args) => {
     else {
         message.channel.send("🎵 **Searching** 🔎 `" + argument + "`");
         message.channel.send("**Playing** 🎶 `" + argument + "` - Now!");
-        const connection = joinVoiceChannel({
+
+        connection = Discord.joinVoiceChannel({
             channelId: message.member.voice.channel.id,
             guildId: message.guild.id,
             adapterCreator: message.guild.voiceAdapterCreator
         });
+        const player = Discord.createAudioPlayer();
+        const resource = Discord.createAudioResource("https://discord.com/channels/938100003224829952/938100003677810728/938885655763750994");
+        
+        player.play(resource);
+        connection.subscribe(player);
         return connection;
     }
 }

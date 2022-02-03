@@ -1,4 +1,5 @@
 const { Client, Intents } = require("discord.js");
+const Discord = require ("@discordjs/voice");
 
 // Import from config.json
 const config = require("./config.json");
