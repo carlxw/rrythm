@@ -1,4 +1,5 @@
 const { joinVoiceChannel } = require('@discordjs/voice');
+let connection;
 
 module.exports = play = (message, args) => {
     // No second argument
@@ -13,7 +14,8 @@ module.exports = play = (message, args) => {
     }
     // Run, join voice channel
     else {
-        message.channel.send(`Playing: ${args[0]}!`);
+        const argument = format(args);
+        message.channel.send(`Playing: ${argument}!`);
         const connection = joinVoiceChannel({
             channelId: message.member.voice.channel.id,
             guildId: message.guild.id,
@@ -21,4 +23,12 @@ module.exports = play = (message, args) => {
         });
         return connection;
     }
+}
+
+const format = (x) => {
+    let output = "";
+    for (let i = 0; i < x.length; i++) {
+        output = output + x[i] + " ";
+    }
+    return output.trim();
 }
