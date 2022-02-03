@@ -1,8 +1,8 @@
 module.exports = disonnect = (message, client, connection) => {
-    // Close connection if in a voice chat
+    // Falsy: There is no connection
     if (!connection) {
         return;
-    } else {
+    } else { // Truthy: There is a connection
         connection.destroy();
         message.channel.send("📭 **Successfully disconnected**");
     }

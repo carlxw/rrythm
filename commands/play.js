@@ -1,10 +1,15 @@
 const { joinVoiceChannel } = require('@discordjs/voice');
-let connection;
 
-module.exports = play = (message, args) => {
-    // No second argument
+// Voice channel connection
+let connection; 
+
+/**
+ * @return voice connection
+ */
+module.earrports = play = (message, args) => {
+    // No second argument (link, search keyword)
     if (!args[0]) {
-        message.channel.send("Provide a link!");
+        message.channel.send("❌ **There is nothing to play**");
         return null;
     }
     // Not connected to voice channel
@@ -26,10 +31,11 @@ module.exports = play = (message, args) => {
     }
 }
 
-const format = (x) => {
+// Formats all data in args to be one single argument
+const format = (arr) => {
     let output = "";
-    for (let i = 0; i < x.length; i++) {
-        output = output + x[i] + " ";
+    for (let i = 0; i < arr.length; i++) {
+        output = output + arr[i] + " ";
     }
     return output.trim();
 }

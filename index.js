@@ -1,23 +1,35 @@
 const { Client, Intents } = require("discord.js");
+
+// Import from config.json
 const config = require("./config.json");
+
+// Import from ./commands/.js
 const play = require("./commands/play.js");
 const disconnect = require("./commands/disconnect.js");
+
+// Voice connection
 let connection = null;
 
+// Initialize bot
 const client = new Client({
     intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES]
 });
 
+// Bot active
 client.on("ready", () => {
     console.log("Rrythm is active!");
 });
 
+// On event: new message created
 client.on("messageCreate", async message => {
+    // Ignore messages sent by bot and without prefix
     if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) return;
 
+    // Isolate arguments (array) and command
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
+    // Command handling
     if (command === "play" || command === "p") {
         connection = play(message, args);
     } else if (command === "disconnect" || command === "dc") {
@@ -26,4 +38,5 @@ client.on("messageCreate", async message => {
     }
 });
 
+// Activate bot
 client.login(config.token);
