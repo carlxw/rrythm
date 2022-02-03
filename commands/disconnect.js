@@ -4,5 +4,6 @@ module.exports = disonnect = (message, client, connection) => {
         return;
     } else {
         connection.destroy();
+        message.channel.send("📭 **Successfully disconnected**");
     }
 }
