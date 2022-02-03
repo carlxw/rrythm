@@ -13,6 +13,7 @@ const unpause = require("./commands/unpause.js");
 // Voice player
 let connection;
 let player;
+let paused; // True = paused, false = playing
 
 // Initialize bot
 const client = new Client({
@@ -42,14 +43,14 @@ client.on("messageCreate", async message => {
         if (!connection && !player) { // No connection
             [connection, player] = play(message, args, client);
         } else { // Unpause 
-            unpause(message, client, connection, player);
+            paused = unpause(message, client, connection, player, paused);
         }
     } else if (command === "disconnect" || command === "dc") {
         [connection, player] = disconnect(message, client, connection, player);
     } else if (command === "destroy" || command === "d") {
         destroy(message);
     } else if (command === "pause") {
-        pause(message, client, connection, player);
+        paused = pause(message, client, connection, player, paused);
     }
 });
 

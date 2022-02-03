@@ -1,4 +1,4 @@
-module.exports = disonnect = (message, client, connection, player) => {
+module.exports = disonnect = (message, client, connection, player, x) => {
     // Falsy: There is no connection
     if (!connection) {
         message.channel.send("❌ **I am not connected to a voice channel. Type** `!join` **to get me in one**");
@@ -6,5 +6,6 @@ module.exports = disonnect = (message, client, connection, player) => {
     } else { // Truthy: There is a connection
         player.pause();
         message.channel.send("**Paused** ⏸");
+        return true;
     }
 }
