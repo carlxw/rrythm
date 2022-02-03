@@ -36,7 +36,7 @@ module.exports = play = (message, args, client) => {
         connection.subscribe(player);
         player.play(resource);
 
-        return connection;
+        return [connection, player];
     }
 }
 

@@ -8,8 +8,9 @@ const play = require("./commands/play.js");
 const disconnect = require("./commands/disconnect.js");
 const destroy = require("./commands/destroy.js");
 
-// Voice connection
-let connection = null;
+// Voice player
+let connection;
+let player;
 
 // Initialize bot
 const client = new Client({
@@ -36,12 +37,11 @@ client.on("messageCreate", async message => {
 
     // Command handling
     if (command === "play" || command === "p") {
-        connection = await play(message, args, client);
+        [connection, player] = play(message, args, client);
     } else if (command === "disconnect" || command === "dc") {
-        await disconnect(message, client, connection);
-        connection = null;
+        disconnect(message, client, connection, player);
     } else if (command === "destroy" || command === "d") {
-        await destroy(message);
+        destroy(message);
     }
 });
 
