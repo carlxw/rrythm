@@ -36,12 +36,12 @@ client.on("messageCreate", async message => {
 
     // Command handling
     if (command === "play" || command === "p") {
-        connection = play(message, args);
+        connection = await play(message, args);
     } else if (command === "disconnect" || command === "dc") {
-        disconnect(message, client, connection);
+        await disconnect(message, client, connection);
         connection = null;
     } else if (command === "destroy" || command === "d") {
-        destroy(message);
+        await destroy(message);
     }
 });
 

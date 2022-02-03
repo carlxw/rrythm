@@ -1,4 +1,4 @@
-module.exports = disonnect = async (message) => {
-    await message.channel.send("Instance destroyed");
+module.exports = disonnect = (message) => {
+    message.channel.send("Instance destroyed!");
     process.exit();
 }
