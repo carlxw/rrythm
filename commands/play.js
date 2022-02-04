@@ -1,4 +1,5 @@
 const Discord = require("@discordjs/voice");
+const ytdl = require("ytdl-core");
 
 // Voice channel connection
 let connection; 
@@ -31,13 +32,20 @@ module.exports = play = (message, args, client) => {
             selfMute: false,
             selfDeaf: false
         });
-        const player = Discord.createAudioPlayer();
-        const resource = Discord.createAudioResource("./music.mp3");
-        
-        connection.subscribe(player);
-        player.play(resource);
 
-        return [connection, player];
+        try {
+            const stream = ytdl(args[0], { filter: "audioonly" });
+            const player = Discord.createAudioPlayer();
+            const resource = Discord.createAudioResource(stream);
+            
+            connection.subscribe(player);
+            player.play(resource);
+
+            return [connection, player];
+        } catch (error) {
+            message.channel.send("Not a valid URL");
+            return [null, null];
+        }
     }
 }
 
