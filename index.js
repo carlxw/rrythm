@@ -23,12 +23,13 @@ const disconnect = require("./commands/disconnect.js");
 const destroy = require("./commands/destroy.js");
 const pause = require("./commands/pause.js");
 const unpause = require("./commands/unpause.js");
+const join = require("./commands/join.js");
 
 // Voice player
 let connection;
 let player;
 let paused; // True = paused, false = playing
-const queue = new Queue(); // Array consisting 
+// const queue = new Queue(); // Array consisting 
 
 // On event: new message created
 client.on("messageCreate", async message => {
@@ -39,19 +40,47 @@ client.on("messageCreate", async message => {
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
-    // Command handling
+    // Play, queue, unpause
     if (command === "play" || command === "p") {
-        if (!connection && !player) { // No connection, create
-            [connection, player] = await play(message, args, client);
+        if (!connection) { // No connection: Create queue, connection, player
+            [connection, player, queue] = await play(message, args);
+        } else if (!queue) { // There is a connection, there is no queue and player
+            
         } else { // Unpause 
-            paused = unpause(message, client, connection, player, paused);
+            unpause(message, client, connection, player);
         }
-    } else if (command === "disconnect" || command === "dc") {
-        [connection, player] = disconnect(message, client, connection, player);
-    } else if (command === "destroy" || command === "d") {
+    }
+
+    // Disconnect
+    if (command === "disconnect" || command === "dc") {
+        if (connection && player) { // Connection and player
+            [connection, player] = disconnect(message, client, connection, player);
+        } else if (connection && !player) { // Connection, no player
+            connection = disconnect(message, connection);
+            console.log(connection);
+        } else {
+            message.channel.send("❌ **I am not connected to a voice channel. Type** `!join` **to get me in one**");
+        }
+    }
+
+    // Development - destroy
+    if (command === "destroy" || command === "d") {
         destroy(message);
-    } else if (command === "pause") {
-        paused = pause(message, client, connection, player, paused);
+    }
+
+    // Pause
+    if (command === "pause") {
+        pause(message, client, connection, player);
+    }
+
+    // Join
+    if (command === "join") {
+        if (!connection) { // No connection, just join
+            console.log(connection);
+            connection = join(message);
+        } else { // There is connection, already in a voice channel
+            message.channel.send("❌ **I am already in `" + message.member.voice.channel.name + "`!**");
+        }
     }
 });
 
