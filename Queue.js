@@ -14,7 +14,7 @@ class Queue
     }
 
     // Removes and returns element at front
-    dequeue()
+    pop()
     {
         if(this.isEmpty()) return "Underflow";
         this.tail--;

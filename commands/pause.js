@@ -1,3 +1,6 @@
+/**
+ * Pause the player
+ */
 module.exports = pause = async (message, player, connection) => {
     // Falsy: There is no connection
     if (!connection) {

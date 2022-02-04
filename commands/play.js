@@ -1,9 +1,12 @@
+/**
+ * Does to many things, but take a guess what this file does
+ */
 const Discord = require("@discordjs/voice");
 
 // Function imports
 const connect = require("../modules/connect.js");
 const search = require("../modules/search.js");
-const enqueue = require("../modules/enqueue.js");
+const startQueue = require("../modules/startQueue.js");
 
 /**
  * @return voice connection
@@ -11,6 +14,8 @@ const enqueue = require("../modules/enqueue.js");
  * @return queue
  */
 module.exports = play = async (message, args, connection, player, queue) => {
+    let title;
+    let url;
     // No second argument (link, search keyword)
     const argument = format(args);
     if (!argument) {
@@ -24,16 +29,22 @@ module.exports = play = async (message, args, connection, player, queue) => {
     }
     // Truthy: There is a connection and player
     else if (connection && player) {
-        queue.add(argument);
+        queue = enqueue(message, argument, player)
+        return queue;
+    }
+    // Truthy: There is a connection, but no player
+    else if (connection && !player) {
+        [title, url] = await search(message, argument);
+        queue.add([title, url]);
+        [player, queue] = await startQueue(Discord, message, title, queue);
+        return [player, queue];
     }
     // Run, join voice channel
     else {
-        let stream;
-        let title;
-        let url;
         connection = await connect(Discord, message);
-        [stream, title, url] = await search(message, argument);
-        [player, queue] = await enqueue(Discord, message, stream, title, queue);
+        [title, url] = await search(message, argument);
+        queue.add([title, url]);
+        [player, queue] = await startQueue(Discord, message, title, queue);
         return [connection, player, queue];
     }
 }

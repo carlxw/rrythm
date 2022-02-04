@@ -1,4 +1,5 @@
 /**
+ * Connects the bot to the call
  * @return connection
  */
 module.exports = connect = async (Discord, message) => {

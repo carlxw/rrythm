@@ -1,3 +1,6 @@
+/**
+ * Bot to join voice channel, but not play anything
+ */
 const { joinVoiceChannel } = require("@discordjs/voice");
 
 module.exports = join = async (message) => {

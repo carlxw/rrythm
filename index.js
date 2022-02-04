@@ -1,5 +1,6 @@
 const { Client, Intents } = require("discord.js");
 const Queue = require("./Queue.js");
+const { AudioPlayerStatus, createAudioPlayer } = require("@discordjs/voice");
 
 // Import from config.json
 const config = require("./config.json");
@@ -46,16 +47,11 @@ client.on("messageCreate", async message => {
             [connection, player, queue] = await play(message, args, null, null, queue);
         } else if (!player && connection) { // connection, !queue, !player: Queue something and play it
             print("No player, yes connection");
-            player = await play(message, args, connection, player, queue);
-        } 
-
-        /*
-        else if (connection, player) { // connection, player, !queue: Queue something and play it
-            queue = await play(message, args, queue, connection, player);
-        } 
-        */
-       
-        else { // Unpause 
+            [player, queue] = await play(message, args, connection, player, queue);
+        } else if (connection, player) { // connection, player, !queue: Queue something and play it
+            print("Queue new song")
+            queue = await play(message, args, connection, player, queue);
+        } else { // Unpause 
             await unpause(message, player);
         }
     }
@@ -89,6 +85,10 @@ client.on("messageCreate", async message => {
     if (command === "destroy" || command === "d") {
         await destroy(message);
     }
+
+    if (command === "state") {
+        message.channel.send(player.state.status);
+    }
 });
 
 // Activate bot
@@ -97,3 +97,5 @@ client.login(config.token);
 function print(x) {
     console.log(x);
 }
+
+module.exports = queue;

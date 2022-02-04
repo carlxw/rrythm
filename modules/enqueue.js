@@ -1,13 +1,11 @@
 /**
- * @return connection
+ * Adds a song to the queue
  */
-module.exports = enqueue = async (Discord, message, stream, title, queue) => {
-    // Play music
-    const player = Discord.createAudioPlayer();
-    const resource = Discord.createAudioResource(stream);
-    connection.subscribe(player);
-    player.play(resource);
-    message.channel.send("**Playing** 🎶 `" + title + "` - Now!");
-
-    return [player, queue];
+module.exports = enqueue = async (message, args, queue) => {
+    let title;
+    let url;
+    [title, url] = await search(args);
+    message.channel.send(`added ${title} to queue`);
+    queue.add([title, url]);
+    return queue;
 }

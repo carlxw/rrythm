@@ -1,3 +1,6 @@
+/**
+ * Bot to disconnect
+ */
 module.exports = disonnect = async (message, connection, player) => {
     if (!connection) { // Falsy: There is no connection
         message.channel.send("❌ **I am not in a voice channel**");
