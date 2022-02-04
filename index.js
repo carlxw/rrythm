@@ -44,13 +44,13 @@ client.on("messageCreate", async message => {
     if (command === "play" || command === "p") {
         if (!connection && !player) { // !connection: Create queue, connection, player
             print("No connection, no player");
-            [connection, player, queue] = await play(message, args, null, null, queue);
+            [connection, player] = await play(message, args, null, null);
         } else if (!player && connection) { // connection, !queue, !player: Queue something and play it
             print("No player, yes connection");
-            [player, queue] = await play(message, args, connection, player, queue);
+            player = await play(message, args, connection, player);
         } else if (connection, player) { // connection, player, !queue: Queue something and play it
             print("Queue new song")
-            queue = await play(message, args, connection, player, queue);
+            await play(message, args, connection, player);
         } else { // Unpause 
             await unpause(message, player);
         }

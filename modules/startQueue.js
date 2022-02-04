@@ -9,14 +9,15 @@ const ytdl = require("ytdl-core");
 /**
  * @return connection
  */
-module.exports = startQueue = async (Discord, message, title, queue) => {
+module.exports = startQueue = async (Discord, message, title) => {
     // Play music
+    const queue = require("../index.js");
     const stream = ytdl(queue.pop()[1], { filter: "audioonly"} );
     const resource = Discord.createAudioResource(stream);
     connection.subscribe(player);
     player.play(resource);
     message.channel.send("**Playing** 🎶 `" + title + "` - Now!");
-    return [player, queue];
+    return player;
 }
 
 player.on(AudioPlayerStatus.Idle, () => {

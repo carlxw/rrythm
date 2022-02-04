@@ -13,7 +13,8 @@ const startQueue = require("../modules/startQueue.js");
  * @return player
  * @return queue
  */
-module.exports = play = async (message, args, connection, player, queue) => {
+module.exports = play = async (message, args, connection, player) => {
+    const queue = require("../index.js");
     let title;
     let url;
     // No second argument (link, search keyword)
@@ -29,23 +30,22 @@ module.exports = play = async (message, args, connection, player, queue) => {
     }
     // Truthy: There is a connection and player
     else if (connection && player) {
-        queue = enqueue(message, argument, player)
-        return queue;
+        await enqueue(message, argument, player)
     }
     // Truthy: There is a connection, but no player
     else if (connection && !player) {
         [title, url] = await search(message, argument);
         queue.add([title, url]);
-        [player, queue] = await startQueue(Discord, message, title, queue);
-        return [player, queue];
+        player = await startQueue(Discord, message, title);
+        return player;
     }
     // Run, join voice channel
     else {
         connection = await connect(Discord, message);
         [title, url] = await search(message, argument);
         queue.add([title, url]);
-        [player, queue] = await startQueue(Discord, message, title, queue);
-        return [connection, player, queue];
+        player = await startQueue(Discord, message, title);
+        return [connection, player];
     }
 }
 
