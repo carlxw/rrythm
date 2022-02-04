@@ -46,7 +46,7 @@ class Queue
         for(var i = 0; i < this.items.length; i++) {
             str += this.items[i] +" ";
         }
-        return str;
+        console.log(str);
     }
 }
 
