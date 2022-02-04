@@ -6,6 +6,6 @@ module.exports = enqueue = async (message, args) => {
     let title;
     let url;
     [title, url] = await search(args);
-    message.channel.send(`added ${title} to queue`);
+    message.channel.send("**✅ Added **`"+ title +"`** to queue**");
     queue.add([title, url]);
 }

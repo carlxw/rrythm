@@ -23,3 +23,5 @@ module.exports = startQueue = async (Discord, message, title) => {
 player.on(AudioPlayerStatus.Idle, () => {
     changeQueue(player);
 })
+
+module.export = player;

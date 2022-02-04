@@ -4,7 +4,7 @@ const Queue = require("../Queue.js");
  * Bot to disconnect
  */
 module.exports = disonnect = async (message, connection, player) => {
-    const queue = require("../index.js");
+    let queue = require("../index.js");
     if (!connection) { // Falsy: There is no connection
         message.channel.send("❌ **I am not in a voice channel**");
         return [null, null];

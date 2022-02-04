@@ -9,9 +9,8 @@ const yts = require("yt-search");
  * @return title of video
  * @return url of video
  */
-module.exports = search = async (message, argument) => {
+module.exports = search = async (argument) => {
     // Search for youtube video
-    message.channel.send("🎵 **Searching** 🔎 `" + argument + "`");
     let title;
     let url;
     if (ytdl.validateURL(argument)) { // URL is valid
@@ -36,23 +35,3 @@ const findVideo = async (argument) => {
     title = info.videoDetails.title;
     return [title, search.all[count].url];
 }
-
-/*
-module.exports = search = async (message, argument) => {
-    // Search for youtube video
-    message.channel.send("🎵 **Searching** 🔎 `" + argument + "`");
-    let stream;
-    let title;
-    let url;
-    if (ytdl.validateURL(argument)) { // URL is valid
-        stream = ytdl(argument, { filter: "audioonly" }); // Stream link
-        // Get title
-        const info = await ytdl.getInfo(argument); 
-        title = info.videoDetails.title;
-        url = argument;
-    } else { // Argument is a search keyword
-        [stream, title, url] = await findVideo(argument);
-    }
-    return [stream, title, url];
-}
-*/

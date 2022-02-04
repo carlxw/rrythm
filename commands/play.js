@@ -7,6 +7,7 @@ const Discord = require("@discordjs/voice");
 const connect = require("../modules/connect.js");
 const search = require("../modules/search.js");
 const startQueue = require("../modules/startQueue.js");
+const enqueue = require("../modules/enqueue.js");
 
 /**
  * @return voice connection
@@ -30,11 +31,14 @@ module.exports = play = async (message, args, connection, player) => {
     }
     // Truthy: There is a connection and player
     else if (connection && player) {
+        message.channel.send("🎵 **Searching** 🔎 `" + argument + "`");
         await enqueue(message, argument, player)
+        // https://discordjs.guide/popular-topics/embeds.html#embed-preview
     }
     // Truthy: There is a connection, but no player
     else if (connection && !player) {
-        [title, url] = await search(message, argument);
+        message.channel.send("🎵 **Searching** 🔎 `" + argument + "`");
+        [title, url] = await search(argument);
         queue.add([title, url]);
         player = await startQueue(Discord, message, title);
         return player;
@@ -42,7 +46,8 @@ module.exports = play = async (message, args, connection, player) => {
     // Run, join voice channel
     else {
         connection = await connect(Discord, message);
-        [title, url] = await search(message, argument);
+        message.channel.send("🎵 **Searching** 🔎 `" + argument + "`");
+        [title, url] = await search(argument);
         queue.add([title, url]);
         player = await startQueue(Discord, message, title);
         return [connection, player];
