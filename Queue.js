@@ -22,6 +22,11 @@ class Queue
         return this.items.shift();
     }
 
+    queueTop(element) {
+        this.items.unshift(element);
+        this.tail++;
+    }
+
     // Gets the element at the front
     peek()
     {
