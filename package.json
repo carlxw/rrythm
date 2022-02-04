@@ -17,6 +17,7 @@
     "libsodium-wrappers": "^0.7.9",
     "opusscript": "^0.0.8",
     "tweetnacl": "^1.0.3",
+    "yt-search": "^2.10.3",
     "ytdl-core": "^4.10.1"
   }
 }

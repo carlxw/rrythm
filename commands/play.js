@@ -7,7 +7,7 @@ let connection;
 /**
  * @return voice connection
  */
-module.exports = play = (message, args, client) => {
+module.exports = play = async (message, args, client) => {
     // No second argument (link, search keyword)
     const argument = format(args);
     if (!argument) {
@@ -21,10 +21,6 @@ module.exports = play = (message, args, client) => {
     }
     // Run, join voice channel
     else {
-        message.channel.send("👍 **Joined `" + message.member.voice.channel.name + "` and bound to " + message.channel.toString() + "**"); // Will need to update in future
-        message.channel.send("🎵 **Searching** 🔎 `" + argument + "`");
-        message.channel.send("**Playing** 🎶 `" + argument + "` - Now!");
-
         connection = Discord.joinVoiceChannel({
             channelId: message.member.voice.channel.id,
             guildId: message.guild.id,
@@ -32,20 +28,28 @@ module.exports = play = (message, args, client) => {
             selfMute: false,
             selfDeaf: false
         });
+        message.channel.send("👍 **Joined `" + message.member.voice.channel.name + "` and bound to " + message.channel.toString() + "**"); // Will need to update in future
 
-        try {
-            const stream = ytdl(args[0], { filter: "audioonly" });
-            const player = Discord.createAudioPlayer();
-            const resource = Discord.createAudioResource(stream);
-            
-            connection.subscribe(player);
-            player.play(resource);
-
-            return [connection, player];
-        } catch (error) {
-            message.channel.send("Not a valid URL");
-            return [null, null];
+        message.channel.send("🎵 **Searching** 🔎 `" + argument + "`");
+        let stream;
+        let title;
+        if (ytdl.validateURL(argument)) { // URL is valid
+            stream = ytdl(argument, { filter: "audioonly" });
+            // Example of choosing a video format.
+            let info = await ytdl.getInfo(argument);
+            title = info.videoDetails.title;
+        } else { // Argument is a search keyword
+            stream = ("./music.mp3");
+            title = "Lost My Pieces";
         }
+
+        message.channel.send("**Playing** 🎶 `" + title + "` - Now!");
+        const player = Discord.createAudioPlayer();
+        const resource = Discord.createAudioResource(stream);
+        connection.subscribe(player);
+        player.play(resource);
+
+        return [connection, player];
     }
 }
 
