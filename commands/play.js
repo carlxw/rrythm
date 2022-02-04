@@ -6,19 +6,19 @@ const yts = require("yt-search");
 let connection; 
 
 /**
- * @return voice connection
+ * @return Connection, player, queue
  */
-module.exports = play = async (message, args, client) => {
+module.exports = play = async (message, args) => {
     // No second argument (link, search keyword)
     const argument = format(args);
     if (!argument) {
         message.channel.send("❌ **There is nothing to play**");
-        return [null, null];
+        return [null, null, null];
     }
     // Not connected to voice channel
     else if (!message.member.voice.channel) {
-        message.channel.send("❌ **You have to be in a voice channel to use this command.**");
-        return [null, null];
+        message.channel.send("❌ **I am not connected to a voice channel. Type** `!join` **to get me in one**");
+        return [null, null, null];
     }
     // Run, join voice channel
     else {
