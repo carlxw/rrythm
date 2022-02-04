@@ -41,10 +41,12 @@ client.on("messageCreate", async message => {
 
     // Play, queue, unpause
     if (command === "play" || command === "p") {
-        if (!connection) { // !connection: Create queue, connection, player
+        if (!connection && !player) { // !connection: Create queue, connection, player
+            print("No connection, no player");
             [connection, player] = await play(message, args, null, null, queue);
         } else if (!player && connection) { // connection, !queue, !player: Queue something and play it
-            [player] = await play(message, args, connection, player);
+            print("No player, yes connection");
+            [player] = await play(message, args, connection, player, queue);
         } 
 
         /*
@@ -91,3 +93,7 @@ client.on("messageCreate", async message => {
 
 // Activate bot
 client.login(config.token);
+
+function print(x) {
+    console.log(x);
+}

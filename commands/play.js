@@ -48,8 +48,7 @@ module.exports = play = async (message, args, connection, player, queue) => {
         } else { // Argument is a search keyword
             [stream, title] = await findVideo(argument);
         }
-        // queue.add(argument); // Adds argument to queue
-
+        console.log(queue);
         message.channel.send("**Playing** 🎶 `" + title + "` - Now!");
         const player = Discord.createAudioPlayer();
         const resource = Discord.createAudioResource(stream);
