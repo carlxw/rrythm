@@ -1,5 +1,6 @@
 const Discord = require("@discordjs/voice");
 const ytdl = require("ytdl-core");
+const yts = require("yt-search");
 
 // Voice channel connection
 let connection; 
@@ -36,11 +37,13 @@ module.exports = play = async (message, args, client) => {
         if (ytdl.validateURL(argument)) { // URL is valid
             stream = ytdl(argument, { filter: "audioonly" });
             // Example of choosing a video format.
-            let info = await ytdl.getInfo(argument);
+            const info = await ytdl.getInfo(argument);
             title = info.videoDetails.title;
         } else { // Argument is a search keyword
-            stream = ("./music.mp3");
-            title = "Lost My Pieces";
+            const search = await yts(argument);
+            stream = ytdl(search.all[0].url, { filter: "audioonly"} );
+            const info = await ytdl.getInfo(search.all[0].url);
+            title = info.videoDetails.title;
         }
 
         message.channel.send("**Playing** 🎶 `" + title + "` - Now!");
