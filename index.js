@@ -3,18 +3,6 @@ const { Client, Intents } = require("discord.js");
 // Import from config.json
 const config = require("./config.json");
 
-// Import from ./commands/.js
-const play = require("./commands/play.js");
-const disconnect = require("./commands/disconnect.js");
-const destroy = require("./commands/destroy.js");
-const pause = require("./commands/pause.js");
-const unpause = require("./commands/unpause.js");
-
-// Voice player
-let connection;
-let player;
-let paused; // True = paused, false = playing
-
 // Initialize bot
 const client = new Client({
     intents: [
@@ -28,6 +16,19 @@ const client = new Client({
 client.on("ready", () => {
     console.log("Rythm is active!");
 });
+
+// Import from ./commands/.js
+const play = require("./commands/play.js");
+const disconnect = require("./commands/disconnect.js");
+const destroy = require("./commands/destroy.js");
+const pause = require("./commands/pause.js");
+const unpause = require("./commands/unpause.js");
+
+// Voice player
+let connection;
+let player;
+let paused; // True = paused, false = playing
+const queue = new Queue(); // Array consisting 
 
 // On event: new message created
 client.on("messageCreate", async message => {
