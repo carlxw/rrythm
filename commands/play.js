@@ -1,6 +1,9 @@
 const Discord = require("@discordjs/voice");
-const ytdl = require("ytdl-core");
-const yts = require("yt-search");
+
+// Function imports
+const connect = require("../modules/connect.js");
+const search = require("../modules/search.js");
+const enqueue = require("../modules/enqueue.js");
 
 /**
  * @return voice connection
@@ -25,40 +28,12 @@ module.exports = play = async (message, args, connection, player, queue) => {
     }
     // Run, join voice channel
     else {
-        // Establish connection
-        connection = Discord.joinVoiceChannel({
-            channelId: message.member.voice.channel.id,
-            guildId: message.guild.id,
-            adapterCreator: message.guild.voiceAdapterCreator,
-            selfMute: false,
-            selfDeaf: false
-        });
-        message.channel.send("👍 **Joined `" + message.member.voice.channel.name + "` and bound to " + message.channel.toString() + "**"); // Will need to update in future
-
-        // Search for youtube video
-        message.channel.send("🎵 **Searching** 🔎 `" + argument + "`");
         let stream;
         let title;
         let url;
-        if (ytdl.validateURL(argument)) { // URL is valid
-            stream = ytdl(argument, { filter: "audioonly" }); // Stream link
-            // Get title
-            const info = await ytdl.getInfo(argument); 
-            title = info.videoDetails.title;
-            url = argument;
-        } else { // Argument is a search keyword
-            [stream, title, url] = await findVideo(argument);
-        }
-        message.channel.send("**Playing** 🎶 `" + title + "` - Now!");
-        
-        queue.add([title, url]);
-
-        // Play music
-        const player = Discord.createAudioPlayer();
-        const resource = Discord.createAudioResource(stream);
-        connection.subscribe(player);
-        player.play(resource);
-
+        connection = await connect(Discord, message);
+        [stream, title, url] = await search(message, argument);
+        [player, queue] = await enqueue(Discord, message, stream, title, queue);
         return [connection, player, queue];
     }
 }
@@ -70,16 +45,4 @@ const format = (arr) => {
         output = output + arr[i] + " ";
     }
     return output.trim();
-}
-
-const findVideo = async (argument) => {
-    let count = 0;
-    const search = await yts(argument); // Youtube Search
-    while (search.all[count].type !== "video") {
-        count++;
-    }
-    stream = ytdl(search.all[count].url, { filter: "audioonly"} ); // Stream link
-    const info = await ytdl.getInfo(search.all[count].url);
-    title = info.videoDetails.title;
-    return [stream, title, search.all[count].url];
 }

@@ -29,7 +29,7 @@ const join = require("./commands/join.js");
 // Voice player
 let connection;
 let player;
-const queue = new Queue();
+let queue = new Queue();
 
 // On event: new message created
 client.on("messageCreate", async message => {
@@ -43,10 +43,10 @@ client.on("messageCreate", async message => {
     if (command === "play" || command === "p") {
         if (!connection && !player) { // !connection: Create queue, connection, player
             print("No connection, no player");
-            [connection, player] = await play(message, args, null, null, queue);
+            [connection, player, queue] = await play(message, args, null, null, queue);
         } else if (!player && connection) { // connection, !queue, !player: Queue something and play it
             print("No player, yes connection");
-            [player] = await play(message, args, connection, player, queue);
+            player = await play(message, args, connection, player, queue);
         } 
 
         /*
