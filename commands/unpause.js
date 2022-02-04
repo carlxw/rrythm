@@ -1,7 +1,6 @@
-module.exports = disonnect = (message, client, connection, player, x) => {
-    if (x) { // Truthy: There is a connection
+module.exports = unpause = (message, client, connection, player) => {
+    if (player.state.status === "paused") {
         player.unpause();
         message.channel.send("⏯ **Resuming** 👍");
-        return false;
     }
 }

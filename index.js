@@ -1,4 +1,5 @@
 const { Client, Intents } = require("discord.js");
+const Queue = require("./Queue.js");
 
 // Import from config.json
 const config = require("./config.json");
@@ -28,8 +29,7 @@ const join = require("./commands/join.js");
 // Voice player
 let connection;
 let player;
-let paused; // True = paused, false = playing
-// const queue = new Queue(); // Array consisting 
+let queue = new Queue(); // Queue of songs
 
 // On event: new message created
 client.on("messageCreate", async message => {
@@ -44,8 +44,8 @@ client.on("messageCreate", async message => {
     if (command === "play" || command === "p") {
         if (!connection) { // No connection: Create queue, connection, player
             [connection, player, queue] = await play(message, args);
-        } else if (!queue) { // There is a connection, there is no queue and player
-            
+        } else if (!queue && !player) { // There is a connection, there is no queue and player
+            [player, queue] = await queue(message, args, queue);
         } else { // Unpause 
             unpause(message, client, connection, player);
         }
