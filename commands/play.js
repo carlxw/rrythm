@@ -20,6 +20,7 @@ module.exports = play = (message, args, client) => {
     }
     // Run, join voice channel
     else {
+        message.channel.send("👍 **Joined `" + message.member.voice.channel.name + "` and bound to " + message.channel.toString() + "**"); // Will need to update in future
         message.channel.send("🎵 **Searching** 🔎 `" + argument + "`");
         message.channel.send("**Playing** 🎶 `" + argument + "` - Now!");
 

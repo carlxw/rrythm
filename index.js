@@ -40,7 +40,7 @@ client.on("messageCreate", async message => {
 
     // Command handling
     if (command === "play" || command === "p") {
-        if (!connection && !player) { // No connection
+        if (!connection && !player) { // No connection, create
             [connection, player] = play(message, args, client);
         } else { // Unpause 
             paused = unpause(message, client, connection, player, paused);
