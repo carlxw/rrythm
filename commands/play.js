@@ -1,7 +1,6 @@
 const Discord = require("@discordjs/voice");
 const ytdl = require("ytdl-core");
 const yts = require("yt-search");
-const Queue = require("./Queue.js");
 
 // Voice channel connection
 let connection; 
@@ -11,7 +10,7 @@ let connection;
  * @return player
  * @return queue
  */
-module.exports = play = async (message, args, queue, connection, player) => {
+module.exports = play = async (message, args, connection, player, queue) => {
     // No second argument (link, search keyword)
     const argument = format(args);
     if (!argument) {
@@ -25,7 +24,7 @@ module.exports = play = async (message, args, queue, connection, player) => {
     }
     // Truthy: There is a connection and player
     else if (connection && player) {
-        queue.add(args[0]);
+        queue.add(argument);
     }
     // Run, join voice channel
     else {
@@ -42,17 +41,14 @@ module.exports = play = async (message, args, queue, connection, player) => {
         let stream;
         let title;
         if (ytdl.validateURL(argument)) { // URL is valid
-            stream = ytdl(argument, { filter: "audioonly" });
-            // Example of choosing a video format.
-            const info = await ytdl.getInfo(argument);
+            stream = ytdl(argument, { filter: "audioonly" }); // Stream link
+            // Get title
+            const info = await ytdl.getInfo(argument); 
             title = info.videoDetails.title;
         } else { // Argument is a search keyword
-            const search = await yts(argument);
-            stream = ytdl(search.all[0].url, { filter: "audioonly"} );
-            const info = await ytdl.getInfo(search.all[0].url);
-            title = info.videoDetails.title;
+            [stream, title] = await findVideo(argument);
         }
-        queue.add(argument); // Adds argument to queue
+        // queue.add(argument); // Adds argument to queue
 
         message.channel.send("**Playing** 🎶 `" + title + "` - Now!");
         const player = Discord.createAudioPlayer();
@@ -71,4 +67,16 @@ const format = (arr) => {
         output = output + arr[i] + " ";
     }
     return output.trim();
+}
+
+const findVideo = async (argument) => {
+    let count = 0;
+    const search = await yts(argument); // Youtube Search
+    while (search.all[count].type !== "video") {
+        count++;
+    }
+    stream = ytdl(search.all[count].url, { filter: "audioonly"} ); // Stream link
+    const info = await ytdl.getInfo(search.all[count].url);
+    title = info.videoDetails.title;
+    return [stream, title];
 }

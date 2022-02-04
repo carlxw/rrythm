@@ -15,7 +15,7 @@ const client = new Client({
 
 // Bot active
 client.on("ready", () => {
-    console.log("Rythm is active!");
+    console.log("Rrythm is active!");
 });
 
 // Import from ./commands/.js
@@ -29,26 +29,31 @@ const join = require("./commands/join.js");
 // Voice player
 let connection;
 let player;
-let queue = new Queue(); // Queue of songs
+const queue = new Queue();
 
 // On event: new message created
 client.on("messageCreate", async message => {
     // Ignore messages sent by bot and without prefix
     if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) return;
-
     // Isolate arguments (array) and command
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
     // Play, queue, unpause
     if (command === "play" || command === "p") {
-        if (!connection) { // No connection: Create queue, connection, player
-            [connection, player, queue] = await play(message, args, queue);
-        } else if (!queue && !player) { // There is a connection, there is no queue and player
-            [player, queue] = await play(message, args, queue, connection, player);
-        } else if (connection, player) { // There is a connection and a player
+        if (!connection) { // !connection: Create queue, connection, player
+            [connection, player] = await play(message, args, null, null, queue);
+        } else if (!player && connection) { // connection, !queue, !player: Queue something and play it
+            [player] = await play(message, args, connection, player);
+        } 
+
+        /*
+        else if (connection, player) { // connection, player, !queue: Queue something and play it
             queue = await play(message, args, queue, connection, player);
-        } else { // Unpause 
+        } 
+        */
+       
+        else { // Unpause 
             await unpause(message, player);
         }
     }
@@ -59,9 +64,22 @@ client.on("messageCreate", async message => {
             [connection, player] = await disconnect(message, connection, player);
         } else if (connection && !player) { // Connection, no player
             connection = await disconnect(message, connection);
-            console.log(connection);
         } else {
             message.channel.send("❌ **I am not connected to a voice channel. Type** `!join` **to get me in one**");
+        }
+    }
+
+    // Pause
+    if (command === "pause") {
+        await pause(message, player, connection);
+    }
+
+    // Join
+    if (command === "join") {
+        if (!connection) { // No connection, just join
+            connection = await join(message);
+        } else { // There is connection, already in a voice channel
+            message.channel.send("❌ **I am already in `" + message.member.voice.channel.name + "`!**");
         }
     }
 
@@ -69,23 +87,7 @@ client.on("messageCreate", async message => {
     if (command === "destroy" || command === "d") {
         await destroy(message);
     }
-
-    // Pause
-    if (command === "pause") {
-        await pause(message, player);
-    }
-
-    // Join
-    if (command === "join") {
-        if (!connection) { // No connection, just join
-            console.log(connection);
-            connection = await join(message);
-        } else { // There is connection, already in a voice channel
-            message.channel.send("❌ **I am already in `" + message.member.voice.channel.name + "`!**");
-        }
-    }
 });
-
 
 // Activate bot
 client.login(config.token);
