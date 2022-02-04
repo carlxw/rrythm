@@ -1,4 +1,4 @@
-module.exports = pause = (message, client, connection, player, x) => {
+module.exports = pause = async (message, connection, player) => {
     // Falsy: There is no connection
     if (!connection) {
         message.channel.send("❌ **I am not connected to a voice channel. Type** `!join` **to get me in one**");

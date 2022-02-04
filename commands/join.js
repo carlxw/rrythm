@@ -1,6 +1,6 @@
 const { joinVoiceChannel } = require("@discordjs/voice");
 
-module.exports = join = (message) => {
+module.exports = join = async (message) => {
     const connection = joinVoiceChannel({
         channelId: message.member.voice.channel.id,
         guildId: message.guild.id,

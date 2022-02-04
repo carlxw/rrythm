@@ -1,14 +1,17 @@
 const Discord = require("@discordjs/voice");
 const ytdl = require("ytdl-core");
 const yts = require("yt-search");
+const Queue = require("./Queue.js");
 
 // Voice channel connection
 let connection; 
 
 /**
  * @return voice connection
+ * @return player
+ * @return queue
  */
-module.exports = play = async (message, args, client) => {
+module.exports = play = async (message, args, queue, connection, player) => {
     // No second argument (link, search keyword)
     const argument = format(args);
     if (!argument) {
@@ -19,6 +22,10 @@ module.exports = play = async (message, args, client) => {
     else if (!message.member.voice.channel) {
         message.channel.send("❌ **You have to be in a voice channel to use this command.**");
         return [null, null];
+    }
+    // Truthy: There is a connection and player
+    else if (connection && player) {
+        queue.add(args[0]);
     }
     // Run, join voice channel
     else {
@@ -45,6 +52,7 @@ module.exports = play = async (message, args, client) => {
             const info = await ytdl.getInfo(search.all[0].url);
             title = info.videoDetails.title;
         }
+        queue.add(argument); // Adds argument to queue
 
         message.channel.send("**Playing** 🎶 `" + title + "` - Now!");
         const player = Discord.createAudioPlayer();

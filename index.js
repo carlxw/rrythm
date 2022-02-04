@@ -43,20 +43,22 @@ client.on("messageCreate", async message => {
     // Play, queue, unpause
     if (command === "play" || command === "p") {
         if (!connection) { // No connection: Create queue, connection, player
-            [connection, player, queue] = await play(message, args);
+            [connection, player, queue] = await play(message, args, queue);
         } else if (!queue && !player) { // There is a connection, there is no queue and player
-            [player, queue] = await queue(message, args, queue);
+            [player, queue] = await play(message, args, queue, connection, player);
+        } else if (connection, player) { // There is a connection and a player
+            queue = await play(message, args, queue, connection, player);
         } else { // Unpause 
-            unpause(message, client, connection, player);
+            await unpause(message, player);
         }
     }
 
     // Disconnect
     if (command === "disconnect" || command === "dc") {
         if (connection && player) { // Connection and player
-            [connection, player] = disconnect(message, client, connection, player);
+            [connection, player] = await disconnect(message, connection, player);
         } else if (connection && !player) { // Connection, no player
-            connection = disconnect(message, connection);
+            connection = await disconnect(message, connection);
             console.log(connection);
         } else {
             message.channel.send("❌ **I am not connected to a voice channel. Type** `!join` **to get me in one**");
@@ -65,19 +67,19 @@ client.on("messageCreate", async message => {
 
     // Development - destroy
     if (command === "destroy" || command === "d") {
-        destroy(message);
+        await destroy(message);
     }
 
     // Pause
     if (command === "pause") {
-        pause(message, client, connection, player);
+        await pause(message, player);
     }
 
     // Join
     if (command === "join") {
         if (!connection) { // No connection, just join
             console.log(connection);
-            connection = join(message);
+            connection = await join(message);
         } else { // There is connection, already in a voice channel
             message.channel.send("❌ **I am already in `" + message.member.voice.channel.name + "`!**");
         }
