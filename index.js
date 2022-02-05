@@ -144,6 +144,7 @@ const createEmbed = async (musicPlayer, yt) => {
     const thumbnail = await yt.getThumbnail(queue.look());
     const positionInQueue = queue.length();
     const title = await yt.getTitle(queue.look());
+    const queueDuration = await yt.getQueueDuration(queue);
     const output = new MessageEmbed()
         .setColor("#000000") 
         .setTitle(title) // Get Song title
@@ -153,7 +154,7 @@ const createEmbed = async (musicPlayer, yt) => {
         .addFields(
             { name: "Channel", value: channelName, inline: true },
             { name: "Song Duration", value: songDuration, inline: true },
-            { name: "Estimated time until playing", value: "Who knows lol", inline: true },
+            { name: "Estimated time until playing", value: queueDuration, inline: true },
         )
         .addField("Position in queue", `${positionInQueue}`, true) // Position in queue
     return output;

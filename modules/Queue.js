@@ -18,6 +18,7 @@ class Queue
     {
         if(this.isEmpty()) return "Underflow";
         this.tail--;
+        this.recentPopped = this.peek();
         return this.items.shift();
     }
 
@@ -54,6 +55,18 @@ class Queue
             str += this.items[i] +" ";
         }
         console.log(str);
+    }
+
+    // Gets the array used
+    getArray() 
+    {
+        return this.items;
+    }
+
+    // Gets most recent popped item
+    getRecentPopped()
+    {
+        return this.recentPopped;
     }
 }
 

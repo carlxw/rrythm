@@ -76,7 +76,8 @@ class YouTube {
         const toMin = input/60;
         const min = Math.floor(toMin);
         const seconds = Math.floor((toMin-min)*60);
-        return `${min}:${seconds}`;
+        if (seconds < 10) return `${min}:0${seconds}`;
+        else return `${min}:${seconds}`;
     }
     
     async ___getInfo(input){
@@ -108,6 +109,23 @@ class YouTube {
     async getStream(url) {
         const stream = this.ytdl(url, { filter: "audioonly" });
         return stream;
+    }
+
+    /**
+     * Method gets the duration of the queue
+     * 
+     * @param {Queue} queue Queue that contains song links
+     * @returns Duration of queue formatted in mm:ss
+     */
+    async getQueueDuration(queue) {
+        let array = queue.getArray();
+        array.push(queue.getRecentPopped());
+        let output = 0;
+        // Store everything in one go?
+        for (let i = 0; i < array.length; i++) {
+            output += Number(await this.getVideoLength(array[i]));
+        }
+        return this.secToMinSec(output);
     }
 }
 
