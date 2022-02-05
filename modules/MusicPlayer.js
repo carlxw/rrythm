@@ -30,17 +30,14 @@ class MusicPlayer {
     async enqueue(argument) {
         if (await this.youtube.isURL(argument)) { // Argument is a url
             this.queue.add(argument)
-            console.log("isURL");
         } else { // Arugment is a title
             this.queue.add(await this.youtube.getURL(argument));
-            console.log("NotURL");
         }
         this.___playAudio();
     }
 
     async ___playAudio() {
-        console.log("In ___playingAudio()");
-        const stream = ytdl("https://www.youtube.com/watch?v=lk0gm_Z81bE", {filter: "audioonly"});
+        const stream = await this.youtube.getStream(this.queue.pop())
         this.player.play(Discord.createAudioResource(stream));
     }
 
