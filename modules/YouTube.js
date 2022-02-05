@@ -19,8 +19,7 @@ class YouTube {
         while (search.all[count].type !== "video") {
             count++;
         }
-        const info = await this.ytdl.getInfo(search.all[count].url);
-        return search.all[count].url;
+        return await this.ytdl.getInfo(search.all[count].url);
     }
 
     /**
