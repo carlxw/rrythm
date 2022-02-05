@@ -38,9 +38,7 @@ const yt = new YouTube();
 client.on("messageCreate", async message => {
     // Ignore messages sent by bot and without prefix, ignore users not in voice channel
     if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) return;
-    else if (!message.member.voice.channel) {
-        message.channel.send("❌ **You have to be in a voice channel to use this command.**");
-    }
+
     // Isolate arguments (array) and command
     let args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
@@ -49,7 +47,9 @@ client.on("messageCreate", async message => {
     // Play, queue, unpause
     let title;
     if (command === "play" || command === "p") {
-        if (!args && !musicPlayer) {
+        if (!message.member.voice.channel) {
+            message.channel.send("❌ **You have to be in a voice channel to use this command.**");
+        } else if (!args && !musicPlayer) {
             message.channel.send("❌ **There is nothing to play**");
         }
         else if (!args && musicPlayer) {
@@ -71,6 +71,7 @@ client.on("messageCreate", async message => {
         }
     }
 
+    //
     if (command === "skip" || command === "s") {
         if (musicPlayer) {
             musicPlayer.___playAudio();
