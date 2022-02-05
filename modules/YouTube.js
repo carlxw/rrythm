@@ -1,7 +1,7 @@
 /**
  * Class handles with YouTube-related methods
  */
-class YouTube {
+ class YouTube {
     constructor() {
         this.ytdl = require("ytdl-core");
         this.yts = require("yt-search");
@@ -19,7 +19,7 @@ class YouTube {
         while (search.all[count].type !== "video") {
             count++;
         }
-        return await this.ytdl.getInfo(search.all[count].url);
+        return search.all[count].url;
     }
 
     /**
