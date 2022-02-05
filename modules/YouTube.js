@@ -26,11 +26,16 @@ class YouTube {
     /**
      * Method gets the title of the video given a URL
      * 
-     * @param {String} url The URL of the video
-     * @returns Title of URL
+     * @param {String} input The URL or keyword of video
+     * @returns Title of video
      */
-    async getTitle(url) {
-        const info = await this.ytdl.getInfo(url); 
+    async getTitle(input) {
+        let info;
+        if (this.isURL(input)) { // is URL
+            info = await this.ytdl.getInfo(input);
+        } else { // is keyword
+            info = await this.ytdl.getInfo(this.getURL(input));
+        }
         return info.videoDetails.title;
     }
 
