@@ -1,5 +1,13 @@
 class Queue
 {
+    /**
+     * [0] - Link
+     * [1] - Title
+     * [2] - Channel name 
+     * [3] - Song duration
+     * [4] - Thumbnail link
+     * [5] - ytdl stream
+     */
     constructor()
     {
         this.items = [];
@@ -50,11 +58,9 @@ class Queue
     // Print queue
     printQueue()
     {
-        var str = "";
         for(var i = 0; i < this.items.length; i++) {
-            str += this.items[i] +" ";
+            console.log(this.items[i]);
         }
-        console.log(str);
     }
 
     // Gets the array used

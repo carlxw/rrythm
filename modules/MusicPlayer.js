@@ -5,7 +5,6 @@ const YouTube = require("./YouTube.js");
 class MusicPlayer {
     constructor(message) {
         this.message = message;
-        this.youtube = new YouTube();
         this.connection = this.___createConnection(message);
         this.player = Discord.createAudioPlayer();
         this.connection.subscribe(this.player);
@@ -49,19 +48,25 @@ class MusicPlayer {
      * @param {String} argument A URL or a keyword
      */
     async enqueue(argument) {
+        const yt = new YouTube();
+
         // Clear auto-disconnect timer
         if (this.interval) {
             clearInterval(this.interval);
             this.interval = null;
         }
-        if (await this.youtube.isURL(argument)) { // Argument is a url
-            this.queue.add(argument)
-        } else { // Arugment is a title
-            this.queue.add(await this.youtube.getURL(argument));
-        }
-        if (this.getPlayerStatus() === "idle") {
-            this.___playAudio();
-        }
+
+        let link;
+        if (await yt.isURL(argument)) link = argument;
+        else link = await yt.getURL(argument);
+
+        const title = await yt.getTitle(link);
+        const channelName = await yt.getVideoChannel(link);
+        const songDuration = await yt.getVideoLength(link);
+        const thumbnail = await yt.getThumbnail(link);
+        const stream = await yt.getStream(link)
+        this.queue.add([link, title, channelName, songDuration, thumbnail, stream]);
+        if (this.getPlayerStatus() === "idle") this.___playAudio();
     }
 
     /**
@@ -70,8 +75,7 @@ class MusicPlayer {
     async ___playAudio() {
         if (this.queue.isEmpty()) this.player.stop();
         else {
-            const stream = await this.youtube.getStream(this.queue.pop())
-            this.player.play(Discord.createAudioResource(stream));
+            this.player.play(Discord.createAudioResource(this.queue.pop()[5]));
         }
     }
 
@@ -106,6 +110,38 @@ class MusicPlayer {
         this.connection.destroy();
         this.player.stop();
         this.queue = new Queue();
+    }
+
+    /**
+     * Creates embed for new queue entry
+     * 
+     * @returns Embed message
+     */
+    createEmbed = async () => {
+        const { MessageEmbed } = require("discord.js");
+        const yt = new YouTube();
+        const url = "https://bit.ly/335tabK";
+
+        const title = this.queue.look()[1];
+        const channelName = this.queue.look()[2];
+        const songDuration = yt.secToMinSec(this.queue.look()[3]);
+        const thumbnail = this.queue.look()[4];
+        const positionInQueue = this.queue.length();
+        const queueDuration = yt.getQueueDuration(this.queue);
+
+        const output = new MessageEmbed()
+            .setColor("#000000") 
+            .setTitle(title) // Get Song title
+            .setURL(this.queue.look()[0]) // Get song thumbnail
+            .setAuthor({ name: "Added to queue", iconURL: url })
+            .setThumbnail(thumbnail) // Get song thumbnail
+            .addFields(
+                { name: "Channel", value: channelName, inline: true },
+                { name: "Song Duration", value: songDuration, inline: true },
+                { name: "Estimated time until playing", value: queueDuration, inline: true },
+            )
+            .addField("Position in queue", `${positionInQueue}`, true) // Position in queue
+        return output;
     }
 
     isConnected() {

@@ -1,8 +1,6 @@
 // See queue
 // Edit queue
-// https://discordjs.guide/popular-topics/embeds.html#embed-preview
 // Commands while playing glitches playing
-// Refactor so that YouTube is completely outside of music player
 
 const { Client, Intents } = require("discord.js");
 
@@ -33,8 +31,6 @@ client.login(config.token);
 const destroy = require("./commands/destroy.js");
 const MusicPlayer = require("./modules/Musicplayer.js");
 const YouTube = require("./modules/YouTube.js");
-const { MessageEmbed } = require("discord.js");
-
 
 // Initalize
 let musicPlayer;
@@ -51,7 +47,6 @@ client.on("messageCreate", async message => {
     args = format(args);
 
     // Play, queue, unpause
-    let title;
     if (command === "play" || command === "p") {
         if (!message.member.voice.channel) {
             message.channel.send("❌ **You have to be in a voice channel to use this command.**");
@@ -66,14 +61,13 @@ client.on("messageCreate", async message => {
             message.channel.send("👍 **Joined** `" + message.member.voice.channel.name + "` **and bound to " + message.channel.toString() + "**"); // Will need to update in future
             message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
             await musicPlayer.enqueue(args);
-            title = await yt.getTitle(args);
-            message.channel.send("**Playing** 🎶 `" + title + "` - Now!");
+            const queue = musicPlayer.getQueue();
+            message.channel.send("**Playing** 🎶 `" + queue.getRecentPopped()[1] + "` - Now!");
         }
         else if (musicPlayer) { // Add song to queue
             message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
             await musicPlayer.enqueue(args);
-            title = await yt.getTitle(args);
-            const embed = await createEmbed(musicPlayer, yt);
+            const embed = await musicPlayer.createEmbed();
             message.channel.send({embeds: [embed]});
         }
     }
@@ -134,30 +128,6 @@ const format = (arr) => {
 // Auto disconnects music bot and garbage collects it
 const autodc = () => {
     if (musicPlayer) musicPlayer = null;
-}
-
-const createEmbed = async (musicPlayer, yt) => {
-    const url = "https://bit.ly/335tabK";
-    const queue = musicPlayer.getQueue();
-    const channelName = await yt.getVideoChannel(queue.look());
-    const songDuration = yt.secToMinSec(await yt.getVideoLength(queue.look()));
-    const thumbnail = await yt.getThumbnail(queue.look());
-    const positionInQueue = queue.length();
-    const title = await yt.getTitle(queue.look());
-    const queueDuration = await yt.getQueueDuration(queue);
-    const output = new MessageEmbed()
-        .setColor("#000000") 
-        .setTitle(title) // Get Song title
-        .setURL(queue.look()) // Get song thumbnail
-        .setAuthor({ name: "Added to queue", iconURL: url })
-        .setThumbnail(thumbnail) // Get song thumbnail
-        .addFields(
-            { name: "Channel", value: channelName, inline: true },
-            { name: "Song Duration", value: songDuration, inline: true },
-            { name: "Estimated time until playing", value: queueDuration, inline: true },
-        )
-        .addField("Position in queue", `${positionInQueue}`, true) // Position in queue
-    return output;
 }
 
 module.exports = {
