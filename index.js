@@ -44,8 +44,11 @@ client.on("messageCreate", async message => {
 
     // Play, queue, unpause
     if (command === "play" || command === "p") {
-        if (!args) {
+        if (!args && !musicPlayer) {
             console.log("No argument");
+        }
+        else if (!args && musicPlayer) {
+            musicPlayer.unpause();
         } else if (!musicPlayer) { // Not running
             musicPlayer = new MusicPlayer(message);
             await musicPlayer.enqueue(args);
@@ -54,8 +57,6 @@ client.on("messageCreate", async message => {
         else if (musicPlayer) { // Add song to queue
             await musicPlayer.enqueue(args);
             console.log(`Playing ${args}`)
-        } else { // Unpause 
-            musicPlayer.unpause();
         }
     }
 
@@ -74,10 +75,10 @@ client.on("messageCreate", async message => {
         }
     }
 
-    // // Pause
-    // if (command === "pause") {
-    //     await pause(message, player, connection);
-    // }
+    // Pause
+    if (command === "pause") {
+        if (musicPlayer) musicPlayer.pause();
+    }
 
     // // Join
     // if (command === "join") {
