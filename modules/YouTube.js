@@ -1,7 +1,7 @@
 /**
  * Class handles with YouTube-related methods
  */
- class YouTube {
+class YouTube {
     constructor() {
         this.ytdl = require("ytdl-core");
         this.yts = require("yt-search");
@@ -10,11 +10,17 @@
     /**
      * Method gets the URL of a given video title
      * 
-     * @param {String} keyWord Video title
+     * @param {String} argument Video title
      * @returns URL
      */
-    async getURL(keyWord) {
-        return this.___findVideo(keyWord);
+    async getURL(argument) {
+        let count = 0;
+        const search = await this.yts(argument); // Youtube Search
+        while (search.all[count].type !== "video") {
+            count++;
+        }
+        const info = await this.ytdl.getInfo(search.all[count].url);
+        return search.all[count].url;
     }
 
     /**
@@ -47,17 +53,6 @@
     async getStream(url) {
         const stream = this.ytdl(url, { filter: "audioonly"} );
         return stream;
-    }
-
-    // Find video, skip channels, private method
-    ___findVideo = async (argument) => {
-        let count = 0;
-        const search = await this.yts(argument); // Youtube Search
-        while (search.all[count].type !== "video") {
-            count++;
-        }
-        const info = await this.ytdl.getInfo(search.all[count].url);
-        return search.all[count].url;
     }
 }
 
