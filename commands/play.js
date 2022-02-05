@@ -55,10 +55,3 @@ module.exports = play = async (message, args, connection, player) => {
 }
 
 // Formats all data in args to be one single argument
-const format = (arr) => {
-    let output = "";
-    for (let i = 0; i < arr.length; i++) {
-        output = output + arr[i] + " ";
-    }
-    return output.trim();
-}

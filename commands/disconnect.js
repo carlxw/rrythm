@@ -1,4 +1,4 @@
-const Queue = require("../Queue.js");
+const Queue = require("../modules/Queue.js");
 
 /**
  * Bot to disconnect
