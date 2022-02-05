@@ -1,5 +1,5 @@
 module.exports = disonnect = async (musicPlayer) => {
-    musicPlayer.disconnect();
+    if (musicPlayer) musicPlayer.disconnect();
     console.log("Instance destroyed");
     process.exit();
 }

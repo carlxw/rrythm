@@ -12,7 +12,7 @@ class MusicPlayer {
         this.connection.subscribe(this.player);
         this.queue = new Queue();
         this.player.on(Discord.AudioPlayerStatus.Idle, () => {
-            console.log("Switching songs");
+            this.___playAudio();
         });
     }
 
@@ -44,7 +44,9 @@ class MusicPlayer {
         } else { // Arugment is a title
             this.queue.add(await this.youtube.getURL(argument));
         }
-        this.___playAudio();
+        if (this.getPlayerStatus() === "idle") {
+            this.___playAudio();
+        }
     }
 
     /**
@@ -84,6 +86,7 @@ class MusicPlayer {
      */
     disconnect() {
         this.connection.destroy();
+        this.player.stop();
         this.queue = new Queue();
     }
 

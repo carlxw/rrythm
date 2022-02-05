@@ -49,8 +49,12 @@ client.on("messageCreate", async message => {
             musicPlayer = new MusicPlayer(message);
             await musicPlayer.enqueue(args);
             console.log(`Playing ${args}`)
+        }
+        else if (musicPlayer) { // Add song to queue
+            await musicPlayer.enqueue(args);
+            console.log(`Playing ${args}`)
         } else { // Unpause 
-            unpause(message, player);
+            musicPlayer.unpause();
         }
     }
 
