@@ -53,8 +53,11 @@ class MusicPlayer {
      * Plays audio, private method
      */
     async ___playAudio() {
-        const stream = await this.youtube.getStream(this.queue.pop())
-        this.player.play(Discord.createAudioResource(stream));
+        if (this.queue.isEmpty()) this.player.stop();
+        else {
+            const stream = await this.youtube.getStream(this.queue.pop())
+            this.player.play(Discord.createAudioResource(stream));
+        }
     }
 
     /**
@@ -94,13 +97,13 @@ class MusicPlayer {
         return connection ? true : false;
     }
 
-    /**
-     * Gets the player status
-     * 
-     * @returns playing, idle, paused, unpaused
-     */
+    // @returns playing, idle, paused, unpaused
     getPlayerStatus() {
         return this.player.state.status;
+    }
+
+    getQueue() {
+        return this.queue;
     }
 }
 

@@ -61,7 +61,9 @@ client.on("messageCreate", async message => {
     }
 
     if (command === "skip" || command === "s") {
-        if (musicPlayer) musicPlayer.___playAudio();
+        if (musicPlayer) {
+            musicPlayer.___playAudio();
+        }
         console.log("Skip");
     }
 
@@ -76,18 +78,16 @@ client.on("messageCreate", async message => {
     }
 
     // Pause
-    if (command === "pause") {
-        if (musicPlayer) musicPlayer.pause();
+    if (command === "pause" && musicPlayer) {
+        musicPlayer.pause();
     }
 
-    // // Join
-    // if (command === "join") {
-    //     if (!connection) { // No connection, just join
-    //         connection = await join(message);
-    //     } else { // There is connection, already in a voice channel
-    //         message.channel.send("❌ **I am already in `" + message.member.voice.channel.name + "`!**");
-    //     }
-    // }
+    // Join
+    if (command === "join") {
+        if (!musicPlayer) {
+            musicPlayer = new MusicPlayer(message);
+        }
+    }
 
     // Development - destroy
     if (command === "destroy" || command === "d") {
