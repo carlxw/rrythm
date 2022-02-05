@@ -10,7 +10,7 @@ class MusicPlayer {
         this.player = Discord.createAudioPlayer();
         this.connection.subscribe(this.player);
         this.queue = new Queue();
-        console.log(this.getPlayerStatus());
+        this.interval = setTimeout(() => this.___autoDisconnect(), 60_000);
         this.player.on(Discord.AudioPlayerStatus.Idle, () => {
             if (!this.queue.isEmpty()) this.___playAudio();
             else setTimeout(() => this.___autoDisconnect(), 60_000);
@@ -49,6 +49,11 @@ class MusicPlayer {
      * @param {String} argument A URL or a keyword
      */
     async enqueue(argument) {
+        // Clear auto-disconnect timer
+        if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
         if (await this.youtube.isURL(argument)) { // Argument is a url
             this.queue.add(argument)
         } else { // Arugment is a title
