@@ -1,5 +1,4 @@
 const { Client, Intents } = require("discord.js");
-const Queue = require("./modules/Queue.js");
 
 // Import from config.json
 const config = require("./config.json");
