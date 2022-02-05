@@ -143,10 +143,11 @@ const createEmbed = async (musicPlayer, yt) => {
     const songDuration = yt.secToMinSec(await yt.getVideoLength(queue.look()));
     const thumbnail = await yt.getThumbnail(queue.look());
     const positionInQueue = queue.length();
+    const title = await yt.getTitle(queue.look());
     const output = new MessageEmbed()
         .setColor("#000000") 
-        .setTitle("Song name") // Get Song title
-        .setURL("https://discord.js.org/") // Get song thumbnail
+        .setTitle(title) // Get Song title
+        .setURL(queue.look()) // Get song thumbnail
         .setAuthor({ name: "Added to queue", iconURL: url })
         .setThumbnail(thumbnail) // Get song thumbnail
         .addFields(
