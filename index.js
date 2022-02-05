@@ -1,6 +1,7 @@
 // See queue
 // Edit queue
 // https://discordjs.guide/popular-topics/embeds.html#embed-preview
+// Commands while playing glitches playing
 
 const { Client, Intents } = require("discord.js");
 
