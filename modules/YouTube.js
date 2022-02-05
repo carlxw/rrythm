@@ -63,8 +63,17 @@ class YouTube {
      */
     async getVideoLength(input) {
         let info = await this.___getInfo(input);
-        const length = info.videoDetails.lengthSeconds;
-        const toMin = length/60;
+        return info.videoDetails.lengthSeconds;
+    }
+
+    /**
+     * Method converts raw seconds into min:seconds
+     * 
+     * @param {Integer} seconds Duration of a video
+     * @returns Formatted of mm::ss
+     */
+    async secToMinSec(seconds) {
+        const toMin = seconds/60;
         const min = Math.floor(toMin);
         const seconds = Math.floor((toMin-min)*60);
         return `${min}:${seconds}`;
