@@ -56,7 +56,7 @@ client.on("messageCreate", async message => {
             message.channel.send("⏯ **Resuming** 👍");
         } else if (!musicPlayer) { // Not running
             musicPlayer = new MusicPlayer(message);
-            message.channel.send("👍 **Joined `" + message.member.voice.channel.name + "` and bound to " + message.channel.toString() + "**"); // Will need to update in future
+            message.channel.send("👍 **Joined** `" + message.member.voice.channel.name + "` **and bound to " + message.channel.toString() + "**"); // Will need to update in future
             message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
             await musicPlayer.enqueue(args);
             title = await yt.getTitle(args);
@@ -66,7 +66,7 @@ client.on("messageCreate", async message => {
             message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
             await musicPlayer.enqueue(args);
             title = await yt.getTitle(args);
-            message.channel.send("✅ **Added `**" + title + "**` to queue**");
+            message.channel.send("✅ **Added **`" + title + "`** to queue**");
         }
     }
 
@@ -98,7 +98,7 @@ client.on("messageCreate", async message => {
     if (command === "join") {
         if (!musicPlayer) {
             musicPlayer = new MusicPlayer(message);
-            message.channel.send("👍 **Joined `" + message.member.voice.channel.name + "` and bound to " + message.channel.toString() + "**"); // Will need to update in future
+            message.channel.send("👍 **Joined** `" + message.member.voice.channel.name + "` **and bound to " + message.channel.toString() + "**"); // Will need to update in future
         }
     }
 
