@@ -73,7 +73,8 @@ client.on("messageCreate", async message => {
             message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
             await musicPlayer.enqueue(args);
             title = await yt.getTitle(args);
-            message.channel.send("✅ **Added **`" + title + "`** to queue**");
+            const embed = await createEmbed(musicPlayer, yt);
+            message.channel.send({embeds: [embed]});
         }
     }
 
@@ -116,7 +117,7 @@ client.on("messageCreate", async message => {
     }
 
     if (command === "test") {
-        const embed = createEmbed();
+        const embed = await createEmbed(musicPlayer, yt);
         message.channel.send({embeds: [embed]});
     }
 });
@@ -135,20 +136,25 @@ const autodc = () => {
     if (musicPlayer) musicPlayer = null;
 }
 
-const createEmbed = () => {
+const createEmbed = async (musicPlayer, yt) => {
+    const url = "https://bit.ly/335tabK";
+    const queue = musicPlayer.getQueue();
+    const channelName = await yt.getVideoChannel(queue.look());
+    const songDuration = yt.secToMinSec(await yt.getVideoLength(queue.look()));
+    const thumbnail = await yt.getThumbnail(queue.look());
+    const positionInQueue = queue.length();
     const output = new MessageEmbed()
         .setColor("#000000") 
         .setTitle("Song name") // Get Song title
         .setURL("https://discord.js.org/") // Get song thumbnail
-        .setAuthor({ name: "Added to queue", iconURL: "https://cdn.discordapp.com/attachments/753629628614311936/939580861484007444/rythm.png" })
-        //.setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png'})
-        .setThumbnail("https://i.ytimg.com/vi/duJNVv9m2NY/maxresdefault.jpg") // Get song thumbnail
+        .setAuthor({ name: "Added to queue", iconURL: url })
+        .setThumbnail(thumbnail) // Get song thumbnail
         .addFields(
-            { name: "Channel", value: "Some value here", inline: true },
-            { name: "Song Duration", value: "Some value here", inline: true },
-            { name: "Estimated time until playing", value: "Some value here", inline: true },
+            { name: "Channel", value: channelName, inline: true },
+            { name: "Song Duration", value: songDuration, inline: true },
+            { name: "Estimated time until playing", value: "Who knows lol", inline: true },
         )
-        .addField("Position in queue", "Some value here", true) // Position in queue
+        .addField("Position in queue", `${positionInQueue}`, true) // Position in queue
     return output;
 }
 

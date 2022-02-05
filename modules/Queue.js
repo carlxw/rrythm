@@ -28,9 +28,16 @@ class Queue
         return this.items[0];
     }
 
+    // Gets the last element of the queue
+    look() 
+    {
+        if(this.isEmpty()) return "No elements in Queue";
+        return this.items[this.tail-1];
+    }
+
     // Gets length of queue
     length() {
-        return tail - 0;
+        return this.tail - 0;
     }
 
     // Is queue empty?

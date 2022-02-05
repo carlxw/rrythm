@@ -29,7 +29,7 @@ class YouTube {
      * @returns Title of video
      */
     async getTitle(input) {
-        let info = this.___getInfo(input);
+        let info = await this.___getInfo(input);
         return info.videoDetails.title;
     }
 
@@ -41,7 +41,7 @@ class YouTube {
      */
     async getThumbnail(input) {
         let info = await this.___getInfo(input);
-        return info.videoDetails.thumbnails[4].url;
+        return info.videoDetails.thumbnails[3].url;
     }
 
     /**
@@ -72,8 +72,8 @@ class YouTube {
      * @param {Integer} seconds Duration of a video
      * @returns Formatted of mm::ss
      */
-    async secToMinSec(seconds) {
-        const toMin = seconds/60;
+    secToMinSec(input) {
+        const toMin = input/60;
         const min = Math.floor(toMin);
         const seconds = Math.floor((toMin-min)*60);
         return `${min}:${seconds}`;
