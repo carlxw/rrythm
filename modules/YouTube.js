@@ -30,10 +30,10 @@
      */
     async getTitle(input) {
         let info;
-        if (this.isURL(input)) { // is URL
+        if (await this.isURL(input)) { // is URL
             info = await this.ytdl.getInfo(input);
         } else { // is keyword
-            info = await this.ytdl.getInfo(this.getURL(input));
+            info = await this.ytdl.getInfo(await this.getURL(input));
         }
         return info.videoDetails.title;
     }
