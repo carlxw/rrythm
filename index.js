@@ -110,4 +110,11 @@ const format = (arr) => {
     return output.trim();
 }
 
-module.exports = musicPlayer;
+const autodc = () => {
+    if (musicPlayer) musicPlayer = null;
+}
+
+module.exports = {
+    musicPlayer,
+    autodc
+}

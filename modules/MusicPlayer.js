@@ -1,7 +1,6 @@
 const Discord = require("@discordjs/voice");
 let Queue = require("./Queue.js");
 const YouTube = require("./YouTube.js");
-const ytdl = require("ytdl-core");
 
 class MusicPlayer {
     constructor(message) {
@@ -11,9 +10,20 @@ class MusicPlayer {
         this.player = Discord.createAudioPlayer();
         this.connection.subscribe(this.player);
         this.queue = new Queue();
+        console.log(this.getPlayerStatus());
         this.player.on(Discord.AudioPlayerStatus.Idle, () => {
-            this.___playAudio();
+            if (!this.queue.isEmpty()) this.___playAudio();
+            else setTimeout(() => this.___autoDisconnect(), 60_000);
         });
+    }
+
+    /**
+     * Garbage collect self
+     */
+    ___autoDisconnect() {
+        this.disconnect();
+        const {autodc} = require("../index.js");
+        autodc();
     }
 
     /**
