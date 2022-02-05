@@ -22,7 +22,7 @@ const client = new Client({
 client.on("ready", () => {
     console.log("Rrythm is active!");
 
-    const { generateDependencyReport } = require('@discordjs/voice');
+    const { generateDependencyReport } = require("@discordjs/voice");
     console.log(generateDependencyReport());
 });
 
@@ -33,6 +33,8 @@ client.login(config.token);
 const destroy = require("./commands/destroy.js");
 const MusicPlayer = require("./modules/Musicplayer.js");
 const YouTube = require("./modules/YouTube.js");
+const { MessageEmbed } = require("discord.js");
+
 
 // Initalize
 let musicPlayer;
@@ -112,6 +114,11 @@ client.on("messageCreate", async message => {
     if (command === "destroy" || command === "d") {
         destroy(musicPlayer);
     }
+
+    if (command === "test") {
+        const embed = createEmbed();
+        message.channel.send({embeds: [embed]});
+    }
 });
 
 // Formats all entries from an array to a single string
@@ -126,6 +133,23 @@ const format = (arr) => {
 // Auto disconnects music bot and garbage collects it
 const autodc = () => {
     if (musicPlayer) musicPlayer = null;
+}
+
+const createEmbed = () => {
+    const output = new MessageEmbed()
+        .setColor("#000000") 
+        .setTitle("Song name") // Get Song title
+        .setURL("https://discord.js.org/") // Get song thumbnail
+        .setAuthor({ name: "Added to queue", iconURL: "https://cdn.discordapp.com/attachments/753629628614311936/939580861484007444/rythm.png" })
+        //.setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png'})
+        .setThumbnail("https://i.ytimg.com/vi/duJNVv9m2NY/maxresdefault.jpg") // Get song thumbnail
+        .addFields(
+            { name: "Channel", value: "Some value here", inline: true },
+            { name: "Song Duration", value: "Some value here", inline: true },
+            { name: "Estimated time until playing", value: "Some value here", inline: true },
+        )
+        .addField("Position in queue", "Some value here", true) // Position in queue
+    return output;
 }
 
 module.exports = {
