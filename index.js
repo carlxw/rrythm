@@ -2,6 +2,7 @@
 // Edit queue
 // https://discordjs.guide/popular-topics/embeds.html#embed-preview
 // Commands while playing glitches playing
+// Refactor so that YouTube is completely outside of music player
 
 const { Client, Intents } = require("discord.js");
 
@@ -20,6 +21,9 @@ const client = new Client({
 // Bot active
 client.on("ready", () => {
     console.log("Rrythm is active!");
+
+    const { generateDependencyReport } = require('@discordjs/voice');
+    console.log(generateDependencyReport());
 });
 
 // Activate bot
@@ -71,7 +75,7 @@ client.on("messageCreate", async message => {
         }
     }
 
-    //
+    // Skip
     if (command === "skip" || command === "s") {
         if (musicPlayer) {
             musicPlayer.___playAudio();
@@ -106,7 +110,7 @@ client.on("messageCreate", async message => {
 
     // Development - destroy
     if (command === "destroy" || command === "d") {
-        await destroy(musicPlayer);
+        destroy(musicPlayer);
     }
 });
 
