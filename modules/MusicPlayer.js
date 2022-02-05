@@ -122,6 +122,8 @@ class MusicPlayer {
         const yt = new YouTube();
         const url = "https://bit.ly/335tabK";
 
+        // console.dir(this.queue);
+        console.log(this.queue.look()[1]);
         const title = this.queue.look()[1];
         const channelName = this.queue.look()[2];
         const songDuration = yt.secToMinSec(this.queue.look()[3]);

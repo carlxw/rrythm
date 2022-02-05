@@ -121,11 +121,9 @@ class YouTube {
         let array = queue.getArray();
         array.push(queue.getRecentPopped());
         let output = 0;
-        console.dir(queue);
         // Store everything in one go?
         for (let i = 0; i < array.length; i++) {
             output += Number(array[i][3]);
-            console.log(Number(array[i][3]));
         }
         return this.secToMinSec(output);
     }

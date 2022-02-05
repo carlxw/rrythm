@@ -63,10 +63,10 @@ class Queue
         }
     }
 
-    // Gets the array used
+    // Gets the array used BY VALUE
     getArray() 
     {
-        return this.items;
+        return this.items.slice();
     }
 
     // Gets most recent popped item
