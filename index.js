@@ -1,5 +1,5 @@
 // See queue
-// Edit queue
+// Edit queue (remove)
 // Commands while playing glitches playing
 
 const { Client, Intents } = require("discord.js");
