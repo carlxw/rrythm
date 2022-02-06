@@ -8,6 +8,9 @@
 // https://www.npmjs.com/package/nodemon
 // https://www.npmjs.com/package/forever
 
+// play-dl
+// piscina
+
 const { Client, Intents } = require("discord.js");
 
 // Import from config.json
