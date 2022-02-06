@@ -50,7 +50,6 @@ client.on("messageCreate", async message => {
     if (command === "play" || command === "p") {
         if (!message.member.voice.channel) {
             message.channel.send("❌ **You have to be in a voice channel to use this command.**");
-            
         } else if (!args && musicPlayer) {
             musicPlayer.unpause();
             message.channel.send("⏯ **Resuming** 👍");
