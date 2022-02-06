@@ -112,7 +112,7 @@ class MusicPlayer {
      * @returns boolean
      */
     unpause() {
-        if (this.getPlayerStatus() === "paused" && !this.queue.isEmpty()) {
+        if (this.getPlayerStatus() === "paused") {
             this.player.unpause();
             return true;
         } else return false;
