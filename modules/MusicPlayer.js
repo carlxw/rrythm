@@ -127,38 +127,6 @@ class MusicPlayer {
         this.queue = new Queue();
     }
 
-    /**
-     * Creates embed for new queue entry
-     * 
-     * @returns Embed message
-     */
-    createEmbed = async () => {
-        const { MessageEmbed } = require("discord.js");
-        const yt = new YouTube();
-        const url = "https://bit.ly/335tabK";
-
-        const title = this.queue.look()[1];
-        const channelName = this.queue.look()[2];
-        const songDuration = yt.secToMinSec(this.queue.look()[3]);
-        const thumbnail = this.queue.look()[4];
-        const positionInQueue = this.queue.length();
-        const queueDuration = yt.getQueueDuration(this.queue);
-
-        const output = new MessageEmbed()
-            .setColor("#000000") 
-            .setTitle(title) // Get Song title
-            .setURL(this.queue.look()[0]) // Get song thumbnail
-            .setAuthor({ name: "Added to queue", iconURL: url })
-            .setThumbnail(thumbnail) // Get song thumbnail
-            .addFields(
-                { name: "Channel", value: channelName, inline: true },
-                { name: "Song Duration", value: songDuration, inline: true },
-                { name: "Estimated time until playing", value: queueDuration, inline: true },
-            )
-            .addField("Position in queue", `${positionInQueue}`, true) // Position in queue
-        return output;
-    }
-
     isConnected() {
         return connection ? true : false;
     }

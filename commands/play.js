@@ -1,12 +1,14 @@
 const MusicPlayer = require("../modules/MusicPlayer");
+const Discord = require("../modules/Discord.js");
 
 module.exports = command = async (musicPlayer, message, args) => {
+    const discord = new Discord();
+
     if (!message.member.voice.channel) {
         message.channel.send("❌ **You have to be in a voice channel to use this command.**");
     } else if (!args && musicPlayer.getPlayerStatus() === "paused") {
         musicPlayer.unpause();
         message.channel.send("⏯ **Resuming** 👍");
-
         return musicPlayer
     } else if (!args) {
         message.channel.send("❌ **There is nothing to play**");
@@ -15,18 +17,16 @@ module.exports = command = async (musicPlayer, message, args) => {
         message.channel.send("👍 **Joined** `" + message.member.voice.channel.name + "` **and bound to " + message.channel.toString() + "**"); // Will need to update in future
         message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
         await musicPlayer.enqueue(args);
-        const queue = musicPlayer.getQueue();
-        message.channel.send("**Playing** 🎶 `" + queue.getRecentPopped()[1] + "` - Now!");
-        queue.getRecentPopped()[6] = message.author.username+"#"+message.author.discriminator;
+        message.channel.send("**Playing** 🎶 `" + musicPlayer.getQueue().getRecentPopped()[1] + "` - Now!");
+        musicPlayer.getQueue().getRecentPopped()[6] = discord.getUser(message);
         return musicPlayer;
     }
     else if (musicPlayer) { // Add song to queue
         message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
         await musicPlayer.enqueue(args);
-        const embed = await musicPlayer.createEmbed();
+        const embed = await discord.embedAddedToQueue(musicPlayer.getQueue(), message);
         message.channel.send({embeds: [embed]});
-        const queue = musicPlayer.getQueue();
-        queue.look()[6] = message.author.username+"#"+message.author.discriminator;
+        musicPlayer.getQueue().look()[6] = discord.getUser(message);
         return musicPlayer;
     }
 }
