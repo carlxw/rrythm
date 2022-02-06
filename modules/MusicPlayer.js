@@ -57,15 +57,31 @@ class MusicPlayer {
         }
 
         let link;
-        if (await yt.isURL(argument)) link = argument;
-        else link = await yt.getURL(argument);
+        let title;
+        let channelName;
+        let songDuration;
+        let thumbnail;
+        let stream
+        let requestedBy;
+        
+        [
+            link, 
+            title, 
+            channelName, 
+            songDuration, 
+            thumbnail, 
+            stream
+        ] = await yt.acquire(argument);
 
-        const title = await yt.getTitle(link);
-        const channelName = await yt.getVideoChannel(link);
-        const songDuration = await yt.getVideoLength(link);
-        const thumbnail = await yt.getThumbnail(link);
-        const stream = await yt.getStream(link)
-        this.queue.add([link, title, channelName, songDuration, thumbnail, stream, null]);
+        this.queue.add([
+            link, 
+            title, 
+            channelName, 
+            songDuration, 
+            thumbnail, 
+            stream, 
+            requestedBy
+        ]);
         if (this.getPlayerStatus() === "idle") this.___playAudio();
     }
 

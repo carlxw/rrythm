@@ -8,6 +8,27 @@ class YouTube {
     }
 
     /**
+     * 
+     * @param {String} argument A URL or a search keyword
+     * @returns Title of video, 
+     */
+    async acquire(argument) {
+        let link;
+        this.isURL(argument);
+        if (await this.isURL(argument)) argument = link;
+        else link = await this.getURL(argument);
+
+        let info = await this.___getInfo(argument);
+
+        const title = info.videoDetails.title;
+        const channelName = info.videoDetails.author.name;
+        const songDuration = info.videoDetails.lengthSeconds;
+        const thumbnail = info.videoDetails.thumbnails[3].url;
+        const stream = await this.getStream(link)
+        return [link, title, channelName, songDuration, thumbnail, stream];
+    }
+    
+    /**
      * Method gets the URL of a given video title
      * 
      * @param {String} argument Video title
