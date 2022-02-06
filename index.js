@@ -29,8 +29,12 @@ client.login(config.token);
 
 // Imports
 const destroy = require("./commands/destroy.js");
-const MusicPlayer = require("./modules/Musicplayer.js");
 const YouTube = require("./modules/YouTube.js");
+const skip = require("./commands/skip.js");
+const play = require("./commands/play.js");
+const disconnect = require("./commands/disconnect.js");
+const pause = require("./commands/pause.js");
+const join = require("./commands/join.js");
 
 // Initalize
 let musicPlayer;
@@ -48,63 +52,27 @@ client.on("messageCreate", async message => {
 
     // Play, queue, unpause
     if (command === "play" || command === "p") {
-        if (!message.member.voice.channel) {
-            message.channel.send("❌ **You have to be in a voice channel to use this command.**");
-        } else if (!args && musicPlayer) {
-            musicPlayer.unpause();
-            message.channel.send("⏯ **Resuming** 👍");
-        } else if (!args) {
-            message.channel.send("❌ **There is nothing to play**");
-        } else if (!musicPlayer) { // Not running
-            musicPlayer = new MusicPlayer(message);
-            message.channel.send("👍 **Joined** `" + message.member.voice.channel.name + "` **and bound to " + message.channel.toString() + "**"); // Will need to update in future
-            message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
-            await musicPlayer.enqueue(args);
-            const queue = musicPlayer.getQueue();
-            message.channel.send("**Playing** 🎶 `" + queue.getRecentPopped()[1] + "` - Now!");
-            queue.getRecentPopped()[6] = message.author.username+"#"+message.author.discriminator;
-        }
-        else if (musicPlayer) { // Add song to queue
-            message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
-            await musicPlayer.enqueue(args);
-            const embed = await musicPlayer.createEmbed();
-            message.channel.send({embeds: [embed]});
-            const queue = musicPlayer.getQueue();
-            queue.look()[6] = message.author.username+"#"+message.author.discriminator;
-        }
+        musicPlayer = await play(musicPlayer, message, args);
     }
 
     // Skip
-    if (command === "skip" || command === "s") {
-        if (musicPlayer) {
-            musicPlayer.___playAudio();
-            message.channel.send("⏩ **Skipped** 👍");
-        }
+    if ((command === "skip" || command === "s") && musicPlayer) {
+        skip(musicPlayer, message);
     }
 
     // Disconnect
     if (command === "disconnect" || command === "dc") {
-        if (!musicPlayer) {
-            message.channel.send("❌ **I am not in a voice channel**");
-        } else {
-            musicPlayer.disconnect();
-            musicPlayer = null;
-            message.channel.send("📭 **Successfully disconnected**");
-        }
+        musicPlayer = disconnect(musicPlayer, message);
     }
 
     // Pause
     if (command === "pause" && musicPlayer) {
-        musicPlayer.pause();
-        message.channel.send("**Paused** ⏸");
+        pause(musicPlayer, message);
     }
 
     // Join
     if (command === "join") {
-        if (!musicPlayer) {
-            musicPlayer = new MusicPlayer(message);
-            message.channel.send("👍 **Joined** `" + message.member.voice.channel.name + "` **and bound to " + message.channel.toString() + "**"); // Will need to update in future
-        }
+        musicPlayer = join(musicPlayer);
     }
 
     // Development - destroy
