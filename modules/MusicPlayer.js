@@ -12,7 +12,8 @@ class MusicPlayer {
         this.interval = setTimeout(() => this.___autoDisconnect(), 60_000);
         this.player.on(Discord.AudioPlayerStatus.Idle, () => {
             if (!this.queue.isEmpty()) this.___playAudio();
-            else setTimeout(() => this.___autoDisconnect(), 60_000);
+            // else setTimeout(() => this.___autoDisconnect(), 60_000);
+            else this.___autoDisconnect();
         });
     }
 
