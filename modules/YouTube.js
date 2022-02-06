@@ -91,7 +91,7 @@ class YouTube {
      * Method converts raw seconds into min:seconds
      * 
      * @param {Integer} seconds Duration of a video
-     * @returns Formatted of mm::ss
+     * @returns Formatted of mm:ss
      */
     secToMinSec(input) {
         const toMin = input/60;
