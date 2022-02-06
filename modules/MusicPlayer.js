@@ -65,7 +65,7 @@ class MusicPlayer {
         const songDuration = await yt.getVideoLength(link);
         const thumbnail = await yt.getThumbnail(link);
         const stream = await yt.getStream(link)
-        this.queue.add([link, title, channelName, songDuration, thumbnail, stream]);
+        this.queue.add([link, title, channelName, songDuration, thumbnail, stream, null]);
         if (this.getPlayerStatus() === "idle") this.___playAudio();
     }
 
@@ -73,10 +73,8 @@ class MusicPlayer {
      * Plays audio, private method
      */
     async ___playAudio() {
-        if (this.queue.isEmpty()) this.player.stop();
-        else {
-            this.player.play(Discord.createAudioResource(this.queue.pop()[5]));
-        }
+        if (this.queue.isEmpty()) this.___autoDisconnect();
+        else this.player.play(Discord.createAudioResource(this.queue.pop()[5]));
     }
 
     /**
@@ -97,7 +95,7 @@ class MusicPlayer {
      * @returns boolean
      */
     unpause() {
-        if (this.getPlayerStatus() === "paused") {
+        if (this.getPlayerStatus() === "paused" && !this.queue.isEmpty()) {
             this.player.unpause();
             return true;
         } else return false;
@@ -122,8 +120,6 @@ class MusicPlayer {
         const yt = new YouTube();
         const url = "https://bit.ly/335tabK";
 
-        // console.dir(this.queue);
-        console.log(this.queue.look()[1]);
         const title = this.queue.look()[1];
         const channelName = this.queue.look()[2];
         const songDuration = yt.secToMinSec(this.queue.look()[3]);

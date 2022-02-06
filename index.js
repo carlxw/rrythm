@@ -50,25 +50,30 @@ client.on("messageCreate", async message => {
     if (command === "play" || command === "p") {
         if (!message.member.voice.channel) {
             message.channel.send("❌ **You have to be in a voice channel to use this command.**");
-        } else if (!args && !musicPlayer) {
-            message.channel.send("❌ **There is nothing to play**");
-        }
-        else if (!args && musicPlayer) {
+            
+        } else if (!args && musicPlayer) {
             musicPlayer.unpause();
             message.channel.send("⏯ **Resuming** 👍");
+        } else if (!args) {
+            message.channel.send("❌ **There is nothing to play**");
         } else if (!musicPlayer) { // Not running
+            console.log("No music player")
             musicPlayer = new MusicPlayer(message);
             message.channel.send("👍 **Joined** `" + message.member.voice.channel.name + "` **and bound to " + message.channel.toString() + "**"); // Will need to update in future
             message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
             await musicPlayer.enqueue(args);
             const queue = musicPlayer.getQueue();
             message.channel.send("**Playing** 🎶 `" + queue.getRecentPopped()[1] + "` - Now!");
+            queue.getRecentPopped()[6] = message.author.username+"#"+message.author.discriminator;
         }
         else if (musicPlayer) { // Add song to queue
+            console.log("music player, add to queue")
             message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
             await musicPlayer.enqueue(args);
             const embed = await musicPlayer.createEmbed();
             message.channel.send({embeds: [embed]});
+            const queue = musicPlayer.getQueue();
+            queue.look()[6] = message.author.username+"#"+message.author.discriminator;
         }
     }
 
@@ -111,8 +116,13 @@ client.on("messageCreate", async message => {
     }
 
     if (command === "test") {
-        const embed = await createEmbed(musicPlayer, yt);
-        message.channel.send({embeds: [embed]});
+        console.log(message.guild.name) // Guild or server name
+        console.log(message.author.username+ "#"+message.author.discriminator) // Member name
+    }
+
+    if (command === "queue") {
+        const queue = musicPlayer.getQueue();
+        console.dir(queue);
     }
 });
 
