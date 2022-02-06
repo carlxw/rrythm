@@ -1,6 +1,12 @@
-// See queue
-// Edit queue (remove)
+// Now playing
+// Play top
+// Loop queue
+// Loop song
+// Clear queue
 // Commands while playing glitches playing (worker threads)
+
+// https://www.npmjs.com/package/nodemon
+// https://www.npmjs.com/package/forever
 
 const { Client, Intents } = require("discord.js");
 
