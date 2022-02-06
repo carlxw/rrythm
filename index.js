@@ -57,7 +57,6 @@ client.on("messageCreate", async message => {
         } else if (!args) {
             message.channel.send("❌ **There is nothing to play**");
         } else if (!musicPlayer) { // Not running
-            console.log("No music player")
             musicPlayer = new MusicPlayer(message);
             message.channel.send("👍 **Joined** `" + message.member.voice.channel.name + "` **and bound to " + message.channel.toString() + "**"); // Will need to update in future
             message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
@@ -67,7 +66,6 @@ client.on("messageCreate", async message => {
             queue.getRecentPopped()[6] = message.author.username+"#"+message.author.discriminator;
         }
         else if (musicPlayer) { // Add song to queue
-            console.log("music player, add to queue")
             message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
             await musicPlayer.enqueue(args);
             const embed = await musicPlayer.createEmbed();
@@ -118,11 +116,6 @@ client.on("messageCreate", async message => {
     if (command === "test") {
         console.log(message.guild.name) // Guild or server name
         console.log(message.author.username+ "#"+message.author.discriminator) // Member name
-    }
-
-    if (command === "queue") {
-        const queue = musicPlayer.getQueue();
-        console.dir(queue);
     }
 });
 
