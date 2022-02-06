@@ -70,6 +70,13 @@ class Queue
         return this.items.slice();
     }
 
+
+    // Gets the array used BY REFERENCE
+    getArrayReference() 
+    {
+        return this.items;
+    }
+
     // Gets most recent popped item
     getRecentPopped()
     {

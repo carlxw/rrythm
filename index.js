@@ -35,6 +35,7 @@ const disconnect = require("./commands/disconnect.js");
 const pause = require("./commands/pause.js");
 const join = require("./commands/join.js");
 const queue = require ("./commands/queue.js");
+const remove = require ("./commands/remove.js");
 
 // Initalize
 let musicPlayer;
@@ -75,17 +76,19 @@ client.on("messageCreate", async message => {
     }
 
     // Get queue list
-    if (command === "queue" || command === "q") {
+    if ((command === "queue" || command === "q") && musicPlayer) {
         queue(musicPlayer, message);
+    }
+
+    // Remove position in queue
+    if (command === "remove" && musicPlayer) {
+        console.log(1);
+        remove(musicPlayer, message, Number(args));
     }
 
     // Development - destroy
     if (command === "destroy" || command === "d") {
         destroy(musicPlayer);
-    }
-
-    if (command === "test") {
-        console.log(message.author.id);
     }
 });
 
