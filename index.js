@@ -81,7 +81,7 @@ client.on("messageCreate", async message => {
 
     // Join
     else if (command === "join") {
-        musicPlayer = join(musicPlayer);
+        musicPlayer = join(musicPlayer, message);
     }
 
     // Get queue list
