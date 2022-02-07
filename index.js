@@ -99,6 +99,10 @@ client.on("messageCreate", async message => {
     else if (command === "destroy" || command === "d") {
         destroy(musicPlayer);
     }
+
+    else if (command === "test") {
+        console.log(musicPlayer.getSetChannel());
+    }
 });
 
 // Formats all entries from an array to a single string
