@@ -91,7 +91,9 @@ class MusicPlayer {
      */
     async ___playAudio() {
         if (this.queue.isEmpty()) this.___autoDisconnect();
-        else this.player.play(Discord.createAudioResource(this.queue.pop()[5]));
+        else {
+            this.player.play(this.queue.pop()[5]);
+        }
     }
 
     /**

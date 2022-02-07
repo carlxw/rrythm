@@ -5,6 +5,7 @@ class YouTube {
     constructor() {
         this.ytdl = require("ytdl-core");
         this.yts = require("yt-search");
+        this.playdl = require("play-dl");
     }
 
     /**
@@ -128,8 +129,17 @@ class YouTube {
      * @returns AudioResource provided by YTDL
      */
     async getStream(url) {
+        const { createAudioResource } = require("@discordjs/voice");
+        const source = await this.playdl.stream(url);
+        const resource = createAudioResource(source.stream, {
+            inputType : source.type
+        }) 
+        return resource;
+
+        /* ytdl-core 
         const stream = this.ytdl(url, { filter: "audioonly" });
         return stream;
+        */
     }
 
     /**
