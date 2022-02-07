@@ -65,38 +65,38 @@ client.on("messageCreate", async message => {
     }
 
     // Skip
-    if ((command === "skip" || command === "s") && musicPlayer) {
+    else if ((command === "skip" || command === "s") && musicPlayer) {
         skip(musicPlayer, message);
     }
 
     // Disconnect
-    if (command === "disconnect" || command === "dc") {
+    else if (command === "disconnect" || command === "dc") {
         musicPlayer = disconnect(musicPlayer, message);
     }
 
     // Pause
-    if (command === "pause" && musicPlayer) {
+    else if (command === "pause" && musicPlayer) {
         pause(musicPlayer, message);
     }
 
     // Join
-    if (command === "join") {
+    else if (command === "join") {
         musicPlayer = join(musicPlayer);
     }
 
     // Get queue list
-    if ((command === "queue" || command === "q") && musicPlayer) {
+    else if ((command === "queue" || command === "q") && musicPlayer) {
         queue(musicPlayer, message);
     }
 
     // Remove position in queue
-    if (command === "remove" && musicPlayer) {
+    else if (command === "remove" && musicPlayer) {
         console.log(1);
         remove(musicPlayer, message, Number(args));
     }
 
     // Development - destroy
-    if (command === "destroy" || command === "d") {
+    else if (command === "destroy" || command === "d") {
         destroy(musicPlayer);
     }
 });
