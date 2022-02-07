@@ -15,8 +15,7 @@ class YouTube {
      */
     async acquire(argument) {
         let link;
-        this.isURL(argument);
-        if (await this.isURL(argument)) argument = link;
+        if (this.isURL(argument)) argument = link;
         else link = await this.getURL(argument);
 
         let info = await this.___getInfo(argument);
@@ -118,8 +117,9 @@ class YouTube {
      * @param {String} argument Video title, or URL
      * @returns boolean
      */
-    async isURL(argument) {
-        return this.ytdl.validateURL(argument);
+    isURL(argument) {
+        // return this.ytdl.validateURL(argument);
+        return argument.includes("https://www.youtube.com/watch?v=");
     }
 
     /**
