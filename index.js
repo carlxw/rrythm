@@ -8,7 +8,7 @@
 // https://www.npmjs.com/package/nodemon
 // https://www.npmjs.com/package/forever
 
-// play-dl
+// play-dl (Maybe replace ytdl-core?)
 // piscina
 
 const { Client, Intents } = require("discord.js");
