@@ -119,7 +119,7 @@ class YouTube {
      */
     isURL(argument) {
         // return this.ytdl.validateURL(argument);
-        return argument.includes("https://www.youtube.com/watch?v=");
+        return argument.includes("https://www.youtube.com/watch?v=") || argument.includes("https://youtu.be");
     }
 
     /**
