@@ -26,11 +26,8 @@ client.on('messageCreate', async message => {
             limit: 1
         })
 
-        console.log(yt_info[0].thumbnails);
-        console.log()
-        console.log(yt_info);
-        console.log()
-        console.log(yt_info[0]);
+        console.log(yt_info[0].thumbnails.url);
+        console.log(yt_info[0].thumbnails[0].url);
         
         let stream = await play.stream(yt_info[0].url)
         
