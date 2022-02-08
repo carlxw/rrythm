@@ -6,12 +6,14 @@ module.exports = command = async (musicPlayer, message, args) => {
 
     if (!message.member.voice.channel) {
         message.channel.send("❌ **You have to be in a voice channel to use this command.**");
+        return musicPlayer;
     } else if (!args && musicPlayer.getPlayerStatus() === "paused") {
         musicPlayer.unpause();
         message.channel.send("⏯ **Resuming** 👍");
-        return musicPlayer
+        return musicPlayer;
     } else if (!args) {
         message.channel.send("❌ **There is nothing to play**");
+        return musicPlayer;
     } else if (!musicPlayer) { // Not running
         musicPlayer = new MusicPlayer(message);
         message.channel.send("👍 **Joined** `" + message.member.voice.channel.name + "` **and bound to " + message.channel.toString() + "**"); // Will need to update in future
