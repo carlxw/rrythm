@@ -91,7 +91,6 @@ client.on("messageCreate", async message => {
 
     // Remove position in queue
     else if (command === "remove" && musicPlayer) {
-        console.log(1);
         remove(musicPlayer, message, Number(args));
     }
 
