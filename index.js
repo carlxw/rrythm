@@ -34,38 +34,10 @@ for (const file of commandFiles) {
     client.commands.set(commandName, commandExport);
     console.log(`[COMMAND HANDLER] - ${file} has been loaded.`);
 }
+commands = client.commands;
 
 // Activate bot
 client.login(config.token);
-
-client.on("messageCreate", async message => {
-	if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) return;
-
-	// Isolate arguments (array) and command
-    let args = message.content.slice(config.prefix.length).trim().split(/ +/g);
-    const command = args.shift().toLowerCase();
-    args = format(args);
-
-    const cmd = client.commands.get(command);
-
-	if (!cmd) return
-
-    console.dir(client.commands);
-	try {
-		await cmd();
-	} catch (error) {
-		console.error(error);
-	}
-});
-
-// Formats all entries from an array to a single string
-const format = (arr) => {
-    let output = "";
-    for (let i = 0; i < arr.length; i++) {
-        output = output + arr[i] + " ";
-    }
-    return output.trim();
-}
 
 // Auto disconnects music bot and garbage collects it
 const autodc = () => {

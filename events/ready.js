@@ -1,5 +1,5 @@
 module.exports = {
-	name: 'ready',
+	name: "ready",
 	once: true,
 	execute() {
         console.log("Rrythm is active!");
