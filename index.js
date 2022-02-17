@@ -14,6 +14,7 @@
 // Don't immediately discard discord bot when queue is empty
 
 const { Client, Intents } = require("discord.js");
+const fs = require('fs');
 
 // Import from config.json
 const config = require("./config.json");
@@ -27,13 +28,16 @@ const client = new Client({
     ]
 });
 
-// Bot active
-client.on("ready", () => {
-    console.log("Rrythm is active!");
+const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 
-    const { generateDependencyReport } = require("@discordjs/voice");
-    console.log(generateDependencyReport());
-});
+for (const file of eventFiles) {
+	const event = require(`./events/${file}`);
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args));
+	} else {
+		client.on(event.name, (...args) => event.execute(...args));
+	}
+}
 
 // Activate bot
 client.login(config.token);
