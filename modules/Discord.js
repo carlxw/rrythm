@@ -105,6 +105,40 @@ class Discord {
 
         return String(output);
     }
+
+    /**
+     * Creates a voice channel connection
+     * 
+     * @param {String (ID)} message User that called bot
+     * @returns connection to the voice channel
+     */
+    async createConnection(message) {
+        const { joinVoiceChannel } = require("@discordjs/voice");
+        this.connection = joinVoiceChannel({
+            channelId: message.member.voice.channel.id,
+            guildId: message.guild.id,
+            adapterCreator: message.guild.voiceAdapterCreator,
+            selfMute: false,
+            selfDeaf: false
+        });
+        return connection;
+    }
+
+    /**
+     * Method returns connection to VC if exists
+     * 
+     * @returns Connection if available
+     */
+    getConnection() {
+        if (this.connection) return connection
+    }
+
+    /**
+     * Destroys the voice connection if exists
+     */
+    destroyConnection() {
+        if (this.connection) this.connection.destroy();
+    }
 }
 
 module.exports = Discord;

@@ -37,8 +37,3 @@ for (const file of commandFiles) {
 
 // Activate bot
 client.login(config.token);
-
-// Auto disconnects music bot and garbage collects it
-const autodc = () => {
-    if (musicPlayer) musicPlayer = null;
-}

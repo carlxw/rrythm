@@ -1,4 +1,4 @@
-const Discord = require("@discordjs/voice");
+const DiscordVoice = require("@Voicejs/voice");
 let Queue = require("./Queue.js");
 const YouTube = require("./YouTube.js");
 
@@ -6,13 +6,13 @@ class MusicPlayer {
     constructor(message) {
         this.message = message;
         this.connection = this.___createConnection(message);
-        this.player = Discord.createAudioPlayer();
+        this.player = DiscordVoice.createAudioPlayer();
         this.connection.subscribe(this.player);
         this.queue = new Queue();
         this.interval = setTimeout(() => this.___autoDisconnect(), 60_000);
         this.voiceChannel = message.member.voice.channel.name;
         this.textChannel = message.channelId;
-        this.player.on(Discord.AudioPlayerStatus.Idle, () => {
+        this.player.on(DiscordVoice.AudioPlayerStatus.Idle, () => {
             if (!this.queue.isEmpty()) this.___playAudio();
             // else setTimeout(() => this.___autoDisconnect(), 60_000);
             else this.___autoDisconnect();
@@ -26,23 +26,6 @@ class MusicPlayer {
         this.disconnect();
         const {autodc} = require("../index.js");
         autodc();
-    }
-
-    /**
-     * Creates a voice channel connection
-     * 
-     * @param {String (ID)} message User that called bot
-     * @returns connection to the voice channel
-     */
-    ___createConnection(message) {
-        const output = Discord.joinVoiceChannel({
-            channelId: message.member.voice.channel.id,
-            guildId: message.guild.id,
-            adapterCreator: message.guild.voiceAdapterCreator,
-            selfMute: false,
-            selfDeaf: false
-        });
-        return output;
     }
 
     /**
