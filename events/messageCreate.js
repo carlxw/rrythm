@@ -1,4 +1,5 @@
 const config = require("../config.json");
+const musicPlayer = require("../index.js");
 
 module.exports = {
 	name: "messageCreate",
@@ -15,7 +16,7 @@ module.exports = {
         if (!cmd) return
         
         try {
-            await cmd();
+            await cmd(message, musicPlayer, ...args);
         } catch (error) {
             console.error(error);
         }

@@ -1,13 +1,13 @@
-const DiscordVoice = require("@Voicejs/voice");
+const DiscordVoice = require("@discordjs/voice");
 let Queue = require("./Queue.js");
 const YouTube = require("./YouTube.js");
+const connection = require("../index.js");
 
 class MusicPlayer {
     constructor(message) {
         this.message = message;
-        this.connection = this.___createConnection(message);
         this.player = DiscordVoice.createAudioPlayer();
-        this.connection.subscribe(this.player);
+        connection.subscribe(this.player);
         this.queue = new Queue();
         this.interval = setTimeout(() => this.___autoDisconnect(), 60_000);
         this.voiceChannel = message.member.voice.channel.name;
@@ -103,19 +103,6 @@ class MusicPlayer {
             this.player.unpause();
             return true;
         } else return false;
-    }
-
-    /**
-     * Destroys the connection, resets the queue
-     */
-    disconnect() {
-        this.connection.destroy();
-        this.player.stop();
-        this.queue = new Queue();
-    }
-
-    isConnected() {
-        return connection ? true : false;
     }
 
     // @returns playing, idle, paused, unpaused

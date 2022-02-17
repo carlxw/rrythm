@@ -7,7 +7,7 @@ class Discord {
 
     /**
      * Method gets the message author's name
-     * 
+     *
      * @returns Format: NAME#DISCRIMINATOR
      */
     getUser(message) {
@@ -16,7 +16,7 @@ class Discord {
 
     /**
      * Gets the user's avatar
-     * 
+     *
      * @param {Object} message Message that activated command
      * @returns URL to the user's avatar
      */
@@ -26,7 +26,7 @@ class Discord {
 
     /**
      * Method creates embed that shows the new song added to queue
-     * 
+     *
      * @param {Queue} queue MusicPlayer's queue
      * @returns embed
      */
@@ -42,7 +42,7 @@ class Discord {
         const queueDuration = yt.getQueueDuration(queue);
 
         const output = new MessageEmbed()
-            .setColor("#000000") 
+            .setColor("#000000")
             .setTitle(title) // Get Song title
             .setURL(queue.look()[0]) // Get song thumbnail
             .setAuthor({ name: "Added to queue", iconURL: url })
@@ -58,13 +58,13 @@ class Discord {
 
     /**
      * Gets the embed of the queue
-     * 
+     *
      * @param {Object} message Command triggering message
      * @param {MusicPlayer} musicPlayer Music player
      * @returns Embed
      */
     embedQueue(musicPlayer, message) {
-        const { MessageEmbed } = require("discord.js");
+        const { MessageEmbed } = require("@discordjs/voice");
         const userAvatar = this.getUserAvatar(message);
         const description = this.___generateQueueList(musicPlayer.getQueue());
         const output = new MessageEmbed()
@@ -78,7 +78,7 @@ class Discord {
 
     /**
      * Helper method to queueEmbed(message, musicPlayer) - Generates description
-     * 
+     *
      * @param {Queue} queue The queue the music player has
      * @param {Object} message Message that triggered command
      * @returns Formatted description (String)
@@ -104,40 +104,6 @@ class Discord {
         else output += `**${queue.length()} songs in queue | ${yt.getQueueDuration(queue)} total length**`
 
         return String(output);
-    }
-
-    /**
-     * Creates a voice channel connection
-     * 
-     * @param {String (ID)} message User that called bot
-     * @returns connection to the voice channel
-     */
-    async createConnection(message) {
-        const { joinVoiceChannel } = require("@discordjs/voice");
-        this.connection = joinVoiceChannel({
-            channelId: message.member.voice.channel.id,
-            guildId: message.guild.id,
-            adapterCreator: message.guild.voiceAdapterCreator,
-            selfMute: false,
-            selfDeaf: false
-        });
-        return connection;
-    }
-
-    /**
-     * Method returns connection to VC if exists
-     * 
-     * @returns Connection if available
-     */
-    getConnection() {
-        if (this.connection) return connection
-    }
-
-    /**
-     * Destroys the voice connection if exists
-     */
-    destroyConnection() {
-        if (this.connection) this.connection.destroy();
     }
 }
 

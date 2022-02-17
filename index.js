@@ -1,5 +1,6 @@
 const { Client, Intents, Collection } = require("discord.js");
 const fs = require("fs");
+const Connection = require("./modules/Connection");
 
 // Import from config.json
 const config = require("./config.json");
@@ -13,6 +14,10 @@ const client = new Client({
     ]
 });
 
+// Initalize musicPlayer and connection
+let musicPlayer = null;
+let connection = new Connection();
+
 // Events
 const eventFiles = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
 for (const file of eventFiles) {
@@ -22,7 +27,7 @@ for (const file of eventFiles) {
     } else {
         client.on(event.name, (...args) => event.execute(...args));
     }
-    // console.log(`[EVENT HANDLER] - ${file} has been loaded.`);
+    console.log(`[EVENT HANDLER] - ${file} has been loaded.`);
 }
 
 // Commands
@@ -32,8 +37,10 @@ for (const file of commandFiles) {
     const commandExport = require(`./commands/${file}`);
     const commandName = file.split(".")[0];
     client.commands.set(commandName, commandExport);
-    // console.log(`[COMMAND HANDLER] - ${file} has been loaded.`);
+    console.log(`[COMMAND HANDLER] - ${file} has been loaded.`);
 }
 
 // Activate bot
 client.login(config.token);
+
+module.exports = { musicPlayer, connection };
