@@ -28,25 +28,26 @@ const client = new Client({
     ]
 });
 
-// // Events
-// const eventFiles = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
-// for (const file of eventFiles) {
-//     const event = require(`./events/${file}`);
-//     if (event.once) {
-//         client.once(event.name, (...args) => event.execute(...args));
-//     } else {
-//         client.on(event.name, (...args) => event.execute(...args));
-//     }
-//     console.log(`[EVENT HANDLER] - ${file} has been loaded.`);
-// }
+// Events
+const eventFiles = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
+for (const file of eventFiles) {
+    const event = require(`./events/${file}`);
+    if (event.once) {
+        client.once(event.name, (...args) => event.execute(...args));
+    } else {
+        client.on(event.name, (...args) => event.execute(...args));
+    }
+    console.log(`[EVENT HANDLER] - ${file} has been loaded.`);
+}
 
 // Commands
 client.commands = new Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
+const commandFiles = fs.readdirSync("./commands");
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
+    const commandExport = require(`./commands/${file}`);
+    const commandName = file.split(".")[0];
+    client.commands.set(commandName, commandExport);
+    console.log(`[COMMAND HANDLER] - ${file} has been loaded.`);
 }
 
 // Activate bot
@@ -62,11 +63,9 @@ client.on("messageCreate", async message => {
 
     const cmd = client.commands.get(command);
 
-	if (!cmd) {
-        console.log("No command")
-        return
-    }
+	if (!cmd) return
 
+    console.dir(client.commands);
 	try {
 		await cmd();
 	} catch (error) {
