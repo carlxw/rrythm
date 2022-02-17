@@ -1,13 +1,13 @@
 const DiscordVoice = require("@discordjs/voice");
 let Queue = require("./Queue.js");
 const YouTube = require("./YouTube.js");
-const connection = require("../index.js");
 
 class MusicPlayer {
-    constructor(message) {
+    constructor(message, connection) {
         this.message = message;
         this.player = DiscordVoice.createAudioPlayer();
-        connection.subscribe(this.player);
+        this.connection = connection;
+        this.connection.subscribe(this.player);
         this.queue = new Queue();
         this.interval = setTimeout(() => this.___autoDisconnect(), 60_000);
         this.voiceChannel = message.member.voice.channel.name;

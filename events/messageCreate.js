@@ -1,10 +1,9 @@
-const config = require("../config.json");
-const musicPlayer = require("../index.js");
-
 module.exports = {
 	name: "messageCreate",
 	once: false,
 	async execute(message) {
+        const config = require("../config.json");
+
         if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) return;
 
         // Isolate arguments (array) and command
@@ -16,7 +15,7 @@ module.exports = {
         if (!cmd) return
         
         try {
-            await cmd(message, musicPlayer, ...args);
+            await cmd(message, args);
         } catch (error) {
             console.error(error);
         }

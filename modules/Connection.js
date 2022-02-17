@@ -1,8 +1,10 @@
 const { joinVoiceChannel } = require("@discordjs/voice");
+const MusicPlayer = require("./MusicPlayer.js");
 
 class Connection {
     constructor() {
-        this.connection
+        this.connection;
+        this.musicPlayer;
     }
 
     /**
@@ -12,14 +14,13 @@ class Connection {
      * @returns connection to the voice channel
      */
     createConnection(message) {  
-        const output = joinVoiceChannel({
+        this.connection = joinVoiceChannel({
             channelId: message.member.voice.channel.id,
             guildId: message.guild.id,
             adapterCreator: message.guild.voiceAdapterCreator,
             selfMute: false,
             selfDeaf: false
         });
-        this.connection = output;
     }
 
     /**
@@ -29,7 +30,7 @@ class Connection {
         const { musicPlayer } = require("../index.js");
         this.connection.destroy();
         this.connection = null;
-        if (musicPlayer) musicPlayer = null;
+        if (this.musicPlayer) this.musicPlayer = null;
     }
 
     /**
@@ -39,6 +40,14 @@ class Connection {
      */
     getConnection() {
         return this.connection;
+    }
+
+    setMusicPlayer(x) {
+        this.musicPlayer = x;
+    }
+
+    getmusicPlayer() {
+        return this.musicPlayer;
     }
 }
 

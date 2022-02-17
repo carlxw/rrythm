@@ -15,7 +15,6 @@ const client = new Client({
 });
 
 // Initalize musicPlayer and connection
-let musicPlayer = null;
 let connection = new Connection();
 
 // Events
@@ -43,4 +42,4 @@ for (const file of commandFiles) {
 // Activate bot
 client.login(config.token);
 
-module.exports = { musicPlayer, connection };
+module.exports = { connection };
