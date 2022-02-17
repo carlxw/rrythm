@@ -1,4 +1,7 @@
-module.exports = command = (musicPlayer, message, num) => {
+module.exports = (message) => {
+    const { connection } = require("../index.js");
+    musicPlayer = connection.getMusicPlayer();
+
     try {
         if (!message.member.voice.channel || !message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
             const array = musicPlayer.getQueue().getArrayReference();

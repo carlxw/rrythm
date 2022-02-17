@@ -1,4 +1,4 @@
-module.exports = command = (message) => {
+module.exports = (message) => {
     const { connection } = require("../index.js");
 
     // Bot was never in a voice channel in the first place - inform user

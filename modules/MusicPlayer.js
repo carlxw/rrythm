@@ -9,23 +9,19 @@ class MusicPlayer {
         this.connection = connection;
         this.connection.subscribe(this.player);
         this.queue = new Queue();
-        this.interval = setTimeout(() => this.___autoDisconnect(), 60_000);
         this.voiceChannel = message.member.voice.channel.name;
         this.textChannel = message.channelId;
         this.player.on(DiscordVoice.AudioPlayerStatus.Idle, () => {
             if (!this.queue.isEmpty()) this.___playAudio();
-            // else setTimeout(() => this.___autoDisconnect(), 60_000);
-            else this.___autoDisconnect();
         });
     }
 
     /**
      * Garbage collect self
      */
-    ___autoDisconnect() {
-        this.disconnect();
-        const {autodc} = require("../index.js");
-        autodc();
+    ___destroySelf() {
+        const { connection } = require("../index.js");
+        connection.destroyPlayer();
     }
 
     /**
@@ -35,12 +31,6 @@ class MusicPlayer {
      */
     async enqueue(argument) {
         const yt = new YouTube();
-
-        // Clear auto-disconnect timer
-        if (this.interval) {
-            clearInterval(this.interval);
-            this.interval = null;
-        }
 
         let link;
         let title;
@@ -75,7 +65,10 @@ class MusicPlayer {
      * Plays audio, private method
      */
     async ___playAudio() {
-        if (this.queue.isEmpty()) this.___autoDisconnect();
+        if (this.queue.isEmpty()) {
+            this.player.stop();
+            this.___destroySelf();
+        }
         else {
             this.player.play(this.queue.pop()[5]);
         }
@@ -91,6 +84,10 @@ class MusicPlayer {
             this.player.pause();
             return true;
         } else return false;
+    }
+
+    stop() {
+        this.player.stop();
     }
 
     /**

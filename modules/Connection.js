@@ -1,5 +1,4 @@
 const { joinVoiceChannel } = require("@discordjs/voice");
-const MusicPlayer = require("./MusicPlayer.js");
 
 class Connection {
     constructor() {
@@ -21,13 +20,13 @@ class Connection {
             selfMute: false,
             selfDeaf: false
         });
+        this.startTimer();
     }
 
     /**
      * Destroys the connection, in addition destroys musicPlayer if exists
      */
     destroyConnection() {
-        const { musicPlayer } = require("../index.js");
         this.connection.destroy();
         this.connection = null;
         if (this.musicPlayer) this.musicPlayer = null;
@@ -44,10 +43,24 @@ class Connection {
 
     setMusicPlayer(x) {
         this.musicPlayer = x;
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
     }
 
-    getmusicPlayer() {
+    getMusicPlayer() {
         return this.musicPlayer;
+    }
+
+    destroyPlayer() {
+        this.musicPlayer = null;
+        this.startTimer();
+    }
+
+    // Auto disconnect that activates when there is no musicPlayer - destroy timer if music player exists
+    startTimer() {
+        this.timer = setTimeout(() => this.destroyConnection(), 60_000);
     }
 }
 
