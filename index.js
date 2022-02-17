@@ -11,10 +11,10 @@
 // play-dl (Maybe replace ytdl-core?)
 // piscina
 
-// Don't immediately discard discord bot when queue is empty
+// Don"t immediately discard discord bot when queue is empty
 
-const { Client, Intents } = require("discord.js");
-const fs = require('fs');
+const { Client, Intents, Collection } = require("discord.js");
+const fs = require("fs");
 
 // Import from config.json
 const config = require("./config.json");
@@ -28,86 +28,50 @@ const client = new Client({
     ]
 });
 
-const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+// // Events
+// const eventFiles = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
+// for (const file of eventFiles) {
+//     const event = require(`./events/${file}`);
+//     if (event.once) {
+//         client.once(event.name, (...args) => event.execute(...args));
+//     } else {
+//         client.on(event.name, (...args) => event.execute(...args));
+//     }
+//     console.log(`[EVENT HANDLER] - ${file} has been loaded.`);
+// }
 
-for (const file of eventFiles) {
-	const event = require(`./events/${file}`);
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args));
-	}
+// Commands
+client.commands = new Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.name, command);
 }
 
 // Activate bot
 client.login(config.token);
 
-// Command imports
-const destroy = require("./commands/destroy.js");
-const skip = require("./commands/skip.js");
-const play = require("./commands/play.js");
-const disconnect = require("./commands/disconnect.js");
-const pause = require("./commands/pause.js");
-const join = require("./commands/join.js");
-const queue = require ("./commands/queue.js");
-const remove = require ("./commands/remove.js");
-
-// Initalize
-let musicPlayer;
-
-// On event: new message created
 client.on("messageCreate", async message => {
-    // Ignore messages sent by bot and without prefix, ignore users not in voice channel
-    if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) return;
+	if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) return;
 
-    // Isolate arguments (array) and command
+	// Isolate arguments (array) and command
     let args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
     args = format(args);
 
-    // Play, queue, unpause
-    if (command === "play" || command === "p") {
-        musicPlayer = await play(musicPlayer, message, args);
+    const cmd = client.commands.get(command);
+
+	if (!cmd) {
+        console.log("No command")
+        return
     }
 
-    // Skip
-    else if ((command === "skip" || command === "s") && musicPlayer) {
-        skip(musicPlayer, message);
-    }
-
-    // Disconnect
-    else if (command === "disconnect" || command === "dc") {
-        musicPlayer = disconnect(musicPlayer, message);
-    }
-
-    // Pause
-    else if (command === "pause" && musicPlayer) {
-        pause(musicPlayer, message);
-    }
-
-    // Join
-    else if (command === "join") {
-        musicPlayer = join(musicPlayer, message);
-    }
-
-    // Get queue list
-    else if ((command === "queue" || command === "q") && musicPlayer) {
-        queue(musicPlayer, message);
-    }
-
-    // Remove position in queue
-    else if (command === "remove" && musicPlayer) {
-        remove(musicPlayer, message, Number(args));
-    }
-
-    // Development - destroy
-    else if (command === "destroy" || command === "d") {
-        destroy(musicPlayer);
-    }
-
-    else if (command === "test") {
-        console.log(message);
-    }
+	try {
+		await cmd();
+	} catch (error) {
+		console.error(error);
+	}
 });
 
 // Formats all entries from an array to a single string
@@ -125,6 +89,6 @@ const autodc = () => {
 }
 
 module.exports = {
-    musicPlayer,
+    // musicPlayer,
     autodc
 }
