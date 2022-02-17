@@ -23,7 +23,7 @@ module.exports = command = async (musicPlayer, message, args) => {
         musicPlayer.getQueue().getRecentPopped()[6] = discord.getUser(message);
         return musicPlayer;
     }
-    else if (musicPlayer && message.member.voice.channel.name === musicPlayer.getSetChannel()) { // Add song to queue
+    else if (musicPlayer && message.member.voice.channel.name === musicPlayer.getSetVChannel()) { // Add song to queue
         message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
         await musicPlayer.enqueue(args);
         const embed = await discord.embedAddedToQueue(musicPlayer.getQueue(), message);

@@ -11,6 +11,7 @@ class MusicPlayer {
         this.queue = new Queue();
         this.interval = setTimeout(() => this.___autoDisconnect(), 60_000);
         this.voiceChannel = message.member.voice.channel.name;
+        this.textChannel = message.channelId;
         this.player.on(Discord.AudioPlayerStatus.Idle, () => {
             if (!this.queue.isEmpty()) this.___playAudio();
             // else setTimeout(() => this.___autoDisconnect(), 60_000);
@@ -143,8 +144,12 @@ class MusicPlayer {
         return this.queue;
     }
 
-    getSetChannel() {
+    getSetVChannel() {
         return this.voiceChannel;
+    }
+
+    getSetTChannel() {
+        return this.textChannel;
     }
 }
 

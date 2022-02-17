@@ -11,6 +11,8 @@
 // play-dl (Maybe replace ytdl-core?)
 // piscina
 
+// Don't immediately discard discord bot when queue is empty
+
 const { Client, Intents } = require("discord.js");
 
 // Import from config.json
@@ -100,7 +102,7 @@ client.on("messageCreate", async message => {
     }
 
     else if (command === "test") {
-        console.log(musicPlayer.getSetChannel());
+        console.log(message);
     }
 });
 

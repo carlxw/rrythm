@@ -66,7 +66,7 @@ class Discord {
     embedQueue(musicPlayer, message) {
         const { MessageEmbed } = require("discord.js");
         const userAvatar = this.getUserAvatar(message);
-        const description = this.___generateQueueList(musicPlayer.getQueue(), message);
+        const description = this.___generateQueueList(musicPlayer.getQueue());
         const output = new MessageEmbed()
             .setColor("#874766")
             .setTitle(`**Queue for ${message.guild.name}**`) // Queue for server name
@@ -83,19 +83,19 @@ class Discord {
      * @param {Object} message Message that triggered command
      * @returns Formatted description (String)
      */
-    ___generateQueueList (queue, message) {
+    ___generateQueueList (queue) {
         const yt = new YouTube();
         let output = "";
 
         // Now playing
         output += "__Now Playing:__\n";
-        output += "[" + queue.getRecentPopped()[1] + "](" + queue.getRecentPopped()[0] + ") | `" + yt.secToMinSec(queue.getRecentPopped()[3]) + " Requested by: " + this.getUser(message) + "`\n\n";
+        output += "[" + queue.getRecentPopped()[1] + "](" + queue.getRecentPopped()[0] + ") | `" + yt.secToMinSec(queue.getRecentPopped()[3]) + " Requested by: " + queue.getRecentPopped()[6] + "`\n\n";
 
         // Up next
         output += "__Up Next:__\n";
         const array = queue.getArray();
         for (let i = 0; i < array.length; i++) {
-            output += "`" + (i+1) + ".`  " + "[" + array[i][1] + "](" + array[i][0] + ") | `" + yt.secToMinSec(array[i][3]) + " Requested by: " + this.getUser(message) + "`\n\n";
+            output += "`" + (i+1) + ".`  " + "[" + array[i][1] + "](" + array[i][0] + ") | `" + yt.secToMinSec(array[i][3]) + " Requested by: " + array[i][6] + "`\n\n";
         }
         output += "\n";
 
