@@ -1,18 +1,3 @@
-// Now playing
-// Play top
-// Loop queue
-// Loop song
-// Clear queue
-// Commands while playing glitches playing (worker threads)
-
-// https://www.npmjs.com/package/nodemon
-// https://www.npmjs.com/package/forever
-
-// play-dl (Maybe replace ytdl-core?)
-// piscina
-
-// Don"t immediately discard discord bot when queue is empty
-
 const { Client, Intents, Collection } = require("discord.js");
 const fs = require("fs");
 
