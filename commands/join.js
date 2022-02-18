@@ -1,6 +1,7 @@
 module.exports = async (message) => {
     const { connection } = require("../index.js");
-    // Member is not in voice channel - inform user
+
+    // User must be in a voice channel to use commands
     if (!message.member.voice.channel) message.channel.send("❌ **You have to be in a voice channel to use this command.**");
 
     // There is no connection - create a connection
