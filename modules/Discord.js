@@ -69,7 +69,6 @@ class Discord {
         const { connection } = require("../index.js");
         const musicPlayer = connection.getMusicPlayer();
 
-        const { MessageEmbed } = require("@discordjs/voice");
         const userAvatar = this.getUserAvatar(message);
         const description = this.___generateQueueList(musicPlayer.getQueue());
         const output = new MessageEmbed()
