@@ -29,8 +29,8 @@ module.exports = async (message, args) => {
         musicPlayer.getQueue().look()[6] = discord.getUser(message);
     }
 
-    // There is no connection, there is an argument to play - join voice channel and play song
-    else if ((connection.getConnection() && !musicPlayer) || (!connection.getConnection() && !musicPlayer)) {
+    // There is no musicPlayer, there is an argument to play - join voice channel and play song
+    else if (!musicPlayer) {
         if (!connection.getConnection()) {
             connection.createConnection(message);
             message.channel.send("👍 **Joined** `" + message.member.voice.channel.name + "` **and bound to " + message.channel.toString() + "**"); // Will need to update in future

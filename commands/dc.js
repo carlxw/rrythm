@@ -10,7 +10,7 @@ module.exports = (message) => {
     } 
     
     // Bot has a connection to disconnect
-    else {
+    else if (connection.getConnection()){
         connection.destroyConnection();
         message.channel.send("📭 **Successfully disconnected**");
     }

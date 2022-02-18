@@ -27,7 +27,7 @@ class Connection {
      * Destroys the connection, in addition destroys musicPlayer if exists
      */
     destroyConnection() {
-        this.connection.destroy();
+        if (this.connection) this.connection.destroy();
         this.connection = null;
         if (this.musicPlayer) this.musicPlayer = null;
     }
@@ -60,7 +60,7 @@ class Connection {
 
     // Auto disconnect that activates when there is no musicPlayer - destroy timer if music player exists
     startTimer() {
-        this.timer = setTimeout(() => this.destroyConnection(), 60_000);
+        this.timer = setTimeout(() => this.destroyConnection(), 120_000);
     }
 }
 
