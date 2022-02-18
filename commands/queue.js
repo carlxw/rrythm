@@ -8,7 +8,7 @@ module.exports = (message) => {
     if (!message.member.voice.channel) message.channel.send("❌ **You have to be in a voice channel to use this command.**");
     else {
         const discord = new Discord();
-        const embed = discord.embedQueue(musicPlayer, message);
+        const embed = discord.embedQueue(message);
         message.channel.send({embeds: [embed]});
     }
 }

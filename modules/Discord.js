@@ -27,10 +27,13 @@ class Discord {
     /**
      * Method creates embed that shows the new song added to queue
      *
-     * @param {Queue} queue MusicPlayer's queue
+     * @param message
      * @returns embed
      */
-    async embedAddedToQueue(queue, message) {
+    async embedAddedToQueue(message) {
+        const { connection } = require("../index.js");
+        const queue = connection.getMusicPlayer().getQueue();
+
         const yt = new YouTube();
         const url = this.getUserAvatar(message);
 
@@ -60,10 +63,12 @@ class Discord {
      * Gets the embed of the queue
      *
      * @param {Object} message Command triggering message
-     * @param {MusicPlayer} musicPlayer Music player
      * @returns Embed
      */
-    embedQueue(musicPlayer, message) {
+    embedQueue(message) {
+        const { connection } = require("../index.js");
+        const musicPlayer = connection.getMusicPlayer();
+
         const { MessageEmbed } = require("@discordjs/voice");
         const userAvatar = this.getUserAvatar(message);
         const description = this.___generateQueueList(musicPlayer.getQueue());
@@ -79,8 +84,6 @@ class Discord {
     /**
      * Helper method to queueEmbed(message, musicPlayer) - Generates description
      *
-     * @param {Queue} queue The queue the music player has
-     * @param {Object} message Message that triggered command
      * @returns Formatted description (String)
      */
     ___generateQueueList (queue) {
