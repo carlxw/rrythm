@@ -13,6 +13,7 @@ class MusicPlayer {
         this.textChannel = message.channelId;
         this.player.on(DiscordVoice.AudioPlayerStatus.Idle, () => {
             if (!this.queue.isEmpty()) this.___playAudio();
+            else this.___destroySelf()
         });
     }
 
@@ -20,6 +21,7 @@ class MusicPlayer {
      * Garbage collect self
      */
     ___destroySelf() {
+        this.player.stop();
         const { connection } = require("../index.js");
         connection.destroyPlayer();
     }
@@ -65,13 +67,8 @@ class MusicPlayer {
      * Plays audio, private method
      */
     async ___playAudio() {
-        if (this.queue.isEmpty()) {
-            this.player.stop();
-            this.___destroySelf();
-        }
-        else {
-            this.player.play(this.queue.pop()[5]);
-        }
+        if (this.queue.isEmpty()) this.___destroySelf()
+        else this.player.play(this.queue.pop()[5]);
     }
 
     /**

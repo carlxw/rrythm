@@ -54,7 +54,7 @@ class Connection {
     }
 
     destroyPlayer() {
-        this.musicPlayer = null;
+        delete this.musicPlayer;
         this.startTimer();
     }
 
