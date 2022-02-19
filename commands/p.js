@@ -24,7 +24,7 @@ module.exports = async (message, args) => {
 
         await musicPlayer.enqueue(args);
 
-        const embed = await discord.embedAddedToQueue(musicPlayer.getQueue(), message);
+        const embed = await discord.embedAddedToQueue(message);
         message.channel.send({embeds: [embed]});
         musicPlayer.getQueue().look()[6] = discord.getUser(message);
     }
