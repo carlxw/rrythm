@@ -11,8 +11,9 @@ class MusicPlayer {
         this.queue = new Queue();
         this.voiceChannel = message.member.voice.channel.name;
         this.textChannel = message.channelId;
+        this.loop = false;
         this.player.on(DiscordVoice.AudioPlayerStatus.Idle, () => {
-            if (!this.queue.isEmpty()) this.___playAudio();
+            if (this.loop || !this.queue.isEmpty()) this.___playAudio();
             else this.___destroySelf()
         });
     }
@@ -67,8 +68,13 @@ class MusicPlayer {
      * Plays audio, private method
      */
     async ___playAudio() {
-        if (this.queue.isEmpty()) this.___destroySelf()
-        else this.player.play(this.queue.pop()[5]);
+        if (this.loop) {
+            const yt = new YouTube();
+            const loopedResource = await yt.getStream(this.queue.getRecentPopped()[0])
+            this.player.play(loopedResource);
+        }
+        else if (this.queue.isEmpty()) this.___destroySelf();
+        else this.player.play(this.queue.pop()[5])
     }
 
     /**
@@ -114,6 +120,15 @@ class MusicPlayer {
 
     getSetTChannel() {
         return this.textChannel;
+    }
+
+    toggleLoop() {
+        if (this.loop) this.loop = false;
+        else this.loop = true;
+    }
+
+    isLooped() {
+        return this.loop;
     }
 }
 
