@@ -39,6 +39,7 @@ for (const file of commandFiles) {
     else if (commandName === "q") client.commands.set("queue", commandExport);
     else if (commandName === "dc") client.commands.set("disconnect", commandExport);
     else if (commandName === "s")  client.commands.set("skip", commandExport);
+    else if (commandName === "q") client.commands.set("skip", commandExport);
     client.commands.set(commandName, commandExport);
     console.log(`[COMMAND HANDLER] - ${file} has been loaded.`);
 }
