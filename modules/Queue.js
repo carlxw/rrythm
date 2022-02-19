@@ -7,7 +7,8 @@ class Queue
      * [3] - Song duration
      * [4] - Thumbnail link
      * [5] - ytdl stream
-     * [6] - Requested by...
+     * [6] - Live - boolean
+     * [7] - Requested by...
      */
     constructor()
     {

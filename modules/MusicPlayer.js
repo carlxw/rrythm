@@ -42,6 +42,7 @@ class MusicPlayer {
         let thumbnail;
         let stream
         let requestedBy;
+        let live;
         
         [
             link, 
@@ -49,7 +50,8 @@ class MusicPlayer {
             channelName, 
             songDuration, 
             thumbnail, 
-            stream
+            stream,
+            live
         ] = await yt.acquire(argument);
 
         this.queue.add([
@@ -59,6 +61,7 @@ class MusicPlayer {
             songDuration, 
             thumbnail, 
             stream, 
+            live,
             requestedBy
         ]);
         if (this.getPlayerStatus() === "idle") this.___playAudio();

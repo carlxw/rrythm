@@ -26,7 +26,7 @@ module.exports = async (message, args) => {
 
         const embed = await discord.embedAddedToQueue(message);
         message.channel.send({embeds: [embed]});
-        musicPlayer.getQueue().look()[6] = discord.getUser(message);
+        musicPlayer.getQueue().look()[7] = discord.getUser(message);
     }
 
     // There is no musicPlayer, there is an argument to play - join voice channel and play song
@@ -42,6 +42,6 @@ module.exports = async (message, args) => {
         await musicPlayer.enqueue(args);
 
         message.channel.send("**Playing** 🎶 `" + musicPlayer.getQueue().getRecentPopped()[1] + "` - Now!");
-        musicPlayer.getQueue().getRecentPopped()[6] = discord.getUser(message);
+        musicPlayer.getQueue().getRecentPopped()[7] = discord.getUser(message);
     }
 }

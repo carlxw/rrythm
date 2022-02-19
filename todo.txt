@@ -8,7 +8,6 @@ Commands while playing glitches playing (worker threads)
 https://www.npmjs.com/package/nodemon
 https://www.npmjs.com/package/forever
 
-play-dl (Maybe replace ytdl-core?)
 piscina
 
 https://imgur.com/a/AClM6Ff

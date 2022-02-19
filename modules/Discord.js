@@ -39,10 +39,15 @@ class Discord {
 
         const title = queue.look()[1];
         const channelName = queue.look()[2];
-        const songDuration = yt.secToMinSec(queue.look()[3]);
+
+        let songDuration
+        if (queue.look()[6]) songDuration = "LIVE";
+        else songDuration = yt.secToMinSec(queue.look()[3]);
+
         const thumbnail = queue.look()[4];
         const positionInQueue = queue.length();
-        const queueDuration = yt.getQueueDuration(queue);
+        let queueDuration = yt.getQueueDuration(queue);
+        if (queueDuration === "0:00") queueDuration = "Now";
 
         const output = new MessageEmbed()
             .setColor("#000000")
@@ -86,27 +91,29 @@ class Discord {
     }
 
     /**
-     * Helper method to queueEmbed(message, musicPlayer) - Generates description
+     * Helper method to queueEmbed(message) - Generates description
      *
      * @returns Formatted description (String)
      */
-    ___generateQueueList (queue) {
+    ___generateQueueList(queue) {       
         const yt = new YouTube();
         let output = "";
-
-        // Now playing
-        output += "__Now Playing:__\n";
-        output += "[" + queue.getRecentPopped()[1] + "](" + queue.getRecentPopped()[0] + ") | `" + yt.secToMinSec(queue.getRecentPopped()[3]) + " Requested by: " + queue.getRecentPopped()[6] + "`\n\n";
-
-        // Up next
-        output += "__Up Next:__\n";
         const array = queue.getArray();
+
+        // Now playing - Video title -> Video link -> Video Duration -> Requested by
+        output += "__Now Playing:__\n";
+        if (queue.getRecentPopped()[6]) output += "[" + queue.getRecentPopped()[1] + "](" + queue.getRecentPopped()[0] + ") | `" + "LIVE" + " Requested by: " + queue.getRecentPopped()[7] + "`\n\n";
+        else output += "[" + queue.getRecentPopped()[1] + "](" + queue.getRecentPopped()[0] + ") | `" + yt.secToMinSec(queue.getRecentPopped()[3]) + " Requested by: " + queue.getRecentPopped()[7] + "`\n\n";
+
+        // Up next - Video title -> Video link -> Video Duration -> Requested by
+        output += "__Up Next:__\n";
         for (let i = 0; i < array.length; i++) {
-            output += "`" + (i+1) + ".`  " + "[" + array[i][1] + "](" + array[i][0] + ") | `" + yt.secToMinSec(array[i][3]) + " Requested by: " + array[i][6] + "`\n\n";
+            if (array[i][6]) output += "`" + (i+1) + ".`  " + "[" + array[i][1] + "](" + array[i][0] + ") | `" + "LIVE" + " Requested by: " + array[i][7] + "`\n\n";
+            else output += "`" + (i+1) + ".`  " + "[" + array[i][1] + "](" + array[i][0] + ") | `" + yt.secToMinSec(array[i][3]) + " Requested by: " + array[i][7] + "`\n\n";
         }
         output += "\n";
 
-        // Queue information
+        // Queue information - # songs in queue | #:## total length
         if (queue.length() === 1) output += `**${queue.length()} song in queue | ${yt.getQueueDuration(queue)} total length**`
         else output += `**${queue.length()} songs in queue | ${yt.getQueueDuration(queue)} total length**`
 
