@@ -13,3 +13,4 @@ piscina
 
 https://imgur.com/a/AClM6Ff
 Update for live streams
+the live property on the object returned by video_basic_info and video_info
