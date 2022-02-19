@@ -71,12 +71,17 @@ class Discord {
 
         const userAvatar = this.getUserAvatar(message);
         const description = this.___generateQueueList(musicPlayer.getQueue());
+        
+        let footerText;
+        if (musicPlayer.isLooped()) footerText = "Page 1/1 | Loop: ✅ | Queue Loop: ❌";
+        else footerText = "Page 1/1 | Loop: ❌ | Queue Loop: ❌";
+
         const output = new MessageEmbed()
             .setColor("#874766")
             .setTitle(`**Queue for ${message.guild.name}**`) // Queue for server name
             .setURL("https://discord.js.org/")
             .setDescription(description) // Large string - now playing, up next, songs in queue, total length
-            .setFooter({ text: "Page 1/1 | Loop: ❌ | Queue Loop: ❌", iconURL: userAvatar });
+            .setFooter({ text: footerText, iconURL: userAvatar });
         return output;
     }
 
