@@ -1,4 +1,4 @@
-module.exports = (message) => {
+module.exports = (message, num) => {
     const { connection } = require("../index.js");
     musicPlayer = connection.getMusicPlayer();
 
@@ -6,7 +6,7 @@ module.exports = (message) => {
     if (!message.member.voice.channel) message.channel.send("❌ **You have to be in a voice channel to use this command.**");
     
     try {
-        if (!message.member.voice.channel || !message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
+        if (message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
             const array = musicPlayer.getQueue().getArrayReference();
             const removedIndex = array[num-1];
             array.splice(num-1, 1)
