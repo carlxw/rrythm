@@ -10,3 +10,6 @@ https://www.npmjs.com/package/forever
 
 play-dl (Maybe replace ytdl-core?)
 piscina
+
+https://imgur.com/a/AClM6Ff
+Update for live streams
