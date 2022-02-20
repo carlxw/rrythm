@@ -79,7 +79,7 @@ class YouTube {
      * Method gets the duration of the queue
      * 
      * @param {Queue} queue Queue that contains song links
-     * @returns Duration of queue formatted in mm:ss
+     * @returns Duration of queue in seconds
      */
     getQueueDuration(queue) {
         let array = queue.getArray();
@@ -89,7 +89,7 @@ class YouTube {
         for (let i = 0; i < array.length; i++) {
             output += Number(array[i][3]);
         }
-        return this.secToMinSec(output);
+        return output;
     }
 }
 
