@@ -1,4 +1,5 @@
 module.exports = async () => {
     const {connection} = require("../index.js")
-    console.log(connection.getConnection())
+    console.log(connection.getMusicPlayer().getQueue())
+    console.log(connection.getMusicPlayer().getQueue().getArray())
 }

@@ -83,6 +83,12 @@ class Queue
     {
         return this.recentPopped;
     }
+
+    // Reset array
+    clear() {
+        this.items = [];
+        this.tail = 0;
+    }
 }
 
 module.exports = Queue;
