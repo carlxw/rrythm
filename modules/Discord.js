@@ -119,6 +119,60 @@ class Discord {
 
         return String(output);
     }
+
+    /**
+     * Gets the embed of the queue
+     *
+     * @param {Object} message Command triggering message
+     * @returns Embed
+     */
+    embedNowPlaying() {
+        const { connection } = require("../index.js");
+        const musicPlayer = connection.getMusicPlayer();
+        const yt = new YouTube();
+
+        const description = this.___generateNPDescription(musicPlayer.getQueue())
+        const thumbnail = musicPlayer.getQueue().getRecentPopped()[4];
+
+        const output = new MessageEmbed()
+            .setColor("#0056bf")
+            .setAuthor({ name: "Now Playing ♪", iconURL: "https://i.imgur.com/dGzFmnr.png", url: "https://discord.js.org" })
+            .setDescription(description) // Large string - now playing, up next, songs in queue, total length
+            .setThumbnail(thumbnail) // Get song thumbnail
+        return output;
+    }
+
+
+    ___generateNPDescription(queue) {
+        const yt = new YouTube();
+
+        // Current time in seconds
+        const currentTime = Math.floor(queue.getRecentPopped()[5].playbackDuration/1000, 1);
+        // Total time in seconds
+        const totalTime = queue.getRecentPopped()[3];
+
+        let output = "";
+
+        // Name of song
+        output += "[" + queue.getRecentPopped()[1] + "](" + queue.getRecentPopped()[0] + ")";
+        output += "\n\n";
+
+        // Progress bar
+        output += "`";
+        for (let i = 0; i < 30; i++) {
+            if (i === Math.floor((currentTime / totalTime)*30, 1)) output += "🔘";
+            else output += "▬";
+        }
+        output += "`\n\n";
+
+        // Time
+        output += "`" + yt.secToMinSec(currentTime) + " / " + yt.secToMinSec(totalTime) + "`";
+        output += "\n\n";
+
+        // Requested by
+        output += "`Requested by:` " + queue.getRecentPopped()[7];
+        return output;
+    }
 }
 
 module.exports = Discord;
