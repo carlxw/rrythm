@@ -44,8 +44,9 @@ class Discord {
 
         const thumbnail = queue.look()[4];
         const positionInQueue = queue.length();
-        let queueDuration = yt.secToMinSec(yt.getQueueDuration(queue) - Math.floor(queue.getRecentPopped()[5].playbackDuration/1000, 1) - queue.look()[3]);
-        if (queueDuration === "0:00") queueDuration = "Now";
+        let queueDuration = yt.getQueueDuration(queue) - Math.floor(queue.getRecentPopped()[5].playbackDuration/1000, 1) - queue.look()[3];
+        if (queueDuration <= 0 ) queueDuration = "Now";
+        else queueDuration = yt.secToMinSec(queueDuration);
 
         const output = new MessageEmbed()
             .setColor("#000000")
