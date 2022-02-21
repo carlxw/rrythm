@@ -23,6 +23,13 @@ class Queue
         this.tail++;
     }
 
+    // Adds an element to the top of the array
+    unshift(element)
+    {
+        this.items.unshift(element);
+        this.tail++;
+    }
+
     // Removes and returns element at front
     pop()
     {
@@ -55,6 +62,15 @@ class Queue
     isEmpty()
     {
         return this.items.length == 0;
+    }
+
+    // Removes an item from queue
+    remove(num)
+    {
+        const removedIndex = this.items[num-1];
+        this.items.splice(num-1, 1);
+        this.tail--;
+        return removedIndex;
     }
 
     // Print queue

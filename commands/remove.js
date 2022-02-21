@@ -7,9 +7,7 @@ module.exports = (message, num) => {
     
     try {
         if (message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
-            const array = musicPlayer.getQueue().getArrayReference();
-            const removedIndex = array[num-1];
-            array.splice(num-1, 1)
+            const removedIndex = musicPlayer.getQueue().remove(num)
             message.channel.send("✅ **Removed** `" + removedIndex[1] + "`");
         }
     } catch (error) {
