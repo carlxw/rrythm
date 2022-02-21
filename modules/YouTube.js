@@ -5,6 +5,7 @@ const play = require("play-dl");
  */
 class YouTube {
     /**
+     * Acquires the necessary information given an argument
      * 
      * @param {String} argument A URL or a search keyword
      * @returns Many things...
@@ -12,7 +13,10 @@ class YouTube {
     async acquire(argument) {
         let info = await this.___getInfo(argument);
 
-        const link = info[0].url;
+        let link;
+        if (this.isURL(argument)) link = argument;
+        else link = info[0].url;
+
         const title = info[0].title;
         const channelName = info[0].channel.name;
         const songDuration = info[0].durationInSec;

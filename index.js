@@ -40,6 +40,7 @@ for (const file of commandFiles) {
     else if (commandName === "disconnect") client.commands.set("dc", commandExport);
     else if (commandName === "skip")  client.commands.set("s", commandExport);
     else if (commandName === "playtop") client.commands.set("ptop", commandExport);
+    else if (commandName === "nowplaying") client.commands.set("np", commandExport);
     client.commands.set(commandName, commandExport);
     console.log(`[COMMAND HANDLER] - ${file} has been loaded.`);
 }
