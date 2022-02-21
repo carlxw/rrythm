@@ -1,13 +1,13 @@
 const Discord = require("../modules/Discord.js");
 
-module.exports = (message, args) => {
+module.exports = async (message, args) => {
     const { connection } = require("../index.js");
-    const musicPlayer = connection.getMusicPlayer();
+    let musicPlayer = connection.getMusicPlayer();
 
     // User must be in a voice channel to use commands
     if (!message.member.voice.channel) message.channel.send("❌ **You have to be in a voice channel to use this command.**");
     else if (connection.getConnection() && musicPlayer && message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
-        musicPlayer.enqueueTop(args);
+        await musicPlayer.enqueueTop(args);
 
         const discord = new Discord();
         const embed = discord.embedAddedToQueueTop(message);

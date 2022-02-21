@@ -72,9 +72,8 @@ class MusicPlayer {
      * 
      * @param {String} argument A URL or a keyword
      */
-     async enqueueTop(argument) {
+    async enqueueTop(argument) {
         const yt = new YouTube();
-        const array = this.queue.getArrayReference();
 
         let link;
         let title;
@@ -95,7 +94,7 @@ class MusicPlayer {
             live
         ] = await yt.acquire(argument);
 
-        array.unshift(
+        this.queue.unshift(
         [
             link, 
             title, 

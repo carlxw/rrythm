@@ -7,7 +7,7 @@ class YouTube {
     /**
      * 
      * @param {String} argument A URL or a search keyword
-     * @returns Title of video, 
+     * @returns Many things...
      */
     async acquire(argument) {
         let info = await this.___getInfo(argument);
