@@ -30,7 +30,7 @@ class Discord {
      * @param message
      * @returns embed
      */
-    async embedAddedToQueue(message) {
+    embedAddedToQueue(message) {
         const { connection } = require("../index.js");
         const queue = connection.getMusicPlayer().getQueue();
 
@@ -53,6 +53,46 @@ class Discord {
             .setColor("#000000")
             .setTitle(title) // Get Song title
             .setURL(queue.look()[0]) // Get song thumbnail
+            .setAuthor({ name: "Added to queue", iconURL: url })
+            .setThumbnail(thumbnail) // Get song thumbnail
+            .addFields(
+                { name: "Channel", value: channelName, inline: true },
+                { name: "Song Duration", value: songDuration, inline: true },
+                { name: "Estimated time until playing", value: queueDuration, inline: true },
+            )
+            .addField("Position in queue", `${positionInQueue}`, true) // Position in queue
+        return output;
+    }
+
+    /**
+     * Method creates embed that shows the new song added to queue
+     *
+     * @param message
+     * @returns embed
+     */
+    embedAddedToQueueTop(message) {
+        const { connection } = require("../index.js");
+        const queue = connection.getMusicPlayer().getQueue();
+
+        const yt = new YouTube();
+        const url = this.getUserAvatar(message);
+
+        const title = queue.peek()[1];
+        const channelName = queue.peek()[2];
+
+        let songDuration
+        if (queue.peek()[6]) songDuration = "LIVE";
+        else songDuration = yt.secToMinSec(queue.peek()[3]);
+
+        const thumbnail = queue.peek()[4];
+        const positionInQueue = 1;
+        let queueDuration = yt.secToMinSec(Math.floor(queue.getRecentPopped()[5].playbackDuration / 1000, 1) - queue.peek()[3]);
+        if (queueDuration === "0:00") queueDuration = "Now";
+
+        const output = new MessageEmbed()
+            .setColor("#000000")
+            .setTitle(title) // Get Song title
+            .setURL(queue.peek()[0]) // Get song thumbnail
             .setAuthor({ name: "Added to queue", iconURL: url })
             .setThumbnail(thumbnail) // Get song thumbnail
             .addFields(

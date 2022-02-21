@@ -1,6 +1,4 @@
-Now playing
 Play top
-Loop queue
 Commands while playing glitches playing (worker threads)
 
 https://www.npmjs.com/package/nodemon

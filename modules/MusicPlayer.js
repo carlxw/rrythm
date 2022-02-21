@@ -68,6 +68,47 @@ class MusicPlayer {
     }
 
     /**
+     * Method queues song to bot to the top of the queue
+     * 
+     * @param {String} argument A URL or a keyword
+     */
+     async enqueueTop(argument) {
+        const yt = new YouTube();
+        const array = this.queue.getArrayReference();
+
+        let link;
+        let title;
+        let channelName;
+        let songDuration;
+        let thumbnail;
+        let stream
+        let requestedBy;
+        let live;
+        
+        [
+            link, 
+            title, 
+            channelName, 
+            songDuration, 
+            thumbnail, 
+            stream,
+            live
+        ] = await yt.acquire(argument);
+
+        array.unshift(
+        [
+            link, 
+            title, 
+            channelName, 
+            songDuration, 
+            thumbnail, 
+            stream, 
+            live,
+            requestedBy
+        ]);
+    }
+
+    /**
      * Plays audio, private method
      */
     async ___playAudio() {

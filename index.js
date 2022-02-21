@@ -35,11 +35,11 @@ const commandFiles = fs.readdirSync("./commands");
 for (const file of commandFiles) {
     const commandExport = require(`./commands/${file}`);
     const commandName = file.split(".")[0];
-    if (commandName === "p") client.commands.set("play", commandExport);
-    else if (commandName === "q") client.commands.set("queue", commandExport);
-    else if (commandName === "dc") client.commands.set("disconnect", commandExport);
-    else if (commandName === "s")  client.commands.set("skip", commandExport);
-    else if (commandName === "q") client.commands.set("skip", commandExport);
+    if (commandName === "play") client.commands.set("p", commandExport);
+    else if (commandName === "queue") client.commands.set("q", commandExport);
+    else if (commandName === "disconnect") client.commands.set("dc", commandExport);
+    else if (commandName === "skip")  client.commands.set("s", commandExport);
+    else if (commandName === "playtop") client.commands.set("ptop", commandExport);
     client.commands.set(commandName, commandExport);
     console.log(`[COMMAND HANDLER] - ${file} has been loaded.`);
 }
