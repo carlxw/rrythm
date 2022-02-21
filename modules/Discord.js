@@ -1,7 +1,5 @@
 const YouTube = require("./YouTube.js");
 const { MessageEmbed } = require("discord.js");
-const Queue = require("./Queue.js");
-const MusicPlayer = require("./MusicPlayer.js");
 
 class Discord {
 
@@ -154,8 +152,8 @@ class Discord {
         output += "\n";
 
         // Queue information - # songs in queue | #:## total length
-        if (queue.length() === 1) output += `**${queue.length()} song in queue | ${yt.getQueueDuration(queue)} total length**`
-        else output += `**${queue.length()} songs in queue | ${yt.getQueueDuration(queue)} total length**`
+        if (queue.length() === 1) output += `**${queue.length()} song in queue | ${yt.secToMinSec(yt.getQueueDuration(queue))} total length**`
+        else output += `**${queue.length()} songs in queue | ${yt.secToMinSec(yt.getQueueDuration(queue))} total length**`
 
         return String(output);
     }
