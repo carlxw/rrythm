@@ -11,6 +11,7 @@ class YouTube {
      * @returns Many things...
      */
     async acquire(argument) {
+        argument = argument.trim();
         let info = await this.___getInfo(argument);
 
         let link;

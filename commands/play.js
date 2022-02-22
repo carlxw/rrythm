@@ -22,7 +22,11 @@ module.exports = async (message, args) => {
     else if (connection.getConnection() && musicPlayer && message.member.voice.channel.name === musicPlayer.getSetVChannel()) { 
         message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
 
-        await musicPlayer.enqueue(args);
+        try {
+            await musicPlayer.enqueue(args);
+        } catch (error) {
+            message.channel.send("❌ **Failed to load** `Something went wrong when looking up the track`");
+        }
 
         const embed = discord.embedAddedToQueue(message);
         message.channel.send({embeds: [embed]});
@@ -39,7 +43,11 @@ module.exports = async (message, args) => {
         connection.setMusicPlayer(musicPlayer);
 
         message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
-        await musicPlayer.enqueue(args);
+        try {
+            await musicPlayer.enqueue(args);
+        } catch (error) {
+            message.channel.send("❌ **Failed to load** `Something went wrong when looking up the track`");
+        }
 
         message.channel.send("**Playing** 🎶 `" + musicPlayer.getQueue().getRecentPopped()[1] + "` - Now!");
         musicPlayer.getQueue().getRecentPopped()[7] = discord.getUser(message);
