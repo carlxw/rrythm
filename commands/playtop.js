@@ -8,6 +8,7 @@ module.exports = async (message, args) => {
     if (!message.member.voice.channel) message.channel.send("❌ **You have to be in a voice channel to use this command.**");
     else if (connection.getConnection() && musicPlayer && message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
         try {
+            message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
             await musicPlayer.enqueue(args);
         } catch (error) {
             message.channel.send("❌ **Failed to load** `Something went wrong when looking up the track`");
