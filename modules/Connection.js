@@ -28,8 +28,8 @@ class Connection {
      */
     destroyConnection() {
         if (this.connection) this.connection.destroy();
-        this.connection = null;
         if (this.musicPlayer) this.musicPlayer = null;
+        this.connection = null;
     }
 
     /**
@@ -41,11 +41,10 @@ class Connection {
         return this.connection;
     }
 
-    setMusicPlayer(x) {
-        this.musicPlayer = x;
+    setMusicPlayer(player) {
+        this.musicPlayer = player;
         if (this.timer) {
-            clearInterval(this.timer);
-            this.timer = null;
+            clearTimeout(this.timer);
         }
     }
 
@@ -60,7 +59,7 @@ class Connection {
 
     // Auto disconnect that activates when there is no musicPlayer - destroy timer if music player exists
     startTimer() {
-        this.timer = setTimeout(() => this.destroyConnection(), 120_000);
+        this.timer = setTimeout(() => this.destroyConnection(), 60_000);
     }
 }
 

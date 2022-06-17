@@ -34,36 +34,7 @@ class MusicPlayer {
      */
     async enqueue(argument) {
         const yt = new YouTube();
-
-        let link;
-        let title;
-        let channelName;
-        let songDuration;
-        let thumbnail;
-        let stream
-        let requestedBy;
-        let live;
-        
-        [
-            link, 
-            title, 
-            channelName, 
-            songDuration, 
-            thumbnail, 
-            stream,
-            live
-        ] = await yt.acquire(argument);
-
-        this.queue.add([
-            link, 
-            title, 
-            channelName, 
-            songDuration, 
-            thumbnail, 
-            stream, 
-            live,
-            requestedBy
-        ]);
+        this.queue.add(await yt.acquire(argument));
         if (this.getPlayerStatus() === "idle") this.___playAudio();
     }
 
@@ -74,37 +45,7 @@ class MusicPlayer {
      */
     async enqueueTop(argument) {
         const yt = new YouTube();
-
-        let link;
-        let title;
-        let channelName;
-        let songDuration;
-        let thumbnail;
-        let stream
-        let requestedBy;
-        let live;
-        
-        [
-            link, 
-            title, 
-            channelName, 
-            songDuration, 
-            thumbnail, 
-            stream,
-            live
-        ] = await yt.acquire(argument);
-
-        this.queue.unshift(
-        [
-            link, 
-            title, 
-            channelName, 
-            songDuration, 
-            thumbnail, 
-            stream, 
-            live,
-            requestedBy
-        ]);
+        this.queue.unshift(await yt.acquire(argument));
     }
 
     /**
@@ -113,11 +54,11 @@ class MusicPlayer {
     async ___playAudio() {
         if (this.loop) {
             const yt = new YouTube();
-            const loopedResource = await yt.getStream(this.queue.getRecentPopped()[0])
+            const loopedResource = await yt.getStream(this.queue.getRecentPopped().link)
             this.player.play(loopedResource);
         }
         else if (this.queue.isEmpty()) this.___destroySelf();
-        else this.player.play(this.queue.pop()[5])
+        else this.player.play(this.queue.pop().stream)
     }
 
     /**

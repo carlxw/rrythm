@@ -1,5 +1,5 @@
-class AudioYouTube {
-    constructor(link, title, channel, duration, thumbnail, stream, isLive, requested) {
+class YouTubeStream {
+    constructor(link, title, channel, duration, thumbnail, stream, isLive, requestedBy) {
         this.link = link;
         this.title = title;
         this.channel = channel;
@@ -7,8 +7,8 @@ class AudioYouTube {
         this.thumbnail = thumbnail;
         this.stream = stream; 
         this.isLive = isLive;
-        this.requested = requested;
+        this.requestedBy = requestedBy;
     }
 }
 
-module.exports = AudioYouTube;
+module.exports = YouTubeStream;

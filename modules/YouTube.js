@@ -1,5 +1,7 @@
 const play = require("play-dl");
 
+// PLAYLIST IMPLEMENTATION 
+
 /**
  * Class handles with YouTube-related methods
  */
@@ -11,11 +13,13 @@ class YouTube {
      * @returns Many things...
      */
     async acquire(argument) {
+        const YouTubeStream = require("./YouTubeStream.js");
+        
         argument = argument.trim();
         let info = await this.___getInfo(argument);
 
         let link;
-        if (this.isURL(argument)) link = argument;
+        if (yt_validate(argument) === "video") link = argument;
         else link = info[0].url;
 
         const title = info[0].title;
@@ -24,7 +28,8 @@ class YouTube {
         const thumbnail = info[0].thumbnails[0].url;
         const stream = await this.getStream(link)
         const live = info[0].live
-        return [link, title, channelName, songDuration, thumbnail, stream, live];
+        const ytStream = new YouTubeStream(link, title, channelName, songDuration, thumbnail, stream, live);
+        return ytStream;
     }
 
     /**
@@ -52,17 +57,6 @@ class YouTube {
             limit: 1
         })
         return yt_info;
-    }
-
-    /**
-     * Method checks if the argument is a url or not
-     * 
-     * @param {String} argument Video title, or URL
-     * @returns boolean
-     */
-    isURL(argument) {
-        // return this.ytdl.validateURL(argument);
-        return argument.includes("https://www.youtube.com/watch?v=") || argument.includes("https://youtu.be");
     }
 
     /**
