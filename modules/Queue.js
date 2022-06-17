@@ -1,28 +1,24 @@
 class Queue
 {
-    constructor()
-    {
+    constructor() {
         this.items = [];
         this.tail = 0;
     }
 
     // Adds an element to the end
-    add(element)
-    {    
+    add(element) {    
         this.items.push(element);
         this.tail++;
     }
 
-    // Adds an element to the top of the array
-    unshift(element)
-    {
+    // Adds an element to the first in queue
+    unshift(element) {
         this.items.unshift(element);
         this.tail++;
     }
 
     // Removes and returns element at front
-    pop()
-    {
+    pop() {
         if(this.isEmpty()) return "Underflow";
         this.tail--;
         this.recentPopped = this.peek();
@@ -30,15 +26,13 @@ class Queue
     }
 
     // Gets the element at the front
-    peek()
-    {
+    peek() {
         if(this.isEmpty()) return "No elements in Queue";
         return this.items[0];
     }
 
     // Gets the last element of the queue
-    look() 
-    {
+    look() {
         if(this.isEmpty()) return "No elements in Queue";
         return this.items[this.tail-1];
     }
@@ -49,14 +43,12 @@ class Queue
     }
 
     // Is queue empty?
-    isEmpty()
-    {
+    isEmpty() {
         return this.items.length == 0;
     }
 
     // Removes an item from queue
-    remove(num)
-    {
+    remove(num) {
         const removedIndex = this.items[num-1];
         this.items.splice(num-1, 1);
         this.tail--;
@@ -64,29 +56,25 @@ class Queue
     }
 
     // Print queue
-    printQueue()
-    {
+    printQueue() {
         for(var i = 0; i < this.items.length; i++) {
             console.log(this.items[i]);
         }
     }
 
-    // Gets the array used BY VALUE
-    getArray() 
-    {
+    // Gets the array used BY VALUE (Does  not affect original object)
+    getArray() {
         return this.items.slice();
     }
 
 
-    // Gets the array used BY REFERENCE
-    getArrayReference() 
-    {
+    // Gets the array used BY REFERENCE (Affects original object)
+    getArrayReference() {
         return this.items;
     }
 
     // Gets most recent popped item
-    getRecentPopped()
-    {
+    getRecentPopped(){
         return this.recentPopped;
     }
 

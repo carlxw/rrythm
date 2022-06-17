@@ -82,11 +82,11 @@ class YouTube {
      */
     getQueueDuration(queue) {
         let array = queue.getArray();
-        array.push(queue.getRecentPopped());
+        array.push(queue.getRecentPopped()); // Include what is currently playing
         let output = 0;
         // Store everything in one go?
         for (let i = 0; i < array.length; i++) {
-            output += Number(array[i][3]);
+            output += Number(array[i].duration);
         }
         return output;
     }
