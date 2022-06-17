@@ -1,5 +1,4 @@
-class Queue
-{
+class Queue {
     constructor() {
         this.items = [];
         this.tail = 0;
