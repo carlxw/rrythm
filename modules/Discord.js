@@ -114,7 +114,7 @@ class Discord {
         const musicPlayer = connection.getMusicPlayer();
 
         const userAvatar = this.getUserAvatar(message);
-        const description = this.___generateQueueList(musicPlayer.getQueue());
+        const description = this.generateQueueList(musicPlayer.getQueue());
         
         let footerText;
         if (musicPlayer.isLooped()) footerText = "Page 1/1 | Loop: ✅ | Queue Loop: ❌";
@@ -134,7 +134,7 @@ class Discord {
      *
      * @returns Formatted description (String)
      */
-    ___generateQueueList(queue) {       
+    generateQueueList(queue) {       
         const yt = new YouTube();
         let output = "";
         const array = queue.getArray();
@@ -170,7 +170,7 @@ class Discord {
         const musicPlayer = connection.getMusicPlayer();
         const yt = new YouTube();
 
-        const description = this.___generateNPDescription(musicPlayer.getQueue())
+        const description = this.generateNPDescription(musicPlayer.getQueue())
         const thumbnail = musicPlayer.getQueue().getRecentPopped()[4];
 
         const output = new MessageEmbed()
@@ -182,7 +182,7 @@ class Discord {
     }
 
 
-    ___generateNPDescription(queue) {
+    generateNPDescription(queue) {
         const yt = new YouTube();
 
         // Current time in seconds

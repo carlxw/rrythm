@@ -16,7 +16,7 @@ class YouTube {
         const YouTubeStream = require("./YouTubeStream.js");
         
         argument = argument.trim();
-        let info = await this.___getInfo(argument);
+        let info = await this.getInfo(argument);
 
         let link;
         if (yt_validate(argument) === "video") link = argument;
@@ -52,7 +52,7 @@ class YouTube {
      * @param {String} input Search keyword or URL
      * @returns Array of data
      */
-    async ___getInfo(input){
+    async getInfo(input){
         let yt_info = await play.search(input, {
             limit: 1
         })
@@ -62,7 +62,7 @@ class YouTube {
     /**
      * Using YTDL, returns something that is playable by discord.js/voice AudioPlayer
      * 
-     * @param {String} x A title or a URL
+     * @param {String} url A URL
      * @returns AudioResource provided by YTDL
      */
     async getStream(url) {

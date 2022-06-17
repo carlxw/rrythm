@@ -1,15 +1,5 @@
 class Queue
 {
-    /**
-     * [0] - Link
-     * [1] - Title
-     * [2] - Channel name 
-     * [3] - Song duration
-     * [4] - Thumbnail link
-     * [5] - ytdl stream
-     * [6] - Live - boolean
-     * [7] - Requested by...
-     */
     constructor()
     {
         this.items = [];

@@ -3,28 +3,16 @@ let Queue = require("./Queue.js");
 const YouTube = require("./YouTube.js");
 
 class MusicPlayer {
-    constructor(message, connection) {
-        this.message = message;
+    constructor(message) {
         this.player = DiscordVoice.createAudioPlayer();
-        this.connection = connection;
-        this.connection.subscribe(this.player);
         this.queue = new Queue();
         this.voiceChannel = message.member.voice.channel.name;
         this.textChannel = message.channelId;
         this.loop = false;
         this.player.on(DiscordVoice.AudioPlayerStatus.Idle, () => {
-            if (this.loop || !this.queue.isEmpty()) this.___playAudio();
-            else this.___destroySelf()
+            if (this.loop || !this.queue.isEmpty()) this.playAudio();
+            else this.destroySelf()
         });
-    }
-
-    /**
-     * Garbage collect self
-     */
-    ___destroySelf() {
-        this.player.stop();
-        const { connection } = require("../index.js");
-        connection.destroyPlayer();
     }
 
     /**
@@ -35,7 +23,7 @@ class MusicPlayer {
     async enqueue(argument) {
         const yt = new YouTube();
         this.queue.add(await yt.acquire(argument));
-        if (this.getPlayerStatus() === "idle") this.___playAudio();
+        if (this.getPlayerStatus() === "idle") this.playAudio();
     }
 
     /**
@@ -51,13 +39,13 @@ class MusicPlayer {
     /**
      * Plays audio, private method
      */
-    async ___playAudio() {
+    async playAudio() {
         if (this.loop) {
             const yt = new YouTube();
             const loopedResource = await yt.getStream(this.queue.getRecentPopped().link)
             this.player.play(loopedResource);
         }
-        else if (this.queue.isEmpty()) this.___destroySelf();
+        else if (this.queue.isEmpty()) this.destroySelf();
         else this.player.play(this.queue.pop().stream)
     }
 

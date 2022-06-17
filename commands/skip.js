@@ -4,7 +4,7 @@ module.exports = (message) => {
     
     if (musicPlayer) {
         if (musicPlayer.isLooped()) musicPlayer.toggleLoop();
-        musicPlayer.___playAudio();
+        musicPlayer.playAudio();
         message.channel.send("⏩ **Skipped** 👍");
     }
 }
