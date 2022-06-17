@@ -2,9 +2,6 @@ module.exports = (message, num) => {
     const { connection } = require("../index.js");
     musicPlayer = connection.getMusicPlayer();
 
-    // User must be in a voice channel to use commands
-    if (!message.member.voice.channel) message.channel.send("❌ **You have to be in a voice channel to use this command.**");
-    
     try {
         if (message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
             const removedIndex = musicPlayer.getQueue().remove(num)

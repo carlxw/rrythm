@@ -6,6 +6,9 @@ module.exports = {
 
         if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) return;
 
+        // User must be in a voice channel to use commands
+        if (!message.member.voice.channel) message.channel.send("❌ **You have to be in a voice channel to use this command.**");
+
         // Isolate arguments (array) and command
         let args = message.content.slice(config.prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();

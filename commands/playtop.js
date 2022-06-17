@@ -4,9 +4,7 @@ module.exports = async (message, args) => {
     const { connection } = require("../index.js");
     let musicPlayer = connection.getMusicPlayer();
 
-    // User must be in a voice channel to use commands
-    if (!message.member.voice.channel) message.channel.send("❌ **You have to be in a voice channel to use this command.**");
-    else if (connection.getConnection() && musicPlayer && message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
+    if (connection.getConnection() && musicPlayer && message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
         try {
             message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
             await musicPlayer.enqueue(args);

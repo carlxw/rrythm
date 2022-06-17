@@ -6,11 +6,8 @@ module.exports = async (message, args) => {
     const discord = new Discord();
     let musicPlayer = connection.getMusicPlayer();
 
-    // User must be in a voice channel to use commands
-    if (!message.member.voice.channel) message.channel.send("❌ **You have to be in a voice channel to use this command.**");
-    
     // There is no argument and the player is currently paused - unpause
-    else if (musicPlayer && !args && musicPlayer.getPlayerStatus() === "paused") {
+    if (musicPlayer && !args && musicPlayer.getPlayerStatus() === "paused") {
         musicPlayer.unpause();
         message.channel.send("⏯ **Resuming** 👍");
     } 
