@@ -7,14 +7,14 @@ module.exports = async (message, args) => {
     if (connection.getConnection() && musicPlayer && message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
         try {
             message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
-            await musicPlayer.enqueue(args);
+            await musicPlayer.enqueueTop(args);
         } catch (error) {
             message.channel.send("❌ **Failed to load** `Something went wrong when looking up the track`");
         }
 
         const discord = new Discord();
-        const embed = discord.embedAddedToQueueTop(message);
+        const embed = discord.embedAddedToQueue(message);
         message.channel.send({embeds: [embed]});
-        musicPlayer.getQueue().peek()[7] = discord.getUser(message);
+        musicPlayer.getQueue().peek().requestedBy = discord.getUser(message);
     }
 }

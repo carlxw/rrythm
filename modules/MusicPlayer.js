@@ -22,7 +22,7 @@ class MusicPlayer {
      */
     async enqueue(argument) {
         const yt = new YouTube();
-        this.queue.add(await yt.acquire(argument));
+        this.queue.add(await yt.acquire(argument), false);
         if (this.getPlayerStatus() === "idle") this.playAudio();
     }
 
@@ -33,7 +33,7 @@ class MusicPlayer {
      */
     async enqueueTop(argument) {
         const yt = new YouTube();
-        this.queue.unshift(await yt.acquire(argument));
+        this.queue.add(await yt.acquire(argument), true);
     }
 
     /**

@@ -4,16 +4,18 @@ class Queue {
         this.tail = 0;
     }
 
-    // Adds an element to the end
-    add(element) {    
-        this.items.push(element);
-        this.tail++;
-    }
-
-    // Adds an element to the first in queue
-    unshift(element) {
-        this.items.unshift(element);
-        this.tail++;
+    add(element, toTop) {
+        this.recentAdded = element;
+        // Add an element to the top
+        if (toTop) {
+            this.items.unshift(element);
+            this.tail++;
+        } 
+        // Add an element to the back of the queue
+        else {
+            this.items.push(element);
+            this.tail++;
+        }
     }
 
     // Removes and returns element at front
@@ -73,8 +75,21 @@ class Queue {
     }
 
     // Gets most recent popped item
-    getRecentPopped(){
+    getRecentPopped() {
         return this.recentPopped;
+    }
+
+    // Gets the recent added item (from either start or end of queue)
+    getRecentAdded() {
+        return this.getRecentAdded;
+    }
+
+    // Searches for an element in the queue, returns -1 if not found. Title is case sensitive 
+    search(title) {
+        for (let i = 0; i < this.items.length; i++) {
+            if (this.items[i].title === title) return i+1;
+        }
+        return -1;
     }
 
     // Reset array

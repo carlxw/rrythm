@@ -30,75 +30,28 @@ class Discord {
     embedAddedToQueue(message) {
         const { connection } = require("../index.js");
         const queue = connection.getMusicPlayer().getQueue();
-
         const yt = new YouTube();
-        const url = this.getUserAvatar(message);
-
-        const title = queue.look()[1];
-        const channelName = queue.look()[2];
 
         let songDuration
-        if (queue.look()[6]) songDuration = "LIVE";
-        else songDuration = yt.secToMinSec(queue.look()[3]);
-
-        const thumbnail = queue.look()[4];
-        const positionInQueue = queue.length();
-        let queueDuration = yt.getQueueDuration(queue) - Math.floor(queue.getRecentPopped()[5].playbackDuration/1000, 1) - queue.look()[3];
+        if (queue.getRecentPopped().isLive) songDuration = "LIVE";
+        else songDuration = yt.secToMinSec(queue.getRecentPopped().duration);
+        
+        let queueDuration = yt.getQueueDuration(queue) - Math.floor(queue.getRecentPopped().duration.playbackDuration/1000, 1) - queue.getRecentPopped()[3];
         if (queueDuration <= 0 ) queueDuration = "Now";
         else queueDuration = yt.secToMinSec(queueDuration);
 
         const output = new MessageEmbed()
             .setColor("#000000")
-            .setTitle(title) // Get Song title
-            .setURL(queue.look()[0]) // Get song thumbnail
-            .setAuthor({ name: "Added to queue", iconURL: url })
-            .setThumbnail(thumbnail) // Get song thumbnail
+            .setTitle(queue.getRecentPopped().title) // Get song title
+            .setURL(queue.getRecentPopped().link) // Get song link
+            .setAuthor({ name: "Added to queue", iconURL: this.getUserAvatar(message)})
+            .setThumbnail(queue.getRecentPopped().thumbnail) // Get song thumbnail
             .addFields(
-                { name: "Channel", value: channelName, inline: true },
+                { name: "Channel", value: queue.getRecentPopped().channelName, inline: true },
                 { name: "Song Duration", value: songDuration, inline: true },
                 { name: "Estimated time until playing", value: queueDuration, inline: true },
             )
-            .addField("Position in queue", `${positionInQueue}`, true) // Position in queue
-        return output;
-    }
-
-    /**
-     * Method creates embed that shows the new song added to queue
-     *
-     * @param message
-     * @returns embed
-     */
-    embedAddedToQueueTop(message) {
-        const { connection } = require("../index.js");
-        const queue = connection.getMusicPlayer().getQueue();
-
-        const yt = new YouTube();
-        const url = this.getUserAvatar(message);
-
-        const title = queue.peek()[1];
-        const channelName = queue.peek()[2];
-
-        let songDuration
-        if (queue.peek()[6]) songDuration = "LIVE";
-        else songDuration = yt.secToMinSec(queue.peek()[3]);
-
-        const thumbnail = queue.peek()[4];
-        const positionInQueue = 1;
-        let queueDuration = yt.secToMinSec(queue.getRecentPopped()[3] - Math.floor(queue.getRecentPopped()[5].playbackDuration/1000, 1));
-        if (queueDuration === "0:00") queueDuration = "Now";
-
-        const output = new MessageEmbed()
-            .setColor("#000000")
-            .setTitle(title) // Get Song title
-            .setURL(queue.peek()[0]) // Get song thumbnail
-            .setAuthor({ name: "Added to queue", iconURL: url })
-            .setThumbnail(thumbnail) // Get song thumbnail
-            .addFields(
-                { name: "Channel", value: channelName, inline: true },
-                { name: "Song Duration", value: songDuration, inline: true },
-                { name: "Estimated time until playing", value: queueDuration, inline: true },
-            )
-            .addField("Position in queue", `${positionInQueue}`, true) // Position in queue
+            .addField("Position in queue", `${queue.search(queue.getRecentAdded().title)}`, true) // Position in queue
         return output;
     }
 
