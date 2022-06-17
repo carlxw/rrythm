@@ -2,14 +2,13 @@ const YouTube = require("./YouTube.js");
 const { MessageEmbed } = require("discord.js");
 
 class Discord {
-
     /**
      * Method gets the message author's name
      *
      * @returns Format: NAME#DISCRIMINATOR
      */
     getUser(message) {
-        return message.author.username+"#"+message.author.discriminator;
+        return message.author.username + "#" + message.author.discriminator;
     }
 
     /**
@@ -141,14 +140,14 @@ class Discord {
 
         // Now playing - Video title -> Video link -> Video Duration -> Requested by
         output += "__Now Playing:__\n";
-        if (queue.getRecentPopped()[6]) output += "[" + queue.getRecentPopped()[1] + "](" + queue.getRecentPopped()[0] + ") | `" + "LIVE" + " Requested by: " + queue.getRecentPopped()[7] + "`\n\n";
-        else output += "[" + queue.getRecentPopped()[1] + "](" + queue.getRecentPopped()[0] + ") | `" + yt.secToMinSec(queue.getRecentPopped()[3]) + " Requested by: " + queue.getRecentPopped()[7] + "`\n\n";
+        if (queue.getRecentPopped().isLive) output += "[" + queue.getRecentPopped().title + "](" + queue.getRecentPopped().link + ") | `" + "LIVE" + " Requested by: " + queue.getRecentPopped().requestedBy + "`\n\n";
+        else output += "[" + queue.getRecentPopped().title + "](" + queue.getRecentPopped().link + ") | `" + yt.secToMinSec(queue.getRecentPopped().duration) + " Requested by: " + queue.getRecentPopped().requestedBy + "`\n\n";
 
         // Up next - Video title -> Video link -> Video Duration -> Requested by
         output += "__Up Next:__\n";
         for (let i = 0; i < array.length; i++) {
-            if (array[i][6]) output += "`" + (i+1) + ".`  " + "[" + array[i][1] + "](" + array[i][0] + ") | `" + "LIVE" + " Requested by: " + array[i][7] + "`\n\n";
-            else output += "`" + (i+1) + ".`  " + "[" + array[i][1] + "](" + array[i][0] + ") | `" + yt.secToMinSec(array[i][3]) + " Requested by: " + array[i][7] + "`\n\n";
+            if (array[i].isLiive) output += "`" + (i+1) + ".`  " + "[" + array[i].title + "](" + array[i].link + ") | `" + "LIVE" + " Requested by: " + array[i].requestedBy + "`\n\n";
+            else output += "`" + (i+1) + ".`  " + "[" + array[i].title + "](" + array[i].link + ") | `" + yt.secToMinSec(array[i].duration) + " Requested by: " + array[i].requestedBy + "`\n\n";
         }
         output += "\n";
 
@@ -181,19 +180,23 @@ class Discord {
         return output;
     }
 
-
+    /**
+     * Generate the contents for the now playing embed
+     * @param {Queue} queue 
+     * @returns Contents for the now playing embed
+     */
     generateNPDescription(queue) {
         const yt = new YouTube();
 
         // Current time in seconds
-        const currentTime = Math.floor(queue.getRecentPopped()[5].playbackDuration/1000, 1);
+        const currentTime = Math.floor(queue.getRecentPopped().stream.playbackDuration/1000, 1);
         // Total time in seconds
-        const totalTime = queue.getRecentPopped()[3];
+        const totalTime = queue.getRecentPopped().stream;
 
         let output = "";
 
         // Name of song
-        output += "[" + queue.getRecentPopped()[1] + "](" + queue.getRecentPopped()[0] + ")";
+        output += "[" + queue.getRecentPopped().title + "](" + queue.getRecentPopped().link + ")";
         output += "\n\n";
 
         // Progress bar
@@ -209,7 +212,7 @@ class Discord {
         output += "\n\n";
 
         // Requested by
-        output += "`Requested by:` " + queue.getRecentPopped()[7];
+        output += "`Requested by:` " + queue.getRecentPopped().requestedBy;
         return output;
     }
 }

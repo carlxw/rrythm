@@ -1,5 +1,5 @@
 const DiscordVoice = require("@discordjs/voice");
-let Queue = require("./Queue.js");
+const Queue = require("./Queue.js");
 const YouTube = require("./YouTube.js");
 
 class MusicPlayer {
