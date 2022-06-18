@@ -32,15 +32,6 @@ class Connection {
         this.connection = null;
     }
 
-    /**
-     * Return the Discord connection data
-     * 
-     * @returns Discord voice channel connection
-     */
-    getConnection() {
-        return this.connection;
-    }
-
     setMusicPlayer(player) {
         this.musicPlayer = player;
         if (this.timer) {
@@ -50,11 +41,6 @@ class Connection {
 
     getMusicPlayer() {
         return this.musicPlayer;
-    }
-
-    destroyPlayer() {
-        delete this.musicPlayer;
-        this.startTimer();
     }
 
     // Auto disconnect that activates when there is no musicPlayer - destroy timer if music player exists

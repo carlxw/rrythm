@@ -16,7 +16,7 @@ module.exports = async (message, args) => {
     else if (!args) message.channel.send("❌ **There is nothing to play**");
        
     // Add a song to the queue
-    else if (connection.getConnection() && musicPlayer && message.member.voice.channel.name === musicPlayer.getSetVChannel()) { 
+    else if (connection && musicPlayer && message.member.voice.channel.name === musicPlayer.getSetVChannel()) { 
         message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
 
         try {
@@ -32,11 +32,11 @@ module.exports = async (message, args) => {
 
     // There is no musicPlayer, there is an argument to play - join voice channel and play song
     else if (!musicPlayer) {
-        if (!connection.getConnection()) {
+        if (!connection) {
             connection.createConnection(message);
             message.channel.send("👍 **Joined** `" + message.member.voice.channel.name + "` **and bound to " + message.channel.toString() + "**"); // Will need to update in future
         }
-        musicPlayer = new MusicPlayer(message, connection.getConnection());
+        musicPlayer = new MusicPlayer(message, connection);
         connection.setMusicPlayer(musicPlayer);
 
         message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
@@ -46,7 +46,7 @@ module.exports = async (message, args) => {
             message.channel.send("❌ **Failed to load** `Something went wrong when looking up the track`");
         }
 
-        message.channel.send("**Playing** 🎶 `" + musicPlayer.getQueue().getRecentPopped()[1] + "` - Now!");
+        message.channel.send("**Playing** 🎶 `" + musicPlayer.getQueue().getRecentPopped().title + "` - Now!");
         musicPlayer.getQueue().getRecentPopped()[7] = discord.getUser(message);
     }
 }

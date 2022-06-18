@@ -1,14 +1,14 @@
 class YouTubeStream {
     // An object to store data
     constructor(link, title, channel, duration, thumbnail, stream, isLive, requestedBy) {
-        this.link = link;
-        this.title = title;
-        this.channel = channel;
-        this.duration = duration;
-        this.thumbnail = thumbnail;
-        this.stream = stream; 
-        this.isLive = isLive;
-        this.requestedBy = requestedBy;
+        this.link = link; // [0]
+        this.title = title; // [1]
+        this.channel = channel; // [2]
+        this.duration = duration; // [3]
+        this.thumbnail = thumbnail; // [4]
+        this.stream = stream; // [5] 
+        this.isLive = isLive; // [6]
+        this.requestedBy = requestedBy; // [7]
     }
 }
 

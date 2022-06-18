@@ -1,14 +1,16 @@
 const DiscordVoice = require("@discordjs/voice");
 const Queue = require("./Queue.js");
 const YouTube = require("./YouTube.js");
+const yt = new YouTube();
 
 class MusicPlayer {
-    constructor(message) {
+    constructor(message, connection) {
         this.player = DiscordVoice.createAudioPlayer();
         this.queue = new Queue();
         this.voiceChannel = message.member.voice.channel.name;
         this.textChannel = message.channelId;
         this.loop = false;
+        this.connection = connection;
         this.player.on(DiscordVoice.AudioPlayerStatus.Idle, () => {
             if (this.loop || !this.queue.isEmpty()) this.playAudio();
             else this.destroySelf()
@@ -21,7 +23,6 @@ class MusicPlayer {
      * @param {String} argument A URL or a keyword
      */
     async enqueue(argument) {
-        const yt = new YouTube();
         this.queue.add(await yt.acquire(argument), false);
         if (this.getPlayerStatus() === "idle") this.playAudio();
     }
@@ -32,7 +33,6 @@ class MusicPlayer {
      * @param {String} argument A URL or a keyword
      */
     async enqueueTop(argument) {
-        const yt = new YouTube();
         this.queue.add(await yt.acquire(argument), true);
     }
 
@@ -41,7 +41,6 @@ class MusicPlayer {
      */
     async playAudio() {
         if (this.loop) {
-            const yt = new YouTube();
             const loopedResource = await yt.getStream(this.queue.getRecentPopped().link)
             this.player.play(loopedResource);
         }

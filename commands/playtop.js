@@ -4,7 +4,7 @@ module.exports = async (message, args) => {
     const { connection } = require("../index.js");
     let musicPlayer = connection.getMusicPlayer();
 
-    if (connection.getConnection() && musicPlayer && message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
+    if (connection && musicPlayer && message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
         try {
             message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
             await musicPlayer.enqueueTop(args);

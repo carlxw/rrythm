@@ -3,7 +3,9 @@ module.exports = {
 	once: false,
 	async execute(message) {
         const config = require("../config.json");
-
+        const connection = reqiore("../index.js");
+        const musicPlayer = connection.getMusicPlayer();
+        
         if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) return;
 
         // User must be in a voice channel to use commands
