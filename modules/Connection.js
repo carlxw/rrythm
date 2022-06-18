@@ -39,8 +39,13 @@ class Connection {
         }
     }
 
+    /**
+     * Gets the music player connected to voice connection
+     * @returns Music Player
+     */
     getMusicPlayer() {
-        return this.musicPlayer;
+        if (this.musicPlayer) return this.musicPlayer;
+        else return -1;
     }
 
     // Auto disconnect that activates when there is no musicPlayer - destroy timer if music player exists

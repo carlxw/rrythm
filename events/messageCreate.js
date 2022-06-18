@@ -3,21 +3,31 @@ module.exports = {
 	once: false,
 	async execute(message) {
         const config = require("../config.json");
-        const connection = reqiore("../index.js");
-        const musicPlayer = connection.getMusicPlayer();
-        
-        if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) return;
-
-        // User must be in a voice channel to use commands
-        if (!message.member.voice.channel) message.channel.send("❌ **You have to be in a voice channel to use this command.**");
+        const connection = require("../index.js");
 
         // Isolate arguments (array) and command
         let args = message.content.slice(config.prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
         args = format(args);
+        const cmd = message.client.commands.get(command); // Method to run
 
-        const cmd = message.client.commands.get(command);
-        if (!cmd) return
+        // There is no prefix or the author is the bot
+        if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) return;
+        // User must be in a voice channel to use commands
+        if (!message.member.voice.channel) message.channel.send("❌ **You have to be in a voice channel to use this command.**");
+        // Command does not exist
+        if (!cmd) return;
+        // Do not run following commands; musicPlayer and connection DNE
+        if ((command === "clear") || 
+        (command === "loop") || 
+        (command === "pause") || 
+        (command === "playTop" || command === "ptop") || 
+        (command === "queue" || command === "q") || 
+        (command === "remove") &&
+        (!connection.getConnection() || !connection.getMusicPlayer())) return;
+        
+        // Create a connection if it does not exist
+        if ((command === "play" || command === "p") && !connection.getConnection()) connection.createConnection(message);
         
         try {
             await cmd(message, args);
