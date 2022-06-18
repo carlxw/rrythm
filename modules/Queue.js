@@ -40,7 +40,7 @@ class Queue {
 
     // Gets length of queue
     length() {
-        return this.tail - 0;
+        return this.tail;
     }
 
     // Is queue empty?

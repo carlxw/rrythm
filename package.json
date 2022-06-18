@@ -15,6 +15,7 @@
     "discord.js": "^13.6.0",
     "ffmpeg-static": "^4.4.1",
     "libsodium-wrappers": "^0.7.9",
+    "nodemon": "^2.0.16",
     "opusscript": "^0.0.8",
     "play-dl": "^1.8.6",
     "tweetnacl": "^1.0.3"

@@ -4,17 +4,43 @@ const YouTube = require("./YouTube.js");
 const yt = new YouTube();
 
 class MusicPlayer {
-    constructor(message, connection) {
+    constructor(message) {
+        if (!message) return;
         this.player = DiscordVoice.createAudioPlayer();
         this.queue = new Queue();
         this.voiceChannel = message.member.voice.channel.name;
         this.textChannel = message.channelId;
         this.loop = false;
-        this.connection = connection;
+        this.createConnection(message);
         this.player.on(DiscordVoice.AudioPlayerStatus.Idle, () => {
-            if (this.loop || !this.queue.isEmpty()) this.playAudio();
-            else this.destroySelf()
+            this.connection.destroy();
         });
+    }
+
+    /**
+     * Creates a voice channel connection
+     *
+     * @param {String (ID)} message User that called bot
+     * @returns connection to the voice channel
+     */
+    createConnection(message) {  
+        const { joinVoiceChannel } = require("@discordjs/voice");
+        this.connection = joinVoiceChannel({
+            channelId: message.member.voice.channel.id,
+            guildId: message.guild.id,
+            adapterCreator: message.guild.voiceAdapterCreator,
+            selfMute: false,
+            selfDeaf: false
+        });
+        this.connection.subscribe(this.player);
+    }
+
+    /**
+     * Destroys the connection, in addition destroys musicPlayer if exists
+     */
+    destroyConnection() {
+        if (this.connection) this.connection.destroy();
+        this.connection = null;
     }
 
     /**
@@ -79,18 +105,6 @@ class MusicPlayer {
     // @returns playing, idle, paused, unpaused
     getPlayerStatus() {
         return this.player.state.status;
-    }
-
-    getQueue() {
-        return this.queue;
-    }
-
-    getSetVChannel() {
-        return this.voiceChannel;
-    }
-
-    getSetTChannel() {
-        return this.textChannel;
     }
 
     toggleLoop() {

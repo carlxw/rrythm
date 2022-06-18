@@ -1,6 +1,6 @@
 const { Client, Intents, Collection } = require("discord.js");
 const fs = require("fs");
-const Connection = require("./modules/Connection");
+const MusicPlayer = require("./modules/MusicPlayer.js");
 
 // Import from config.json
 const config = require("./config.json");
@@ -15,7 +15,7 @@ const client = new Client({
 });
 
 // Initalize musicPlayer and connection
-let connection = new Connection();
+let musicPlayer = new MusicPlayer();
 
 // Events
 const eventFiles = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
@@ -48,4 +48,4 @@ for (const file of commandFiles) {
 // Activate bot
 client.login(config.token);
 
-module.exports = { connection };
+module.exports = { musicPlayer };

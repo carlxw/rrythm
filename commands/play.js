@@ -1,10 +1,8 @@
-const MusicPlayer = require("../modules/MusicPlayer");
 const Discord = require("../modules/Discord.js");
 
-module.exports = async (message, args) => {
-    let { connection } = require("../index.js");
+module.exports = async (message, musicPlayer, args) => {
     const discord = new Discord();
-    let musicPlayer = connection.getMusicPlayer();
 
-    
+    musicPlayer.enqueue(args);
+    message.channel.send("Sent");
 }

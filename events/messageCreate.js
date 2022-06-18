@@ -1,9 +1,11 @@
+const MusicPlayer = require("../modules/MusicPlayer");
+
 module.exports = {
 	name: "messageCreate",
 	once: false,
 	async execute(message) {
         const config = require("../config.json");
-        const connection = require("../index.js");
+        let { musicPlayer } = require("../index.js");
 
         // Isolate arguments (array) and command
         let args = message.content.slice(config.prefix.length).trim().split(/ +/g);
@@ -17,20 +19,19 @@ module.exports = {
         if (!message.member.voice.channel) message.channel.send("❌ **You have to be in a voice channel to use this command.**");
         // Command does not exist
         if (!cmd) return;
-        // Do not run following commands; musicPlayer and connection DNE
+        // Do not run following commands; musicPlayer DNE
         if ((command === "clear") || 
         (command === "loop") || 
         (command === "pause") || 
         (command === "playTop" || command === "ptop") || 
         (command === "queue" || command === "q") || 
         (command === "remove") &&
-        (!connection.getConnection() || !connection.getMusicPlayer())) return;
-        
-        // Create a connection if it does not exist
-        if ((command === "play" || command === "p") && !connection.getConnection()) connection.createConnection(message);
+        (!musicPlayer)) return;
+        // Play - Create a musicPlayer if it does not exist
+        if ((command === "play" || command === "p") && !musicPlayer.connection) musicPlayer = new MusicPlayer(message)
         
         try {
-            await cmd(message, args);
+            await cmd(message, musicPlayer, args);
         } catch (error) {
             console.error(error);
         }

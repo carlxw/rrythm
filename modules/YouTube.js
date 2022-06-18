@@ -19,7 +19,7 @@ class YouTube {
         let info = await this.getInfo(argument);
 
         let link;
-        if (yt_validate(argument) === "video") link = argument;
+        if (await play.yt_validate(argument) === "video") link = argument;
         else link = info[0].url;
 
         const title = info[0].title;
