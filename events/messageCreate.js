@@ -20,16 +20,19 @@ module.exports = {
         // Command does not exist
         if (!cmd) return;
         // Do not run following commands; musicPlayer DNE
-        if ((command === "clear") || 
-        (command === "loop") || 
-        (command === "pause") || 
-        (command === "playTop" || command === "ptop") || 
-        (command === "queue" || command === "q") || 
-        (command === "remove") &&
-        (!musicPlayer.connection)) return;
+        if ((!musicPlayer) && (
+            (command === "clear") || 
+            (command === "loop") || 
+            (command === "pause") || 
+            (command === "playTop" || command === "ptop") || 
+            (command === "queue" || command === "q") || 
+            (command === "remove")
+        )) return;
         // Play - Create a musicPlayer if it does not exist
-        if ((command === "play" || command === "p") && !musicPlayer.connection) musicPlayer = new MusicPlayer(message)
-        
+        if ((command === "play" || command === "p") && !musicPlayer.connection) {
+            musicPlayer.create(message);
+        }
+
         try {
             await cmd(message, musicPlayer, args);
         } catch (error) {

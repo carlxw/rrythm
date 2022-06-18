@@ -14,7 +14,7 @@ const client = new Client({
     ]
 });
 
-// Initalize musicPlayer 
+// musicPlayer
 let musicPlayer = new MusicPlayer();
 
 // Events

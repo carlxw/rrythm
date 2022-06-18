@@ -4,17 +4,27 @@ const YouTube = require("./YouTube.js");
 const yt = new YouTube();
 
 class MusicPlayer {
-    constructor(message) {
-        if (!message) return;
+    create(message) {
         this.player = DiscordVoice.createAudioPlayer();
         this.queue = new Queue();
         this.voiceChannel = message.member.voice.channel.name;
         this.textChannel = message.channelId;
         this.loop = false;
-        this.createConnection(message);
+        this.createConnection(message)
         this.player.on(DiscordVoice.AudioPlayerStatus.Idle, () => {
             this.connection.destroy();
         });
+    }
+
+    destroy() {
+        this.player.stop();
+        this.player = null;
+        this.queue = null;
+        this.voiceChannel = null;
+        this.textChannel = null;
+        this.loop = null;
+        this.connection.destroy();
+        this.connection = null;
     }
 
     /**
@@ -33,14 +43,6 @@ class MusicPlayer {
             selfDeaf: false
         });
         this.connection.subscribe(this.player);
-    }
-
-    /**
-     * Destroys the connection, in addition destroys musicPlayer if exists
-     */
-    destroyConnection() {
-        if (this.connection) this.connection.destroy();
-        this.connection = null;
     }
 
     /**
