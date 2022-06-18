@@ -1,9 +1,7 @@
-module.exports = (message) => {
-    const { connection } = require("../index.js");
-    const musicPlayer = connection.getMusicPlayer();
+module.exports = (message, musicPlayer) => {
 
     if (message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
-        musicPlayer.getQueue().clear();
+        musicPlayer.queue.clear();
         message.channel.send("💥 ***Cleared...*** ⏹");
     } 
 }

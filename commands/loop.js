@@ -1,7 +1,4 @@
-module.exports = (message) => {
-    const { connection } = require("../index.js");
-    musicPlayer = connection.getMusicPlayer();
-
+module.exports = (message, musicPlayer) => {
     if (message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
         if (musicPlayer.isLooped()) { // Disable loop
             musicPlayer.toggleLoop();

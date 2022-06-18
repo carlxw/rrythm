@@ -1,9 +1,6 @@
 const Discord = require("../modules/Discord.js");
 
-module.exports = async (message, args) => {
-    const { connection } = require("../index.js");
-    let musicPlayer = connection.getMusicPlayer();
-
+module.exports = async (message, musicPlayer, args) => {
     if (connection && musicPlayer && message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
         try {
             message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
@@ -15,6 +12,6 @@ module.exports = async (message, args) => {
         const discord = new Discord();
         const embed = discord.embedAddedToQueue(message);
         message.channel.send({embeds: [embed]});
-        musicPlayer.getQueue().peek().requestedBy = discord.getUser(message);
+        musicPlayer.queue.peek().requestedBy = discord.getUser(message);
     }
 }

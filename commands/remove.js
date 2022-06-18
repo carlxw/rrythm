@@ -1,10 +1,8 @@
-module.exports = (message, num) => {
-    const { connection } = require("../index.js");
-    musicPlayer = connection.getMusicPlayer();
+module.exports = (message, musicPlayer, num) => {
 
     try {
         if (message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
-            const removedIndex = musicPlayer.getQueue().remove(num)
+            const removedIndex = musicPlayer.queue.remove(num)
             message.channel.send("✅ **Removed** `" + removedIndex[1] + "`");
         }
     } catch (error) {

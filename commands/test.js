@@ -1,4 +1,3 @@
-module.exports = async () => {
-    const { musicPlayer } = require("../index.js")
+module.exports = async (message, musicPlayer) => {
     console.log(musicPlayer);
 }

@@ -28,8 +28,8 @@ class Discord {
      * @returns embed
      */
     embedAddedToQueue(message) {
-        const { connection } = require("../index.js");
-        const queue = connection.getMusicPlayer().getQueue();
+        const { musicPlayer } = require("../index.js");
+        const queue = musicPlayer.queue;
         const yt = new YouTube();
 
         let songDuration
@@ -62,11 +62,10 @@ class Discord {
      * @returns Embed
      */
     embedQueue(message) {
-        const { connection } = require("../index.js");
-        const musicPlayer = connection.getMusicPlayer();
+        const { musicPlayer } = require("../index.js");
 
         const userAvatar = this.getUserAvatar(message);
-        const description = this.generateQueueList(musicPlayer.getQueue());
+        const description = this.generateQueueList(musicPlayer.queue);
         
         let footerText;
         if (musicPlayer.isLooped()) footerText = "Page 1/1 | Loop: ✅ | Queue Loop: ❌";
@@ -118,12 +117,11 @@ class Discord {
      * @returns Embed
      */
     embedNowPlaying() {
-        const { connection } = require("../index.js");
-        const musicPlayer = connection.getMusicPlayer();
+        const { musicPlayer } = require("../index.js");
         const yt = new YouTube();
 
-        const description = this.generateNPDescription(musicPlayer.getQueue())
-        const thumbnail = musicPlayer.getQueue().getRecentPopped()[4];
+        const description = this.generateNPDescription(musicPlayer.queue)
+        const thumbnail = musicPlayer.queue.getRecentPopped()[4];
 
         const output = new MessageEmbed()
             .setColor("#0056bf")

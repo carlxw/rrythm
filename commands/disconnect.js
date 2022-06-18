@@ -1,5 +1,4 @@
-module.exports = (message) => {
-    const { connection } = require("../index.js");
+module.exports = (message, musicPlayer) => {
 
     // Bot was never in a voice channel in the first place - inform user
     if (!connection) {

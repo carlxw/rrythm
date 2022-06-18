@@ -1,7 +1,4 @@
-module.exports = (message) => {
-    const { connection } = require("../index.js");
-    musicPlayer = connection.getMusicPlayer();
-    
+module.exports = (message, musicPlayer) => {
     if (musicPlayer) {
         if (musicPlayer.isLooped()) musicPlayer.toggleLoop();
         musicPlayer.playAudio();

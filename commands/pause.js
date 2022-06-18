@@ -1,6 +1,4 @@
-module.exports = (message) => {
-    const { connection } = require("../index.js");
-    
+module.exports = (message, musicPlayer) => {
     connection.getmusicPlayer().pause();
     message.channel.send("**Paused** ⏸");
 }

@@ -26,7 +26,7 @@ module.exports = {
         (command === "playTop" || command === "ptop") || 
         (command === "queue" || command === "q") || 
         (command === "remove") &&
-        (!musicPlayer)) return;
+        (!musicPlayer.connection)) return;
         // Play - Create a musicPlayer if it does not exist
         if ((command === "play" || command === "p") && !musicPlayer.connection) musicPlayer = new MusicPlayer(message)
         
