@@ -20,18 +20,22 @@ module.exports = {
         // Command does not exist
         if (!cmd) return;
         // Do not run following commands; musicPlayer DNE
-        if ((!musicPlayer) && (
+        if ((!musicPlayer.connection) && (
             (command === "clear") || 
             (command === "loop") || 
             (command === "pause") || 
             (command === "playTop" || command === "ptop") || 
             (command === "queue" || command === "q") || 
+            (command === "disconnect" || command === "dc") || 
             (command === "remove")
-        )) return;
-        // Play - Create a musicPlayer if it does not exist
-        if ((command === "play" || command === "p") && !musicPlayer.connection) {
-            musicPlayer.create(message);
+        )) {
+            message.channel.send("❌ **I am not in a voice channel.**");
+            return;
         }
+        // Play - If there are no args, try unpausing. 
+        if ((command === "play" || command === "p") && !args) return;
+        // Play - Create a musicPlayer if it does not exist
+        if ((command === "play" || command === "p") && !musicPlayer.connection) musicPlayer.create(message);
 
         try {
             await cmd(message, musicPlayer, args);
