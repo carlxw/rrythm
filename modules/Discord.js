@@ -28,7 +28,7 @@ class Discord {
      */
     embedText(text) {
         const output = new MessageEmbed()
-            .setColor("#FF3741")
+            .setColor('#FF3741')
             .setDescription(text)
             .setTimestamp()
             .setFooter({ text: "Rrythm Bot", iconURL: "https://i.imgur.com/dGzFmnr.png" });
@@ -137,7 +137,7 @@ class Discord {
         else footerText = `Page ${page} | Loop: ❌ | Queue Loop: ❌`;
 
         const output = new MessageEmbed()
-            .setColor("#874766")
+            .setColor('#FF3741')
             .setTitle(`**Queue for ${message.guild.name}**`) // Queue for server name
             .setURL("https://discord.js.org/")
             .setDescription(description) // Large string - now playing, up next, songs in queue, total length
@@ -192,7 +192,7 @@ class Discord {
         const yt = new YouTube();
 
         const output = new MessageEmbed()
-            .setColor("#0056bf")
+            .setColor('#FF3741')
             .setAuthor({ name: "Now Playing ♪", iconURL: "https://i.imgur.com/dGzFmnr.png", url: "https://discord.js.org" })
             .setDescription(this.generateNPDescription(musicPlayer.queue.recentPopped)) // Large string - now playing, up next, songs in queue, total length
             .setThumbnail(musicPlayer.queue.recentPopped.thumbnail); // Get song thumbnail
