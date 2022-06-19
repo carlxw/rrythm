@@ -99,16 +99,16 @@ class MusicPlayer {
         const discord = new Discord();
 
         const playlist = await yt.acquirePlaylist(link);
-
-        for (let i = 0; i < playlist.videos.length; i++) {
+        
+        for (let i = 0; i < 20; i++) { // Use playlist.videos.length for all of playlist
             let video = new YouTubeStream();
     
             video.link = playlist.videos[i].url;
             video.title = playlist.videos[i].title;
             video.channel = playlist.videos[i].channel.name;
             video.duration = playlist.videos[i].durationInSec;
-            video.thumbnail = playlist.videos[i].thumbnails[0];
-            video.stream = await yt.getStream(playlist.videos[i].url);
+            video.thumbnail = playlist.videos[i].thumbnails[3].url;
+            video.stream = null;
             video.isLive = false; // Playlist entries can't be livestreams
             video.requestedBy = discord.getUser(message);
 
@@ -134,6 +134,11 @@ class MusicPlayer {
      * Plays audio, private method
      */
     async playAudio() {
+        // Part of a playlist
+        if (this.queue.peek().stream === null) {
+            this.queue.peek().stream = await yt.getStream(this.queue.peek().link);
+        }
+
         if (this.loop) {
             const loopedResource = await yt.getStream(this.queue.recentPopped.link)
             this.player.play(loopedResource);
