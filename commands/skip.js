@@ -1,10 +1,5 @@
-const Discord = require("../modules/Discord");
-
-module.exports = (message, musicPlayer) => {
-    if (musicPlayer.isLooped()) musicPlayer.toggleLoop(); // Unloops current song
+module.exports = (message, musicPlayer, discord) => {
+    if (musicPlayer.loop) musicPlayer.toggleLoop(); // Unloops current song
     musicPlayer.playAudio();
-
-    const discord = new Discord();
-    const embed = discord.embedText("**Skipped** ⏩");
-    message.channel.send({embeds: [embed]});
+    message.channel.send({embeds: [discord.embedText("**Skipped** ⏩")]});
 }

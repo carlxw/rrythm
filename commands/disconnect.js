@@ -1,9 +1,4 @@
-const Discord = require("../modules/Discord");
-
-module.exports = (message, musicPlayer) => {
+module.exports = (message, musicPlayer, discord) => {
     musicPlayer.destroy();
-
-    const discord = new Discord();
-    const embed = discord.embedText("**Successfully disconnected** 📭");
-    message.channel.send({embeds: [embed]});
+    message.channel.send({embeds: [discord.embedText("**Successfully disconnected** 📭")]});
 }

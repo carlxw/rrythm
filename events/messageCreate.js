@@ -4,6 +4,8 @@ module.exports = {
 	async execute(message) {
         const config = require("../config.json");
         let { musicPlayer } = require("../index.js");
+        const Discord = require("../modules/Discord.js");
+        const discord = new Discord();
 
         // Isolate arguments (array) and command
         let args = message.content.slice(config.prefix.length).trim().split(/ +/g);
@@ -45,7 +47,7 @@ module.exports = {
 
         // Execute command
         try {
-            await cmd(message, musicPlayer, args);
+            await cmd(message, musicPlayer, discord, args);
         } catch (error) {
             console.error(error);
         }

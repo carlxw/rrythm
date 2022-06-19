@@ -1,11 +1,6 @@
-const Discord = require("../modules/Discord.js");
-
-module.exports = (message, musicPlayer) => {
-    const discord = new Discord();
-
+module.exports = (message, musicPlayer, discord) => {
     if (musicPlayer.queue.recentPopped.isLive) return; // Update
     else {
-        const embed = discord.embedNowPlaying();
-        message.channel.send({embeds: [embed]});
+        message.channel.send({embeds: [discord.embedNowPlaying()]});
     }
 }

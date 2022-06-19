@@ -113,7 +113,7 @@ class Discord {
         const description = this.generateQueueList(musicPlayer.queue);
         
         let footerText;
-        if (musicPlayer.isLooped()) footerText = "Page 1/1 | Loop: ✅ | Queue Loop: ❌";
+        if (musicPlayer.loop) footerText = "Page 1/1 | Loop: ✅ | Queue Loop: ❌";
         else footerText = "Page 1/1 | Loop: ❌ | Queue Loop: ❌";
 
         const output = new MessageEmbed()

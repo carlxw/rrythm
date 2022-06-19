@@ -1,5 +1,4 @@
 const DiscordVoice = require("@discordjs/voice");
-const VoiceConnectionStatus = require("@discordjs/voice");
 const Discord = require("./Discord.js");
 const Queue = require("./Queue.js");
 const YouTube = require("./YouTube.js");
@@ -16,11 +15,14 @@ class MusicPlayer {
 
         // When the player is in idle mode
         this.player.on(DiscordVoice.AudioPlayerStatus.Idle, () => {
+            if (this.loop) this.playAudio();
             if (this.queue.isEmpty()) this.startTimer();
             else this.playAudio();
         });
+
         // When the bot has been forcefully disconnected
-        this.connection.on(VoiceConnectionStatus.Disconnected, () => {
+        this.connection.on("disconnect", () => {
+            console.log("Admin dc");
             this.destroy();
         });
     }
@@ -124,10 +126,6 @@ class MusicPlayer {
     toggleLoop() {
         if (this.loop) this.loop = false;
         else this.loop = true;
-    }
-
-    isLooped() {
-        return this.loop;
     }
 }
 

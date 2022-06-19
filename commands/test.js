@@ -1,3 +1,3 @@
-module.exports = async (message, musicPlayer, args) => {
-    console.log(musicPlayer.queue)
+module.exports = async (message, musicPlayer, discord, args) => {
+    return
 }

@@ -1,9 +1,4 @@
-const Discord = require("../modules/Discord");
-
-module.exports = (message, musicPlayer) => {
+module.exports = (message, musicPlayer, discord) => {
     musicPlayer.queue.clear();
-
-    const discord = new Discord();
-    const embed = discord.embedText("**Cleared** 💥");
-    message.channel.send({embeds: [embed]});
+    message.channel.send({embeds: [discord.embedText("**Cleared** 💥")]});
 }

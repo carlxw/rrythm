@@ -1,8 +1,4 @@
-const Discord = require("../modules/Discord.js");
-
-module.exports = async (message, musicPlayer, args) => {
-    const discord = new Discord();
-
+module.exports = async (message, musicPlayer, discord, args) => {
     // Unpause
     if (!args && musicPlayer.getPlayerStatus() === "paused") {
         musicPlayer.player.unpause();
