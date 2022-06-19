@@ -122,17 +122,19 @@ class Discord {
      * Gets the embed of the queue
      *
      * @param {Object} message Command triggering message
+     * @param {Number} page Command triggering message
      * @returns Embed
      */
-    embedQueue(message) {
+    embedQueue(message, page = 1) {
         const { musicPlayer } = require("../index.js");
 
-        const userAvatar = this.getUserAvatar(message);
-        const description = this.generateQueueList(musicPlayer.queue);
+        // const userAvatar = this.getUserAvatar(message);
+        const userAvatar = "https://i.imgur.com/dGzFmnr.png";
+        const description = this.generateQueueList(musicPlayer.queue, page);
         
         let footerText;
-        if (musicPlayer.loop) footerText = "Page 1/1 | Loop: ✅ | Queue Loop: ❌";
-        else footerText = "Page 1/1 | Loop: ❌ | Queue Loop: ❌";
+        if (musicPlayer.loop) footerText = `Page ${page} | Loop: ✅ | Queue Loop: ❌`;
+        else footerText = `Page ${page} | Loop: ❌ | Queue Loop: ❌`;
 
         const output = new MessageEmbed()
             .setColor("#874766")
@@ -149,20 +151,25 @@ class Discord {
      *
      * @returns Formatted description (String)
      */
-    generateQueueList(queue) {       
+    generateQueueList(queue, page) {       
         const yt = new YouTube();
         let output = "";
         const array = queue.getArray();
 
-        // Now playing - Video title -> Video link -> Video Duration -> Requested by
-        output += "__Now Playing:__\n";
-        if (queue.recentPopped.isLive) output += "[" + queue.recentPopped.title + "](" + queue.recentPopped.link + ") | `" + "LIVE" + " Requested by: " + queue.recentPopped.requestedBy + "`\n\n";
-        else output += "[" + queue.recentPopped.title + "](" + queue.recentPopped.link + ") | `" + yt.secToMinSec(queue.recentPopped.duration) + " Requested by: " + queue.recentPopped.requestedBy + "`\n\n";
+        // Include on top of page
+        if (page === 1) {
+            // Now playing - Video title -> Video link -> Video Duration -> Requested by
+            output += "__Now Playing:__\n";
+            if (queue.recentPopped.isLive) output += "[" + queue.recentPopped.title + "](" + queue.recentPopped.link + ") | `" + "LIVE" + " Requested by: " + queue.recentPopped.requestedBy + "`\n\n";
+            else output += "[" + queue.recentPopped.title + "](" + queue.recentPopped.link + ") | `" + yt.secToMinSec(queue.recentPopped.duration) + " Requested by: " + queue.recentPopped.requestedBy + "`\n\n";
+            output += "__Up Next:__\n";
+        }
 
         // Up next - Video title -> Video link -> Video Duration -> Requested by
-        output += "__Up Next:__\n";
-        for (let i = 0; i < array.length; i++) {
-            if (array[i].isLiive) output += "`" + (i+1) + ".`  " + "[" + array[i].title + "](" + array[i].link + ") | `" + "LIVE" + " Requested by: " + array[i].requestedBy + "`\n\n";
+        for (let i = (20*(page-1)); i < (20*page); i++) {
+            if (i > array.length-1) break;
+
+            if (array[i].isLive) output += "`" + (i+1) + ".`  " + "[" + array[i].title + "](" + array[i].link + ") | `" + "LIVE" + " Requested by: " + array[i].requestedBy + "`\n\n";
             else output += "`" + (i+1) + ".`  " + "[" + array[i].title + "](" + array[i].link + ") | `" + yt.secToMinSec(array[i].duration) + " Requested by: " + array[i].requestedBy + "`\n\n";
         }
         output += "\n";

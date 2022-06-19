@@ -99,8 +99,8 @@ class MusicPlayer {
         const discord = new Discord();
 
         const playlist = await yt.acquirePlaylist(link);
-        
-        for (let i = 0; i < 20; i++) { // Use playlist.videos.length for all of playlist
+
+        for (let i = 0; i < playlist.videos.length; i++) {
             let video = new YouTubeStream();
     
             video.link = playlist.videos[i].url;
