@@ -2,6 +2,8 @@ class Queue {
     constructor() {
         this.items = [];
         this.tail = 0;
+        this.recentPopped;
+        this.recentAdded;
     }
 
     add(element, toTop) {
@@ -71,16 +73,6 @@ class Queue {
     // Gets the array used BY REFERENCE (Affects original object)
     getArrayReference() {
         return this.items;
-    }
-
-    // Gets most recent popped item
-    getRecentPopped() {
-        return this.recentPopped;
-    }
-
-    // Gets the recent added item (from either start or end of queue)
-    getRecentAdded() {
-        return this.recentAdded;
     }
 
     // Searches for an element in the queue, returns -1 if not found. Title is case sensitive 

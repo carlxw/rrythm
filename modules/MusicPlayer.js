@@ -83,7 +83,7 @@ class MusicPlayer {
      */
     async playAudio() {
         if (this.loop) {
-            const loopedResource = await yt.getStream(this.queue.getRecentPopped().link)
+            const loopedResource = await yt.getStream(this.queue.recentPopped.link)
             this.player.play(loopedResource);
         }
         else if (this.queue.isEmpty()) this.destroySelf();

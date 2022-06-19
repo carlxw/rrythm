@@ -33,25 +33,25 @@ class Discord {
         const yt = new YouTube();
 
         let songDuration
-        if (queue.getRecentPopped().isLive) songDuration = "LIVE";
-        else songDuration = yt.secToMinSec(queue.getRecentPopped().duration);
+        if (queue.recentPopped.isLive) songDuration = "LIVE";
+        else songDuration = yt.secToMinSec(queue.recentPopped.duration);
         
-        let queueDuration = yt.getQueueDuration(queue) - Math.floor(queue.getRecentPopped().duration.playbackDuration/1000, 1) - queue.getRecentPopped()[3];
+        let queueDuration = yt.getQueueDuration(queue) - Math.floor(queue.recentPopped.duration.playbackDuration/1000, 1) - queue.recentPopped.duration;
         if (queueDuration <= 0 ) queueDuration = "Now";
         else queueDuration = yt.secToMinSec(queueDuration);
 
         const output = new MessageEmbed()
             .setColor("#000000")
-            .setTitle(queue.getRecentPopped().title) // Get song title
-            .setURL(queue.getRecentPopped().link) // Get song link
+            .setTitle(queue.recentPopped.title) // Get song title
+            .setURL(queue.recentPopped.link) // Get song link
             .setAuthor({ name: "Added to queue", iconURL: this.getUserAvatar(message)})
-            .setThumbnail(queue.getRecentPopped().thumbnail) // Get song thumbnail
+            .setThumbnail(queue.recentPopped.thumbnail) // Get song thumbnail
             .addFields(
-                { name: "Channel", value: queue.getRecentPopped().channelName, inline: true },
+                { name: "Channel", value: queue.recentPopped.channelName, inline: true },
                 { name: "Song Duration", value: songDuration, inline: true },
                 { name: "Estimated time until playing", value: queueDuration, inline: true },
             )
-            .addField("Position in queue", `${queue.search(queue.getRecentAdded().title)}`, true) // Position in queue
+            .addField("Position in queue", `${queue.search(queue.recentAdded.title)}`, true) // Position in queue
         return output;
     }
 
@@ -92,8 +92,8 @@ class Discord {
 
         // Now playing - Video title -> Video link -> Video Duration -> Requested by
         output += "__Now Playing:__\n";
-        if (queue.getRecentPopped().isLive) output += "[" + queue.getRecentPopped().title + "](" + queue.getRecentPopped().link + ") | `" + "LIVE" + " Requested by: " + queue.getRecentPopped().requestedBy + "`\n\n";
-        else output += "[" + queue.getRecentPopped().title + "](" + queue.getRecentPopped().link + ") | `" + yt.secToMinSec(queue.getRecentPopped().duration) + " Requested by: " + queue.getRecentPopped().requestedBy + "`\n\n";
+        if (queue.recentPopped().isLive) output += "[" + queue.recentPopped().title + "](" + queue.recentPopped().link + ") | `" + "LIVE" + " Requested by: " + queue.recentPopped().requestedBy + "`\n\n";
+        else output += "[" + queue.recentPopped().title + "](" + queue.recentPopped().link + ") | `" + yt.secToMinSec(queue.recentPopped().duration) + " Requested by: " + queue.recentPopped().requestedBy + "`\n\n";
 
         // Up next - Video title -> Video link -> Video Duration -> Requested by
         output += "__Up Next:__\n";
@@ -123,8 +123,8 @@ class Discord {
         const output = new MessageEmbed()
             .setColor("#0056bf")
             .setAuthor({ name: "Now Playing ♪", iconURL: "https://i.imgur.com/dGzFmnr.png", url: "https://discord.js.org" })
-            .setDescription(this.generateNPDescription(musicPlayer.queue.getRecentPopped())) // Large string - now playing, up next, songs in queue, total length
-            .setThumbnail(musicPlayer.queue.getRecentPopped().thumbnail); // Get song thumbnail
+            .setDescription(this.generateNPDescription(musicPlayer.queue.recentPopped)) // Large string - now playing, up next, songs in queue, total length
+            .setThumbnail(musicPlayer.queue.recentPopped.thumbnail); // Get song thumbnail
         return output;
     }
 
