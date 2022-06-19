@@ -9,7 +9,7 @@ class MusicPlayer {
         this.player = DiscordVoice.createAudioPlayer();
         this.queue = new Queue();
         this.voiceChannel = message.member.voice.channel.name;
-        this.textChannel = message.channelId;
+        this.textChannel = message.channel.name;
         this.loop = false;
         this.createConnection(message)
         this.player.on(DiscordVoice.AudioPlayerStatus.Idle, () => {
