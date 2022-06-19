@@ -21,9 +21,19 @@ class MusicPlayer {
         });
 
         // When the bot has been forcefully disconnected
-        this.connection.on("disconnect", () => {
-            console.log("Admin dc");
-            this.destroy();
+        const { VoiceConnectionStatus, entersState } = require('@discordjs/voice');
+        this.connection.on(VoiceConnectionStatus.Disconnected, async (oldState, newState) => {
+            try {
+                await Promise.race([
+                    entersState(connection, VoiceConnectionStatus.Signalling, 5_000),
+                    entersState(connection, VoiceConnectionStatus.Connecting, 5_000),
+                ]);
+                // Seems to be reconnecting to a new channel - ignore disconnect
+            } catch (error) {
+                // Seems to be a real disconnect which SHOULDN'T be recovered from
+                console.log("Admin DC'd");
+                this.destroy();
+            }
         });
     }
 
