@@ -1,5 +1,3 @@
-const MusicPlayer = require("../modules/MusicPlayer");
-
 module.exports = {
 	name: "messageCreate",
 	once: false,
@@ -19,8 +17,9 @@ module.exports = {
         if (!message.member.voice.channel) message.channel.send("❌ **You have to be in a voice channel to use this command.**");
         // Command does not exist
         if (!cmd) return;
-        // Do not run following commands; musicPlayer DNE
-        if ((!musicPlayer.connection) && (
+
+        // Do not run following commands; musicPlayer DNE, not in set voice channel, not in set text channel
+        if ((!musicPlayer.connection || message.channel.name !== musicPlayer.textChannel || message.member.voice.channel.name !== musicPlayer.voiceChannel) && (
             (command === "clear") || 
             (command === "loop") || 
             (command === "pause") || 
@@ -29,14 +28,16 @@ module.exports = {
             (command === "disconnect" || command === "dc") || 
             (command === "remove")
         )) {
-            message.channel.send("❌ **I am not in a voice channel.**");
+            if (!musicPlayer.connection) message.channel.send("❌ **I am not in a voice channel.**");
             return;
         }
+        
         // Play - If there are no args, try unpausing. 
         if ((command === "play" || command === "p") && !args) return;
         // Play - Create a musicPlayer if it does not exist
         if ((command === "play" || command === "p") && !musicPlayer.connection) musicPlayer.create(message);
 
+        // Execute command
         try {
             await cmd(message, musicPlayer, args);
         } catch (error) {

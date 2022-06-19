@@ -1,3 +1,3 @@
 module.exports = async (message, musicPlayer) => {
-    console.log(musicPlayer);
+    console.log(musicPlayer.queue);
 }

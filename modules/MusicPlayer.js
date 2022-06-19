@@ -12,7 +12,8 @@ class MusicPlayer {
         this.loop = false;
         this.createConnection(message)
         this.player.on(DiscordVoice.AudioPlayerStatus.Idle, () => {
-            this.connection.destroy();
+            if (this.queue.isEmpty()) this.connection.destroy();
+            else this.playAudio();
         });
     }
 
