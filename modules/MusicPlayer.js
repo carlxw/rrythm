@@ -12,9 +12,14 @@ class MusicPlayer {
         this.loop = false;
         this.createConnection(message)
         this.player.on(DiscordVoice.AudioPlayerStatus.Idle, () => {
-            if (this.queue.isEmpty()) this.connection.destroy();
+            if (this.queue.isEmpty()) this.startTimer();
             else this.playAudio();
         });
+    }
+
+    // Auto disconnect that activates when there is nothing in queue
+    startTimer() {
+        this.timer = setTimeout(() => this.destroy(), 120_000);
     }
 
     destroy() {
@@ -52,6 +57,10 @@ class MusicPlayer {
      * @param {String} argument A URL or a keyword
      */
     async enqueue(argument) {
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
         this.queue.add(await yt.acquire(argument), false);
         if (this.getPlayerStatus() === "idle") this.playAudio();
     }
