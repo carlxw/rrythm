@@ -36,6 +36,35 @@ class Discord {
     }
 
     /**
+     * Embed for first time playing ONLY
+     * 
+     * @param {Discordjs} message Message that triggered command
+     */
+    embedPlay(message) {
+        const { musicPlayer } = require("../index.js");
+        const queue = musicPlayer.queue;
+        const yt = new YouTube();
+
+        let songDuration
+        if (queue.recentAdded.isLive) songDuration = "LIVE";
+        else songDuration = yt.secToMinSec(queue.recentAdded.duration);
+
+        const output = new MessageEmbed()
+            .setColor("#FF3741")
+            .setTitle(queue.recentAdded.title) // Get song title
+            .setURL(queue.recentAdded.link) // Get song link
+            .setAuthor({ name: "Playing 🎶" })
+            .setThumbnail(queue.recentAdded.thumbnail) // Get song thumbnail
+            .addFields(
+                { name: "Channel", value: queue.recentAdded.channel, inline: true },
+                { name: "Song Duration", value: songDuration, inline: true },
+            )
+            .setTimestamp()
+            .setFooter({ text: "Rrythm Bot", iconURL: "https://i.imgur.com/dGzFmnr.png" });
+        return output;
+    }
+
+    /**
      * Method creates embed that shows the new song added to queue
      *
      * @param message
@@ -66,6 +95,8 @@ class Discord {
                 { name: "Estimated time until playing", value: queueDuration, inline: true },
             )
             .addField("Position in queue", `${queue.search(queue.recentAdded.title)}`, true) // Position in queue
+            .setTimestamp()
+            .setFooter({ text: "Rrythm Bot", iconURL: "https://i.imgur.com/dGzFmnr.png" });
         return output;
     }
 
@@ -90,6 +121,7 @@ class Discord {
             .setTitle(`**Queue for ${message.guild.name}**`) // Queue for server name
             .setURL("https://discord.js.org/")
             .setDescription(description) // Large string - now playing, up next, songs in queue, total length
+            .setTimestamp()
             .setFooter({ text: footerText, iconURL: userAvatar });
         return output;
     }

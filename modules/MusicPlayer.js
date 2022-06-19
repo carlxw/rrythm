@@ -116,22 +116,6 @@ class MusicPlayer {
         } else return false;
     }
 
-    stop() {
-        this.player.stop();
-    }
-
-    /**
-     * Unpauses the bot
-     * 
-     * @returns boolean
-     */
-    unpause() {
-        if (this.getPlayerStatus() === "paused") {
-            this.player.unpause();
-            return true;
-        } else return false;
-    }
-
     // @returns playing, idle, paused, unpaused
     getPlayerStatus() {
         return this.player.state.status;
