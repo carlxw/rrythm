@@ -89,6 +89,36 @@ class MusicPlayer {
     }
 
     /**
+     * Enqueues a playlist
+     * @param {Discord Message} message message that triggered command
+     * @param {String} link Link of playlist
+     * @return {String} title of playlist
+     */
+    async enqueuePlaylist(message, link) {
+        const YouTubeStream = require("../modules/YouTubeStream.js");
+        const discord = new Discord();
+
+        const playlist = await yt.acquirePlaylist(link);
+
+        for (let i = 0; i < playlist.videos.length; i++) {
+            let video = new YouTubeStream();
+    
+            video.link = playlist.videos[i].url;
+            video.title = playlist.videos[i].title;
+            video.channel = playlist.videos[i].channel.name;
+            video.duration = playlist.videos[i].durationInSec;
+            video.thumbnail = playlist.videos[i].thumbnails[0];
+            video.stream = await yt.getStream(playlist.videos[i].url);
+            video.isLive = false; // Playlist entries can't be livestreams
+            video.requestedBy = discord.getUser(message);
+
+            this.queue.add(video, false);
+        }
+        if (this.getPlayerStatus() === "idle") this.playAudio();
+        return playlist;
+    }
+
+    /**
      * Method queues song to bot to the top of the queue
      * 
      * @param {String} argument A URL or a keyword

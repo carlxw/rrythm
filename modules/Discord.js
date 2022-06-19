@@ -101,6 +101,24 @@ class Discord {
     }
 
     /**
+     * Creates embed for playlist entries
+     * @param {Play-dl Playlist} playlist 
+     * @returns Embed to send
+     */
+    embedPlaylist(message, playlist) {
+        const userAvatar = this.getUserAvatar(message);
+
+        const output = new MessageEmbed()
+            .setColor('#FF3741')
+            .setTitle(playlist.title)
+            .setAuthor({ name: "Playlist added to queue", iconURL: userAvatar })
+            .setDescription("**Enqueued** `"+ playlist.videoCount +"` **songs**")
+            .setTimestamp()
+            .setFooter({ text: "Rrythm Bot", iconURL: "https://i.imgur.com/dGzFmnr.png" });
+        return output;
+    }
+
+    /**
      * Gets the embed of the queue
      *
      * @param {Object} message Command triggering message

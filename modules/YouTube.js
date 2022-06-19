@@ -19,7 +19,7 @@ class YouTube {
         let info = await this.getInfo(argument);
 
         let link;
-        if (await play.yt_validate(argument) === "video") link = argument;
+        if (play.yt_validate(argument) === "video") link = argument;
         else link = info[0].url;
 
         const title = info[0].title;
@@ -29,6 +29,15 @@ class YouTube {
         const stream = await this.getStream(link)
         const live = info[0].live
         return new YouTubeStream(link, title, channelName, songDuration, thumbnail, stream, live);
+    }
+
+    /**
+     * Gets playlist data
+     * @param {String} link Playlist link
+     * @returns Playlist list
+     */
+    async acquirePlaylist(link) {
+        return await play.playlist_info(link, { incomplete : true });
     }
 
     /**
