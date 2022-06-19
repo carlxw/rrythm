@@ -7,7 +7,7 @@ class Queue {
     }
 
     add(element, toTop) {
-        this.getRecentAdded = element;
+        this.recentAdded = element;
         // Add an element to the front of the queue
         if (toTop) {
             this.items.unshift(element);

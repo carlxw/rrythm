@@ -14,7 +14,10 @@ module.exports = {
         // There is no prefix or the author is the bot
         if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) return;
         // User must be in a voice channel to use commands
-        if (!message.member.voice.channel) message.channel.send("❌ **You have to be in a voice channel to use this command.**");
+        if (!message.member.voice.channel) {
+            message.channel.send("❌ **You have to be in a voice channel to use this command.**");
+            return;
+        }
         // Command does not exist
         if (!cmd) return;
 

@@ -22,6 +22,20 @@ class Discord {
     }
 
     /**
+     * Generates an embed based on text. Cannot apply text font formatting.
+     * @param {String} text The message to output
+     * @returns Discord embed to send
+     */
+    embedText(text) {
+        const output = new MessageEmbed()
+            .setColor("#FF3741")
+            .setDescription(text)
+            .setTimestamp()
+            .setFooter({ text: "Rrythm Bot", iconURL: "https://i.imgur.com/dGzFmnr.png" });
+        return output;
+    }
+
+    /**
      * Method creates embed that shows the new song added to queue
      *
      * @param message
@@ -33,21 +47,21 @@ class Discord {
         const yt = new YouTube();
 
         let songDuration
-        if (queue.recentPopped.isLive) songDuration = "LIVE";
-        else songDuration = yt.secToMinSec(queue.recentPopped.duration);
+        if (queue.recentAdded.isLive) songDuration = "LIVE";
+        else songDuration = yt.secToMinSec(queue.recentAdded.duration);
         
-        let queueDuration = yt.getQueueDuration(queue) - Math.floor(queue.recentPopped.duration.playbackDuration/1000, 1) - queue.recentPopped.duration;
+        let queueDuration = yt.getQueueDuration(queue) - Math.floor(queue.recentAdded.stream.playbackDuration/1000, 1) - queue.recentAdded.duration;
         if (queueDuration <= 0 ) queueDuration = "Now";
         else queueDuration = yt.secToMinSec(queueDuration);
 
         const output = new MessageEmbed()
-            .setColor("#000000")
-            .setTitle(queue.recentPopped.title) // Get song title
-            .setURL(queue.recentPopped.link) // Get song link
+            .setColor("#FF3741")
+            .setTitle(queue.recentAdded.title) // Get song title
+            .setURL(queue.recentAdded.link) // Get song link
             .setAuthor({ name: "Added to queue", iconURL: this.getUserAvatar(message)})
-            .setThumbnail(queue.recentPopped.thumbnail) // Get song thumbnail
+            .setThumbnail(queue.recentAdded.thumbnail) // Get song thumbnail
             .addFields(
-                { name: "Channel", value: queue.recentPopped.channelName, inline: true },
+                { name: "Channel", value: queue.recentAdded.channel, inline: true },
                 { name: "Song Duration", value: songDuration, inline: true },
                 { name: "Estimated time until playing", value: queueDuration, inline: true },
             )
