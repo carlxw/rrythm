@@ -1,3 +1,5 @@
+const Discord = require("../modules/Discord");
+
 module.exports = (message, musicPlayer) => {
     if (message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
         if (musicPlayer.isLooped()) { // Disable loop

@@ -1,17 +1,12 @@
 const Discord = require("../modules/Discord.js");
 
 module.exports = async (message, musicPlayer, args) => {
-    if (connection && musicPlayer && message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
-        try {
-            message.channel.send("🎵 **Searching** 🔎 `" + args + "`");
-            await musicPlayer.enqueueTop(args);
-        } catch (error) {
-            message.channel.send("❌ **Failed to load** `Something went wrong when looking up the track`");
+    const discord = new Discord();
+    message.channel.send({embeds: [discord.embedText("**Searching** 🔎: `" + args + "`.")]}).then(
+        async msg => {
+            await musicPlayer.enqueueTop(message, args);
+            msg.delete();
+            message.channel.send({embeds: [discord.embedAddedToQueue(message)]});
         }
-
-        const discord = new Discord();
-        const embed = discord.embedAddedToQueue(message);
-        message.channel.send({embeds: [embed]});
-        musicPlayer.queue.peek().requestedBy = discord.getUser(message);
-    }
+    );
 }

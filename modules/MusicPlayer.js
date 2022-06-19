@@ -1,4 +1,5 @@
 const DiscordVoice = require("@discordjs/voice");
+const VoiceConnectionStatus = require("@discordjs/voice");
 const Discord = require("./Discord.js");
 const Queue = require("./Queue.js");
 const YouTube = require("./YouTube.js");
@@ -12,9 +13,15 @@ class MusicPlayer {
         this.textChannel = message.channel.name;
         this.loop = false;
         this.createConnection(message)
+
+        // When the player is in idle mode
         this.player.on(DiscordVoice.AudioPlayerStatus.Idle, () => {
             if (this.queue.isEmpty()) this.startTimer();
             else this.playAudio();
+        });
+        // When the bot has been forcefully disconnected
+        this.connection.on(VoiceConnectionStatus.Disconnected, () => {
+            this.destroy();
         });
     }
 
@@ -74,8 +81,11 @@ class MusicPlayer {
      * 
      * @param {String} argument A URL or a keyword
      */
-    async enqueueTop(argument) {
-        this.queue.add(await yt.acquire(argument), true);
+    async enqueueTop(message, argument) {
+        const discord = new Discord();
+        const element = await yt.acquire(argument);
+        element.requestedBy = discord.getUser(message);
+        this.queue.add(element, true);
     }
 
     /**
@@ -86,7 +96,11 @@ class MusicPlayer {
             const loopedResource = await yt.getStream(this.queue.recentPopped.link)
             this.player.play(loopedResource);
         }
-        else if (this.queue.isEmpty()) this.destroySelf();
+        // For skip command
+        else if (this.queue.isEmpty()) {
+            this.player.stop();
+            this.startTimer();
+        }
         else this.player.play(this.queue.pop().stream)
     }
 

@@ -1,14 +1,13 @@
+const Discord = require("../modules/Discord");
+
 module.exports = (message, musicPlayer, num) => {
-
+    const discord = new Discord();
     try {
-        if (message.member.voice.channel.name === musicPlayer.getSetVChannel()) {
-            const removedIndex = musicPlayer.queue.remove(num)
-            message.channel.send("✅ **Removed** `" + removedIndex[1] + "`");
-        }
-    } catch (error) {
-        console.log("error")
-        return;
-    }
+        const removedIndex = musicPlayer.queue.remove(num)
+        const embed = discord.embedText("**Removed** `" + removedIndex.title + "` ✅ ");
+        message.channel.send({embeds: [embed]});
+    } catch (err) {
+        const embed = discord.embedText("❌ Failed to remove position " + num + ".");
+        message.channel.send({embeds: [embed]});
+    } 
 }
-
-// If the user is not in a voice channel, or in the set voice channel: Ignore
