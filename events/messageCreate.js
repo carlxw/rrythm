@@ -26,12 +26,13 @@ module.exports = {
             (command === "playTop" || command === "ptop") || 
             (command === "queue" || command === "q") || 
             (command === "disconnect" || command === "dc") || 
+            (command === "nowplaying" || command === "np") || 
             (command === "remove")
         )) {
             if (!musicPlayer.connection) message.channel.send("❌ **I am not in a voice channel.**");
             return;
         }
-        
+
         // Play - If there are no args, try unpausing. 
         if ((command === "play" || command === "p") && !args) return;
         // Play - Create a musicPlayer if it does not exist

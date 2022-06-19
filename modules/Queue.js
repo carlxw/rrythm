@@ -5,8 +5,8 @@ class Queue {
     }
 
     add(element, toTop) {
-        this.recentAdded = element;
-        // Add an element to the top
+        this.getRecentAdded = element;
+        // Add an element to the front of the queue
         if (toTop) {
             this.items.unshift(element);
             this.tail++;
@@ -63,11 +63,10 @@ class Queue {
         }
     }
 
-    // Gets the array used BY VALUE (Does  not affect original object)
+    // Gets the array used BY VALUE (Does not affect original object)
     getArray() {
         return this.items.slice();
     }
-
 
     // Gets the array used BY REFERENCE (Affects original object)
     getArrayReference() {
@@ -81,7 +80,7 @@ class Queue {
 
     // Gets the recent added item (from either start or end of queue)
     getRecentAdded() {
-        return this.getRecentAdded;
+        return this.recentAdded;
     }
 
     // Searches for an element in the queue, returns -1 if not found. Title is case sensitive 

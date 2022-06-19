@@ -1,4 +1,5 @@
 const DiscordVoice = require("@discordjs/voice");
+const Discord = require("./Discord.js");
 const Queue = require("./Queue.js");
 const YouTube = require("./YouTube.js");
 const yt = new YouTube();
@@ -56,12 +57,15 @@ class MusicPlayer {
      * 
      * @param {String} argument A URL or a keyword
      */
-    async enqueue(argument) {
+    async enqueue(message, argument) {
+        const discord = new Discord();
         if (this.timer) {
             clearInterval(this.timer);
             this.timer = null;
         }
-        this.queue.add(await yt.acquire(argument), false);
+        const element = await yt.acquire(argument);
+        element.requestedBy = discord.getUser(message);
+        this.queue.add(element, false);
         if (this.getPlayerStatus() === "idle") this.playAudio();
     }
 

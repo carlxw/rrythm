@@ -120,34 +120,31 @@ class Discord {
         const { musicPlayer } = require("../index.js");
         const yt = new YouTube();
 
-        const description = this.generateNPDescription(musicPlayer.queue)
-        const thumbnail = musicPlayer.queue.getRecentPopped()[4];
-
         const output = new MessageEmbed()
             .setColor("#0056bf")
             .setAuthor({ name: "Now Playing ♪", iconURL: "https://i.imgur.com/dGzFmnr.png", url: "https://discord.js.org" })
-            .setDescription(description) // Large string - now playing, up next, songs in queue, total length
-            .setThumbnail(thumbnail) // Get song thumbnail
+            .setDescription(this.generateNPDescription(musicPlayer.queue.getRecentPopped())) // Large string - now playing, up next, songs in queue, total length
+            .setThumbnail(musicPlayer.queue.getRecentPopped().thumbnail); // Get song thumbnail
         return output;
     }
 
     /**
      * Generate the contents for the now playing embed
-     * @param {Queue} queue 
+     * @param {Queue} element Element in queue 
      * @returns Contents for the now playing embed
      */
-    generateNPDescription(queue) {
+    generateNPDescription(element) {
         const yt = new YouTube();
 
         // Current time in seconds
-        const currentTime = Math.floor(queue.getRecentPopped().stream.playbackDuration/1000, 1);
+        const currentTime = Math.floor(element.stream.playbackDuration/1000, 1);
         // Total time in seconds
-        const totalTime = queue.getRecentPopped().stream;
+        const totalTime = element.duration;
 
         let output = "";
 
         // Name of song
-        output += "[" + queue.getRecentPopped().title + "](" + queue.getRecentPopped().link + ")";
+        output += "[" + element.title + "](" + element.link + ")";
         output += "\n\n";
 
         // Progress bar
@@ -163,7 +160,7 @@ class Discord {
         output += "\n\n";
 
         // Requested by
-        output += "`Requested by:` " + queue.getRecentPopped().requestedBy;
+        output += "`Requested by:` " + element.requestedBy;
         return output;
     }
 }
