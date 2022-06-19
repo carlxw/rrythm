@@ -1,4 +1,4 @@
 module.exports = (message, musicPlayer) => {
-    connection.getmusicPlayer().pause();
+    musicPlayer().pause();
     message.channel.send("**Paused** ⏸");
 }

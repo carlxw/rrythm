@@ -92,8 +92,8 @@ class Discord {
 
         // Now playing - Video title -> Video link -> Video Duration -> Requested by
         output += "__Now Playing:__\n";
-        if (queue.recentPopped().isLive) output += "[" + queue.recentPopped().title + "](" + queue.recentPopped().link + ") | `" + "LIVE" + " Requested by: " + queue.recentPopped().requestedBy + "`\n\n";
-        else output += "[" + queue.recentPopped().title + "](" + queue.recentPopped().link + ") | `" + yt.secToMinSec(queue.recentPopped().duration) + " Requested by: " + queue.recentPopped().requestedBy + "`\n\n";
+        if (queue.recentPopped.isLive) output += "[" + queue.recentPopped.title + "](" + queue.recentPopped.link + ") | `" + "LIVE" + " Requested by: " + queue.recentPopped.requestedBy + "`\n\n";
+        else output += "[" + queue.recentPopped.title + "](" + queue.recentPopped.link + ") | `" + yt.secToMinSec(queue.recentPopped.duration) + " Requested by: " + queue.recentPopped.requestedBy + "`\n\n";
 
         // Up next - Video title -> Video link -> Video Duration -> Requested by
         output += "__Up Next:__\n";

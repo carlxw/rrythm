@@ -18,9 +18,6 @@ module.exports = {
         // Command does not exist
         if (!cmd) return;
 
-        console.log(musicPlayer.connection);
-        console.log(message.channel.name !== musicPlayer.textChannel)
-        console.log(message.member.voice.channel.name !== musicPlayer.voiceChannel)
         // Do not run following commands; musicPlayer DNE, not in set voice channel, not in set text channel
         if ((!musicPlayer.connection || (message.channel.name !== musicPlayer.textChannel || message.member.voice.channel.name !== musicPlayer.voiceChannel)) && (
             (command === "clear") || 
@@ -36,10 +33,12 @@ module.exports = {
             return;
         }
 
+        // Play - Create a musicPlayer if it does not exist OR ignore if command is sent in a different channel
+        if ((command === "play" || command === "p") && !musicPlayer.connection) musicPlayer.create(message);
+        // Play - Ignore command if it is found in a different channel
+        if ((command === "play" || command === "p") && (message.channel.name !== musicPlayer.textChannel || message.member.voice.channel.name !== musicPlayer.voiceChannel))
         // Play - If there are no args, try unpausing. 
         if ((command === "play" || command === "p") && !args) return;
-        // Play - Create a musicPlayer if it does not exist
-        if ((command === "play" || command === "p") && !musicPlayer.connection) musicPlayer.create(message);
 
         // Execute command
         try {
@@ -47,7 +46,7 @@ module.exports = {
         } catch (error) {
             console.error(error);
         }
-	},
+	}
 };
 
 // Formats all entries from an array to a single string
