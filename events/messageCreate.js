@@ -41,7 +41,8 @@ module.exports = {
         // Play - Create a musicPlayer if it does not exist OR ignore if command is sent in a different channel
         if ((command === "play" || command === "p") && !musicPlayer.connection) musicPlayer.create(message);
         // Play - Ignore command if it is found in a different channel
-        if ((command === "play" || command === "p") && (message.channel.name !== musicPlayer.textChannel || message.member.voice.channel.name !== musicPlayer.voiceChannel))
+        if ((command === "play" || command === "p") && (message.channel.name !== musicPlayer.textChannel))
+        // if ((command === "play" || command === "p") && (message.channel.name !== musicPlayer.textChannel || message.member.voice.channel.name !== musicPlayer.voiceChannel))
         // Play - If there are no args, try unpausing. 
         if ((command === "play" || command === "p") && !args) return;
 
