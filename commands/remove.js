@@ -3,6 +3,6 @@ module.exports = (message, musicPlayer, discord, num) => {
         const removedIndex = musicPlayer.queue.remove(num)
         message.channel.send({embeds: [discord.embedText("**Removed** `" + removedIndex.title + "` ✅ ")]});
     } catch (err) {
-        message.channel.send({embeds: [discord.embedText("❌ Failed to remove position " + num + ".")]});
+        message.channel.send({embeds: [discord.embedText("❌ Failed to remove item.")]});
     } 
 }
