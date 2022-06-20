@@ -112,7 +112,7 @@ class Discord {
             .setColor('#FF3741')
             .setTitle(playlist.title)
             .setAuthor({ name: "Playlist added to queue", iconURL: userAvatar })
-            .setDescription("**Enqueued** `"+ playlist.videoCount +"` **songs**")
+            .setDescription("**Enqueued** `"+ playlist.videos.length +"` **songs**")
             .setTimestamp()
             .setFooter({ text: "Rrythm Bot", iconURL: "https://i.imgur.com/dGzFmnr.png" });
         return output;
