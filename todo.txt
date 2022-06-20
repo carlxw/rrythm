@@ -1,7 +1,0 @@
-Play skip
-Commands while playing glitches playing (worker threads)
-
-https://www.npmjs.com/package/nodemon
-https://www.npmjs.com/package/forever
-
-piscina
