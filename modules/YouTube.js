@@ -26,7 +26,7 @@ class YouTube {
         const channelName = info[0].channel.name;
         const songDuration = info[0].durationInSec;
         const thumbnail = info[0].thumbnails[0].url;
-        const stream = await this.getStream(link)
+        const stream = null;
         const live = info[0].live
         return new YouTubeStream(link, title, channelName, songDuration, thumbnail, stream, live);
     }
