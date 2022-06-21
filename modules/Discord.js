@@ -107,12 +107,15 @@ class Discord {
      */
     embedPlaylist(message, playlist) {
         const userAvatar = this.getUserAvatar(message);
+        const yt = new YouTube();
+
+        const videoArrLen = yt.playlist_videos(playlist).length;
 
         const output = new MessageEmbed()
             .setColor('#FF3741')
             .setTitle(playlist.title)
             .setAuthor({ name: "Playlist added to queue", iconURL: userAvatar })
-            .setDescription("**Enqueued** `"+ playlist.videos.length +"` **songs**")
+            .setDescription("**Enqueued** `"+ videoArrLen +"` **songs**")
             .setTimestamp()
             .setFooter({ text: "Rrythm Bot", iconURL: "https://i.imgur.com/dGzFmnr.png" });
         return output;
