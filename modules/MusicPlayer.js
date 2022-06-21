@@ -8,6 +8,7 @@ class MusicPlayer {
     create(message) {
         this.player = DiscordVoice.createAudioPlayer();
         this.queue = new Queue();
+        this.message = message;
         this.voiceChannel = message.member.voice.channel.name;
         this.textChannel = message.channel.name;
         this.loop = false;
@@ -134,13 +135,11 @@ class MusicPlayer {
      * Plays audio, private method
      */
     async playAudio() {
-        // Part of a playlist
-        if (this.queue.peek().stream === null) {
-            this.queue.peek().stream = await yt.getStream(this.queue.peek().link);
-        }
+        // Self-destruct if bot is alone in a voice call
+        if (this.message.member.voice.channel.size === 1) this.destroy();
 
         if (this.loop) {
-            const loopedResource = await yt.getStream(this.queue.recentPopped.link)
+            const loopedResource = await yt.getStream(this.queue.recentPopped.link); 
             this.player.play(loopedResource);
         }
         // For skip command
@@ -148,7 +147,7 @@ class MusicPlayer {
             this.player.stop();
             this.startTimer();
         }
-        else this.player.play(this.queue.pop().stream)
+        else this.player.play(await yt.getStream(this.queue.pop().link));
     }
 
     /**
