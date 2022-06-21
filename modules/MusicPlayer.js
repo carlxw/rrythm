@@ -100,15 +100,16 @@ class MusicPlayer {
         const discord = new Discord();
 
         const playlist = await yt.acquirePlaylist(link);
+        const playlist_videos = await yt.playlist_videos(playlist);
 
-        for (let i = 0; i < playlist.videos.length; i++) {
+        for (let i = 0; i < playlist_videos.length; i++) {
             let video = new YouTubeStream();
     
-            video.link = playlist.videos[i].url;
-            video.title = playlist.videos[i].title;
-            video.channel = playlist.videos[i].channel.name;
-            video.duration = playlist.videos[i].durationInSec;
-            video.thumbnail = playlist.videos[i].thumbnails[3].url;
+            video.link = playlist_videos[i].url;
+            video.title = playlist_videos[i].title;
+            video.channel = playlist_videos[i].channel.name;
+            video.duration = playlist_videos[i].durationInSec;
+            video.thumbnail = playlist_videos[i].thumbnails[3].url;
             video.stream = null;
             video.isLive = false; // Playlist entries can't be livestreams
             video.requestedBy = discord.getUser(message);

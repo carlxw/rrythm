@@ -41,6 +41,15 @@ class YouTube {
     }
 
     /**
+     * Returns all videos within a playlist. Can exceed 100.
+     * @param {YouTube Playlist} playlist 
+     * @returns Video array
+     */
+    async playlist_videos(playlist) {
+        return await playlist.all_videos();
+    }
+
+    /**
      * Method converts raw seconds into min:seconds
      * 
      * @param {Integer} seconds Duration of a video
