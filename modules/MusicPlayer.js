@@ -134,9 +134,11 @@ class MusicPlayer {
      * Plays audio, private method
      */
     async playAudio() {
-        // Acquire stream
-        if (this.queue.peek().stream === null) this.queue.peek().stream = await yt.getStream(this.queue.peek().link);
-        
+        // Part of a playlist
+        if (this.queue.peek().stream === null) {
+            this.queue.peek().stream = await yt.getStream(this.queue.peek().link);
+        }
+
         if (this.loop) {
             const loopedResource = await yt.getStream(this.queue.recentPopped.link)
             this.player.play(loopedResource);
