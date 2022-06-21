@@ -26,8 +26,8 @@ class YouTube {
         const channelName = info[0].channel.name;
         const songDuration = info[0].durationInSec;
         const thumbnail = info[0].thumbnails[0].url;
-        const stream = await this.getStream(link)
-        const live = info[0].live
+        const stream = null;
+        const live = info[0].live;
         return new YouTubeStream(link, title, channelName, songDuration, thumbnail, stream, live);
     }
 
@@ -38,6 +38,15 @@ class YouTube {
      */
     async acquirePlaylist(link) {
         return await play.playlist_info(link, { incomplete : true });
+    }
+
+    /**
+     * Returns all videos within a playlist. Can exceed 100.
+     * @param {YouTube Playlist} playlist 
+     * @returns Video array
+     */
+    async playlist_videos(playlist) {
+        return await playlist.all_videos();
     }
 
     /**

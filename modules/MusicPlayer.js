@@ -8,6 +8,7 @@ class MusicPlayer {
     create(message) {
         this.player = DiscordVoice.createAudioPlayer();
         this.queue = new Queue();
+        this.message = message;
         this.voiceChannel = message.member.voice.channel.name;
         this.textChannel = message.channel.name;
         this.loop = false;
@@ -99,15 +100,16 @@ class MusicPlayer {
         const discord = new Discord();
 
         const playlist = await yt.acquirePlaylist(link);
+        const playlist_videos = await yt.playlist_videos(playlist);
 
-        for (let i = 0; i < playlist.videos.length; i++) {
+        for (let i = 0; i < playlist_videos.length; i++) {
             let video = new YouTubeStream();
     
-            video.link = playlist.videos[i].url;
-            video.title = playlist.videos[i].title;
-            video.channel = playlist.videos[i].channel.name;
-            video.duration = playlist.videos[i].durationInSec;
-            video.thumbnail = playlist.videos[i].thumbnails[3].url;
+            video.link = playlist_videos[i].url;
+            video.title = playlist_videos[i].title;
+            video.channel = playlist_videos[i].channel.name;
+            video.duration = playlist_videos[i].durationInSec;
+            video.thumbnail = playlist_videos[i].thumbnails[3].url;
             video.stream = null;
             video.isLive = false; // Playlist entries can't be livestreams
             video.requestedBy = discord.getUser(message);
@@ -134,13 +136,11 @@ class MusicPlayer {
      * Plays audio, private method
      */
     async playAudio() {
-        // Part of a playlist
-        if (this.queue.peek().stream === null) {
-            this.queue.peek().stream = await yt.getStream(this.queue.peek().link);
-        }
-
+        // Self-destruct if bot is alone in a voice call
+        if (this.message.member.voice.channel.size === 1) this.destroy();
+        
         if (this.loop) {
-            const loopedResource = await yt.getStream(this.queue.recentPopped.link)
+            const loopedResource = await yt.getStream(this.queue.recentPopped.link); 
             this.player.play(loopedResource);
         }
         // For skip command
@@ -148,7 +148,11 @@ class MusicPlayer {
             this.player.stop();
             this.startTimer();
         }
-        else this.player.play(this.queue.pop().stream)
+        else {
+            const stream = await yt.getStream(this.queue.pop().link)
+            this.queue.recentPopped.stream = stream;
+            this.player.play(stream);
+        }
     }
 
     /**
