@@ -70,7 +70,7 @@ class Discord {
      * @param message
      * @returns embed
      */
-    embedAddedToQueue(message) {
+    async embedAddedToQueue(message) {
         const { musicPlayer } = require("../index.js");
         const queue = musicPlayer.queue;
         const yt = new YouTube();
@@ -79,7 +79,7 @@ class Discord {
         if (queue.recentAdded.isLive) songDuration = "LIVE";
         else songDuration = yt.secToMinSec(queue.recentAdded.duration);
         
-        let queueDuration = yt.getQueueDuration(queue) - Math.floor(queue.recentAdded.stream.playbackDuration/1000, 1) - queue.recentAdded.duration;
+        let queueDuration = yt.getQueueDuration(queue) - Math.floor((queue.recentPopped.stream.playbackDuration)/1000, 1) - queue.recentAdded.duration;
         if (queueDuration <= 0 ) queueDuration = "Now";
         else queueDuration = yt.secToMinSec(queueDuration);
 

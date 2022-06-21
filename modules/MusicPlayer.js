@@ -137,7 +137,12 @@ class MusicPlayer {
      */
     async playAudio() {
         // Self-destruct if bot is alone in a voice call
-        if (this.message.member.voice.channel.size === 1) this.destroy();
+        if (!this.message.member.voice.channel) {
+            this.destroy();
+            const discord = new Discord();
+            this.message.channel.send({embeds: [discord.embedText("**Successfully disconnected** 📭")]});
+            return;
+        }
         
         if (this.loop) {
             const loopedResource = await yt.getStream(this.queue.recentPopped.link); 

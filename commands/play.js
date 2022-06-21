@@ -25,7 +25,7 @@ module.exports = async (message, musicPlayer, discord, args) => {
             if (musicPlayer.queue.search(musicPlayer.queue.recentAdded.title) === -1) {
                 message.channel.send({embeds: [discord.embedPlay(message)]});
             }
-            else message.channel.send({embeds: [discord.embedAddedToQueue(message)]});
+            else message.channel.send({embeds: [await discord.embedAddedToQueue(message)]});
         }
     );
 }
