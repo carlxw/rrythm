@@ -137,7 +137,7 @@ class MusicPlayer {
     async playAudio() {
         // Self-destruct if bot is alone in a voice call
         if (this.message.member.voice.channel.size === 1) this.destroy();
-
+        
         if (this.loop) {
             const loopedResource = await yt.getStream(this.queue.recentPopped.link); 
             this.player.play(loopedResource);
@@ -147,7 +147,11 @@ class MusicPlayer {
             this.player.stop();
             this.startTimer();
         }
-        else this.player.play(await yt.getStream(this.queue.pop().link));
+        else {
+            const stream = await yt.getStream(this.queue.pop().link)
+            this.queue.recentPopped.stream = stream;
+            this.player.play(stream);
+        }
     }
 
     /**
