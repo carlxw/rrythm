@@ -70,11 +70,6 @@ class Queue {
         return this.items.slice();
     }
 
-    // Gets the array used BY REFERENCE (Affects original object)
-    getArrayReference() {
-        return this.items;
-    }
-
     // Searches for an element in the queue, returns -1 if not found. Title is case sensitive 
     search(title) {
         for (let i = 0; i < this.items.length; i++) {
