@@ -7,6 +7,9 @@ module.exports = {
         const Discord = require("../modules/Discord.js");
         const discord = new Discord();
 
+        // If someone just typed "!" - Ignore
+        if (message.content === "!") return
+        
         // Isolate arguments (array) and command
         let args = message.content.slice(config.prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
