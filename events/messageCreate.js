@@ -55,6 +55,9 @@ module.exports = {
         } catch (error) {
             console.error(error);
         }
+
+        // Memory leak fix
+        discord = null;
 	}
 };
 
