@@ -5,7 +5,7 @@ module.exports = {
         const config = require("../config.json");
         let { musicPlayer } = require("../index.js");
         const Discord = require("../modules/Discord.js");
-        const discord = new Discord();
+        let discord = new Discord();
 
         // If someone just typed "!" - Ignore
         if (message.content === "!") return
