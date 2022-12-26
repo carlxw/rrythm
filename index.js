@@ -1,6 +1,7 @@
 const { Client, Intents, Collection } = require("discord.js");
 const fs = require("fs");
 const MusicPlayer = require("./modules/MusicPlayer.js");
+const Disconnect = require("./modules/Disconnect.js");
 
 // Import from config.json
 const config = require("./config.json");
@@ -45,7 +46,10 @@ for (const file of commandFiles) {
     console.log(`[COMMAND HANDLER] - ${file} has been loaded.`);
 }
 
-// Activate bot
+// Activate bot and logic
 client.login(config.token);
-
 module.exports = { musicPlayer };
+
+// Check if the internet is disconnected every 60 seconds. Quit on internet disconnect
+const disconnect = new Disconnect();
+disconnect.run(60000)
