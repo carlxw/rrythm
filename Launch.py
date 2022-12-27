@@ -12,8 +12,8 @@ def connected():
 		
 while (True):
 	os.system(command)
-	
 	now = datetime.datetime.now()
+	
 	# Host is disconnected from the internet, retry in 10 mins
 	if (not connected()):
 		print("Disconnect occured at " + str(now))
