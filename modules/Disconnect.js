@@ -33,7 +33,7 @@ class Disconnect {
         while (true) {
             await this.sleep(time);
             
-            connected = await this.isOnline()
+            let connected = await this.isOnline()
             if (!connected) process.exit();
         }
     }
