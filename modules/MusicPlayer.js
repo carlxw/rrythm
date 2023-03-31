@@ -26,8 +26,8 @@ class MusicPlayer {
         this.connection.on(VoiceConnectionStatus.Disconnected, async (oldState, newState) => {
             try {
                 await Promise.race([
-                    entersState(connection, VoiceConnectionStatus.Signalling, 5_000),
-                    entersState(connection, VoiceConnectionStatus.Connecting, 5_000),
+                    entersState(connection, VoiceConnectionStatus.Signalling, 5000),
+                    entersState(connection, VoiceConnectionStatus.Connecting, 5000),
                 ]);
                 // Seems to be reconnecting to a new channel - ignore disconnect
             } catch (error) {
@@ -40,7 +40,7 @@ class MusicPlayer {
 
     // Auto disconnect that activates when there is nothing in queue
     startTimer() {
-        this.timer = setTimeout(() => this.destroy(), 120_000);
+        this.timer = setTimeout(() => this.destroy(), 2*60000);
     }
 
     destroy() {
@@ -80,7 +80,7 @@ class MusicPlayer {
     async enqueue(message, argument) {
         const discord = new Discord();
         if (this.timer) {
-            clearInterval(this.timer);
+            clearTimeout(this.timer);
             this.timer = null;
         }
         const element = await yt.acquire(argument);
