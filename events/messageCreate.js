@@ -7,9 +7,6 @@ module.exports = {
         const Discord = require("../modules/Discord.js");
         let discord = new Discord();
 
-        // If someone just typed "!" - Ignore
-        if (message.content === "!") return
-        
         // Isolate arguments (array) and command
         let args = message.content.slice(config.prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
@@ -19,12 +16,16 @@ module.exports = {
         // There is no prefix or the author is the bot
         if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) return;
         // User must be in a voice channel to use commands
+        // If someone just typed "!" - Ignore
+        if (message.content === "!") return
+        // No arguments - Ignore
+        if (!args) return;
+        // Command does not exist
+        if (!cmd) return;
         if (!message.member.voice.channel) {
             message.channel.send("❌ **You have to be in a voice channel to use this command.**");
             return;
         }
-        // Command does not exist
-        if (!cmd) return;
 
         // Do not run following commands; musicPlayer DNE, not in set voice channel, not in set text channel
         if ((!musicPlayer.connection || (message.channel.name !== musicPlayer.textChannel || message.member.voice.channel.name !== musicPlayer.voiceChannel)) && (

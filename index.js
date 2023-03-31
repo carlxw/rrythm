@@ -2,6 +2,7 @@ const { Client, GatewayIntentBits, Collection } = require("discord.js");
 const fs = require("fs");
 const MusicPlayer = require("./modules/MusicPlayer.js");
 const Disconnect = require("./modules/Disconnect.js");
+require("dotenv").config();
 
 // Import from config.json
 const config = require("./config.json");
