@@ -1,7 +1,8 @@
-const { Client, Intents, Collection } = require("discord.js");
+const { Client, GatewayIntentBits, Collection } = require("discord.js");
 const fs = require("fs");
 const MusicPlayer = require("./modules/MusicPlayer.js");
 const Disconnect = require("./modules/Disconnect.js");
+require("dotenv").config();
 
 // Import from config.json
 const config = require("./config.json");
@@ -9,9 +10,10 @@ const config = require("./config.json");
 // Initialize bot
 const client = new Client({
     intents: [
-        Intents.FLAGS.GUILD_VOICE_STATES,
-        Intents.FLAGS.GUILDS, 
-        Intents.FLAGS.GUILD_MESSAGES
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.Guilds, 
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent
     ]
 });
 
@@ -47,7 +49,7 @@ for (const file of commandFiles) {
 }
 
 // Activate bot and logic
-client.login(config.token);
+client.login(process.env.DISCORD_TOKEN);
 module.exports = { musicPlayer };
 
 // Check if the internet is disconnected every 60 seconds. Quit on internet disconnect

@@ -40,17 +40,19 @@ class MusicPlayer {
 
     // Auto disconnect that activates when there is nothing in queue
     startTimer() {
-        this.timer = setTimeout(() => this.destroy(), 2*60000);
+        this.timer = setTimeout(() => { this.destroy }, 2*60000);
+        console.log("Disconnect timer started");
     }
 
     destroy() {
-        this.player.stop();
+        console.log("Disconnected")
+        if (this.player) this.player.stop();
         this.player = null;
         this.queue = null;
         this.voiceChannel = null;
         this.textChannel = null;
         this.loop = null;
-        this.connection.destroy();
+        if (this.connection) this.connection.destroy();
         this.connection = null;
     }
 
@@ -80,8 +82,8 @@ class MusicPlayer {
     async enqueue(message, argument) {
         const discord = new Discord();
         if (this.timer) {
+            console.log("Disconnect timer cleared");
             clearTimeout(this.timer);
-            this.timer = null;
         }
         const element = await yt.acquire(argument);
         element.requestedBy = discord.getUser(message);

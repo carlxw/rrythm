@@ -84,11 +84,14 @@ class YouTube {
      */
     async getStream(url) {
         const { createAudioResource } = require("@discordjs/voice");
-        const source = await play.stream(url);
-        const resource = createAudioResource(source.stream, {
-            inputType : source.type
-        }) 
-        return resource;
+
+        const source = await play.stream(url, {
+            quality: 0
+        });
+
+        return createAudioResource(source.stream, {
+            inputType: source.type
+        });
     }
 
     /**
