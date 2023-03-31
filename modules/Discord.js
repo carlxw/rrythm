@@ -1,5 +1,5 @@
 const YouTube = require("./YouTube.js");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 class Discord {
     /**
@@ -27,7 +27,7 @@ class Discord {
      * @returns Discord embed to send
      */
     embedText(text) {
-        const output = new MessageEmbed()
+        const output = new EmbedBuilder()
             .setColor('#FF3741')
             .setDescription(text)
             .setTimestamp()
@@ -49,7 +49,7 @@ class Discord {
         if (queue.recentAdded.isLive) songDuration = "LIVE";
         else songDuration = yt.secToMinSec(queue.recentAdded.duration);
 
-        const output = new MessageEmbed()
+        const output = new EmbedBuilder()
             .setColor("#FF3741")
             .setTitle(queue.recentAdded.title) // Get song title
             .setURL(queue.recentAdded.link) // Get song link
@@ -83,7 +83,7 @@ class Discord {
         if (queueDuration <= 0 ) queueDuration = "Now";
         else queueDuration = yt.secToMinSec(queueDuration);
 
-        const output = new MessageEmbed()
+        const output = new EmbedBuilder()
             .setColor("#FF3741")
             .setTitle(queue.recentAdded.title) // Get song title
             .setURL(queue.recentAdded.link) // Get song link
@@ -111,7 +111,7 @@ class Discord {
 
         const videoArrLen = yt.playlist_videos(playlist).length;
 
-        const output = new MessageEmbed()
+        const output = new EmbedBuilder()
             .setColor('#FF3741')
             .setTitle(playlist.title)
             .setAuthor({ name: "Playlist added to queue", iconURL: userAvatar })
@@ -139,7 +139,7 @@ class Discord {
         if (musicPlayer.loop) footerText = `Page ${page} | Loop: ✅ | Queue Loop: ❌`;
         else footerText = `Page ${page} | Loop: ❌ | Queue Loop: ❌`;
 
-        const output = new MessageEmbed()
+        const output = new EmbedBuilder()
             .setColor('#FF3741')
             .setTitle(`**Queue for ${message.guild.name}**`) // Queue for server name
             .setURL("https://discord.js.org/")
@@ -194,7 +194,7 @@ class Discord {
         const { musicPlayer } = require("../index.js");
         const yt = new YouTube();
 
-        const output = new MessageEmbed()
+        const output = new EmbedBuilder()
             .setColor('#FF3741')
             .setAuthor({ name: "Now Playing ♪", iconURL: "https://i.imgur.com/dGzFmnr.png", url: "https://discord.js.org" })
             .setDescription(this.generateNPDescription(musicPlayer.queue.recentPopped)) // Large string - now playing, up next, songs in queue, total length

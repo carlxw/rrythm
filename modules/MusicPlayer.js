@@ -40,7 +40,7 @@ class MusicPlayer {
 
     // Auto disconnect that activates when there is nothing in queue
     startTimer() {
-        this.timer = setTimeout(() => this.destroy(), 2*60000);
+        this.timer = setTimeout(this.destroy, 2*60000);
     }
 
     destroy() {
@@ -81,7 +81,6 @@ class MusicPlayer {
         const discord = new Discord();
         if (this.timer) {
             clearTimeout(this.timer);
-            this.timer = null;
         }
         const element = await yt.acquire(argument);
         element.requestedBy = discord.getUser(message);

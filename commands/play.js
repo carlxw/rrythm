@@ -1,16 +1,16 @@
 const play = require("play-dl");
+const config = require("../config.json");
 
 module.exports = async (message, musicPlayer, discord, args) => {
     // Unpause
     if (!args && musicPlayer.getPlayerStatus() === "paused") {
         musicPlayer.player.unpause();
-        message.channel.send({embeds: [discord.embedText("**Resuming** 👍 ⏯")]});
+        message.channel.send({ embeds: [discord.embedText(config.resuming_msg)] });
         return;
     }
 
-    message.channel.send({embeds: [discord.embedText("**Searching** 🔎: `" + args + "`.")]}).then(
+    message.channel.send({ embeds: [discord.embedText(`${config.searching_msg}: \`${args}\`.`)] }).then(
         async msg => {
-            
             // Playlist
             if (play.yt_validate(args) === "playlist") {
                 const playlist = await musicPlayer.enqueuePlaylist(message, args);
