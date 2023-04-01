@@ -1,0 +1,15 @@
+{
+    "prefix": "!",
+
+    "clear_msg": "**Cleared** 💥",
+    "disconnect_msg": "**Successfully disconnected** 📭",
+    "loop_enable_msg": "**Disabled!** 🔂",
+    "loop_disable_msg": "**Enabled!** 🔂",
+    "paused_msg": "**Paused** ⏸",
+    "resuming_msg": "**Resuming** 👍 ⏯",
+    "searching_msg": "**Searching** 🔎",
+    "removed_msg1": "**Removed** `",
+    "removed_msg2": "✅",
+    "failed_remove_msg": "❌ Failed to remove item.",
+    "skipped_msg": "**Skipped** ⏩"
+}
