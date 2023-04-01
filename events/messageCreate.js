@@ -13,12 +13,6 @@ module.exports = {
         args = format(args);
         const cmd = message.client.commands.get(command); // Method to run
 
-        // User must be connected to a voice channel
-        if (!message.member.voice.channel) {
-            message.channel.send("❌ **You have to be in a voice channel to use this command.**");
-            return;
-        }
-
         // There is no prefix or the author is the bot
         if (
             // No prefix
@@ -33,6 +27,12 @@ module.exports = {
             // Command does not exist
             !cmd
         ) return;
+
+        // User must be connected to a voice channel
+        if (!message.member.voice.channel) {
+            message.channel.send("❌ **You have to be in a voice channel to use this command.**");
+            return;
+        }
 
         // Do not run following commands; musicPlayer DNE, not in set voice channel, not in set text channel
         if ((!musicPlayer.connection || (message.channel.name !== musicPlayer.textChannel || message.member.voice.channel.name !== musicPlayer.voiceChannel)) && (
