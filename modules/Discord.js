@@ -94,7 +94,7 @@ class Discord {
                 { name: "Song Duration", value: songDuration, inline: true },
                 { name: "Estimated time until playing", value: queueDuration, inline: true },
             )
-            .addField("Position in queue", `${queue.search(queue.recentAdded.title)}`, true) // Position in queue
+            .addFields("Position in queue", `${queue.search(queue.recentAdded.title)}`, true) // Position in queue
             .setTimestamp()
             .setFooter({ text: "Rrythm Bot", iconURL: "https://i.imgur.com/dGzFmnr.png" });
         return output;
