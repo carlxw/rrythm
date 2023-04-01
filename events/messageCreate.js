@@ -13,19 +13,26 @@ module.exports = {
         args = format(args);
         const cmd = message.client.commands.get(command); // Method to run
 
-        // There is no prefix or the author is the bot
-        if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) return;
-        // User must be in a voice channel to use commands
-        // If someone just typed "!" - Ignore
-        if (message.content === "!") return
-        // No arguments - Ignore
-        if (!args) return;
-        // Command does not exist
-        if (!cmd) return;
+        // User must be connected to a voice channel
         if (!message.member.voice.channel) {
             message.channel.send("❌ **You have to be in a voice channel to use this command.**");
             return;
         }
+
+        // There is no prefix or the author is the bot
+        if (
+            // No prefix
+            message.content.indexOf(config.prefix) !== 0 || 
+
+            // Bot sent message
+            message.author.bot ||
+
+            // Only prefix is mainly sent (i.e. ! or !! or !!! or !!!!)
+            Array.from(new Set(message.content.split('!'))).toString() === "!" ||
+
+            // Command does not exist
+            !cmd
+        ) return;
 
         // Do not run following commands; musicPlayer DNE, not in set voice channel, not in set text channel
         if ((!musicPlayer.connection || (message.channel.name !== musicPlayer.textChannel || message.member.voice.channel.name !== musicPlayer.voiceChannel)) && (

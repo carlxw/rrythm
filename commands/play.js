@@ -2,12 +2,15 @@ const play = require("play-dl");
 const config = require("../config.json");
 
 module.exports = async (message, musicPlayer, discord, args) => {
+    // No unpause needed, and no args
+    if (!args && musicPlayer.getPlayerStatus() !== "paused") return;
+
     // Unpause
     if (!args && musicPlayer.getPlayerStatus() === "paused") {
         musicPlayer.player.unpause();
         message.channel.send({ embeds: [discord.embedText(config.resuming_msg)] });
         return;
-    }
+    } 
 
     message.channel.send({ embeds: [discord.embedText(`${config.searching_msg}: \`${args}\`.`)] }).then(
         async msg => {
