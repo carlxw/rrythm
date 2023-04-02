@@ -7,6 +7,4 @@ module.exports = (message, musicPlayer, discord, num) => {
     } catch (err) {
         message.channel.send({ embeds: [discord.embedText(config.failed_remove_msg)] });
     } 
-
-    
 }

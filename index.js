@@ -54,4 +54,4 @@ module.exports = { musicPlayer };
 
 // Check if the internet is disconnected every 60 seconds. Quit on internet disconnect
 const disconnect = new Disconnect();
-disconnect.run(60000)
+disconnect.run(60000);
