@@ -40,7 +40,7 @@ class MusicPlayer {
 
     // Auto disconnect that activates when there is nothing in queue
     startTimer() {
-        this.timer = setTimeout(() => { this.destroy }, 2*60000);
+        this.timer = setTimeout(() => { this.destroy() }, 2*60000);
         console.log("Disconnect timer started");
     }
 
