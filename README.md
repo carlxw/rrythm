@@ -1,7 +1,9 @@
 # rrythm
-A modernized clone of the Rythm music bot!
 
-# Packages used
-* discord.js
-* discord.js/voice (and other packages for audio)
-* play-dl
+## What Is It?
+
+## Features Of This Project
+
+## Things I Learned While Making This Project
+
+## Future Ideas
