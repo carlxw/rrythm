@@ -13,6 +13,12 @@ module.exports = {
         args = format(args);
         const cmd = message.client.commands.get(command); // Method to run
 
+        // Voice channel is now empty and music is still playing - shortcircuit if musicPlayer exists
+        if (musicPlayer.player && musicPlayer.voiceChannel.members.size === 1) {
+            musicPlayer.destroy();
+            return;
+        }
+
         // There is no prefix or the author is the bot
         if (
             // No prefix
@@ -35,7 +41,7 @@ module.exports = {
         }
 
         // Do not run following commands; musicPlayer DNE, not in set voice channel, not in set text channel
-        if ((!musicPlayer.connection || (message.channel.name !== musicPlayer.textChannel || message.member.voice.channel.name !== musicPlayer.voiceChannel)) && (
+        if ((!musicPlayer.connection || (message.channel.name !== musicPlayer.textChannel || message.member.voice.channel.name !== musicPlayer.voiceChannel.name)) && (
             (command === "clear") || 
             (command === "loop") || 
             (command === "pause") || 
