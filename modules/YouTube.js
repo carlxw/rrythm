@@ -10,24 +10,24 @@ class YouTube {
      * Acquires the necessary information given an argument
      * 
      * @param {String} argument A URL or a search keyword
-     * @returns Many things...
+     * @returns Many things... but no stream
      */
     async acquire(argument) {
         const YouTubeStream = require("./YouTubeStream.js");
         
         argument = argument.trim();
-        let info = await this.getInfo(argument);
+        let [ info ] = await this.getInfo(argument);
 
         let link;
         if (play.yt_validate(argument) === "video") link = argument;
-        else link = info[0].url;
+        else link = info.url;
 
-        const title = info[0].title;
-        const channelName = info[0].channel.name;
-        const songDuration = info[0].durationInSec;
-        const thumbnail = info[0].thumbnails[0].url;
+        const title = info.title;
+        const channelName = info.channel.name;
+        const songDuration = info.durationInSec;
+        const thumbnail = info.thumbnails[0].url;
         const stream = null;
-        const live = info[0].live;
+        const live = info.live;
         return new YouTubeStream(link, title, channelName, songDuration, thumbnail, stream, live);
     }
 
@@ -70,6 +70,11 @@ class YouTube {
      * @returns Array of data
      */
     async getInfo(input){
+        // Simple URL Detection
+        if (input.includes("www.") || input.includes(".com") || input.includes("https")) {
+            input = this.detect_process_ab(input);
+        }
+
         let yt_info = await play.search(input, {
             limit: 1
         })
@@ -109,6 +114,20 @@ class YouTube {
             output += Number(array[i].duration);
         }
         return output;
+    }
+
+    /**
+     * 2023-04-02: AdBlock messes with the URL by adding a "&ab_channel=" to the URL
+     * which messes up with the bot's search algorithm. 
+     * 
+     * @param {String} link URL with possibility of containning AdBlock link
+     * @returns Processed link if it does contain "&ab_channel="
+     */
+    detect_process_ab(link) {
+        if (!link.includes("&ab_channel=")) return link;
+
+        // The link contains AdBlock URL parameter
+        return link.split("&ab_channel=")[0];
     }
 }
 
