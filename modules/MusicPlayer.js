@@ -2,7 +2,9 @@ const DiscordVoice = require("@discordjs/voice");
 const Discord = require("./Discord.js");
 const Queue = require("./Queue.js");
 const YouTube = require("./YouTube.js");
+
 const yt = new YouTube();
+const discord = new Discord();
 
 class MusicPlayer {
     create(message) {
@@ -12,13 +14,13 @@ class MusicPlayer {
         this.voiceChannel = message.member.voice.channel;
         this.textChannel = message.channel.name;
         this.loop = false;
-        this.createConnection(message)
+        this.#createConnection(message)
 
         // When the player is in idle mode
         this.player.on(DiscordVoice.AudioPlayerStatus.Idle, () => {
-            if (this.loop) this.playAudio();
-            if (this.queue.isEmpty()) this.startTimer();
-            else this.playAudio();
+            if (this.loop) this.#playAudio();
+            if (this.queue.isEmpty()) this.#startTimer();
+            else this.#playAudio();
         });
 
         // When the bot has been forcefully disconnected
@@ -39,7 +41,7 @@ class MusicPlayer {
     }
 
     // Auto disconnect that activates when there is nothing in queue
-    startTimer() {
+    #startTimer() {
         this.timer = setTimeout(() => { this.destroy() }, 2*60000);
         console.log("Disconnect timer started");
     }
@@ -62,7 +64,7 @@ class MusicPlayer {
      * @param {String (ID)} message User that called bot
      * @returns connection to the voice channel
      */
-    createConnection(message) {  
+    #createConnection(message) {  
         const { joinVoiceChannel } = require("@discordjs/voice");
         this.connection = joinVoiceChannel({
             channelId: message.member.voice.channel.id,
@@ -80,7 +82,6 @@ class MusicPlayer {
      * @param {String} argument A URL or a keyword
      */
     async enqueue(message, argument) {
-        const discord = new Discord();
         if (this.timer) {
             console.log("Disconnect timer cleared");
             clearTimeout(this.timer);
@@ -88,7 +89,7 @@ class MusicPlayer {
         const element = await yt.acquire(argument);
         element.requestedBy = discord.getUser(message);
         this.queue.add(element, false);
-        if (this.getPlayerStatus() === "idle") this.playAudio();
+        if (this.getPlayerStatus() === "idle") this.#playAudio();
     }
 
     /**
@@ -99,7 +100,6 @@ class MusicPlayer {
      */
     async enqueuePlaylist(message, link) {
         const YouTubeStream = require("../modules/YouTubeStream.js");
-        const discord = new Discord();
 
         const playlist = await yt.acquirePlaylist(link);
         const playlist_videos = await yt.playlist_videos(playlist);
@@ -118,7 +118,7 @@ class MusicPlayer {
 
             this.queue.add(video, false);
         }
-        if (this.getPlayerStatus() === "idle") this.playAudio();
+        if (this.getPlayerStatus() === "idle") this.#playAudio();
         return playlist;
     }
 
@@ -128,7 +128,6 @@ class MusicPlayer {
      * @param {String} argument A URL or a keyword
      */
     async enqueueTop(message, argument) {
-        const discord = new Discord();
         const element = await yt.acquire(argument);
         element.requestedBy = discord.getUser(message);
         this.queue.add(element, true);
@@ -137,11 +136,10 @@ class MusicPlayer {
     /**
      * Plays audio, private method
      */
-    async playAudio() {
+    async #playAudio() {
         // Self-destruct if bot is alone in a voice call
         if (!this.message.member.voice.channel) {
             this.destroy();
-            const discord = new Discord();
             this.message.channel.send({embeds: [discord.embedText("**Successfully disconnected** 📭")]});
             return;
         }
@@ -153,13 +151,20 @@ class MusicPlayer {
         // For skip command
         else if (this.queue.isEmpty()) {
             this.player.stop();
-            this.startTimer();
+            this.#startTimer();
         }
         else {
             const stream = await yt.getStream(this.queue.pop().link)
             this.queue.recentPopped.stream = stream;
             this.player.play(stream);
         }
+    }
+
+    /**
+     * Skips to next song in queue
+     */
+    async skip() {
+        this.#playAudio();
     }
 
     /**

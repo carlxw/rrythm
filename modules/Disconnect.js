@@ -5,7 +5,7 @@ class Disconnect {
      * @param {int} ms Time duration of sleep
      * @returns Promise
      */
-    sleep(ms) {
+    #sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
@@ -15,7 +15,7 @@ class Disconnect {
      * @param {String} url Test webpage
      * @returns Boolean - True if connected to the internet
      */
-    isOnline = async (url = "http://www.google.ca") => {
+    #isOnline = async (url = "http://www.google.ca") => {
         try {
             const online = await fetch(url);
             return (online.status >= 200 && online.status < 300);
@@ -31,9 +31,9 @@ class Disconnect {
      */
     async run(time) {
         while (true) {
-            await this.sleep(time);
+            await this.#sleep(time);
             
-            let connected = await this.isOnline()
+            let connected = await this.#isOnline()
             if (!connected) process.exit();
         }
     }

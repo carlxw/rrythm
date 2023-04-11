@@ -1,6 +1,8 @@
 const YouTube = require("./YouTube.js");
 const { EmbedBuilder } = require("discord.js");
 
+const yt = new YouTube();
+
 class Discord {
     /**
      * Method gets the message author's name
@@ -43,11 +45,10 @@ class Discord {
     embedPlay(message) {
         const { musicPlayer } = require("../index.js");
         const queue = musicPlayer.queue;
-        const yt = new YouTube();
 
         let songDuration
         if (queue.recentAdded.isLive) songDuration = "LIVE";
-        else songDuration = yt.secToMinSec(queue.recentAdded.duration);
+        else songDuration = this.#secToMinSec(queue.recentAdded.duration);
 
         const output = new EmbedBuilder()
             .setColor("#FF3741")
@@ -73,15 +74,14 @@ class Discord {
     async embedAddedToQueue(message) {
         const { musicPlayer } = require("../index.js");
         const queue = musicPlayer.queue;
-        const yt = new YouTube();
 
         let songDuration
         if (queue.recentAdded.isLive) songDuration = "LIVE";
-        else songDuration = yt.secToMinSec(queue.recentAdded.duration);
+        else songDuration = this.#secToMinSec(queue.recentAdded.duration);
         
-        let queueDuration = yt.getQueueDuration(queue) - Math.floor((queue.recentPopped.stream.playbackDuration)/1000, 1) - queue.recentAdded.duration;
+        let queueDuration = this.#getQueueDuration(queue) - Math.floor((queue.recentPopped.stream.playbackDuration)/1000, 1) - queue.recentAdded.duration;
         if (queueDuration <= 0 ) queueDuration = "Now";
-        else queueDuration = yt.secToMinSec(queueDuration);
+        else queueDuration = this.#secToMinSec(queueDuration);
 
         const output = new EmbedBuilder()
             .setColor("#FF3741")
@@ -107,7 +107,6 @@ class Discord {
      */
     embedPlaylist(message, playlist) {
         const userAvatar = this.getUserAvatar(message);
-        const yt = new YouTube();
 
         const videoArrLen = yt.playlist_videos(playlist).length;
 
@@ -155,7 +154,6 @@ class Discord {
      * @returns Formatted description (String)
      */
     generateQueueList(queue, page) {       
-        const yt = new YouTube();
         let output = "";
         const array = queue.getArray();
 
@@ -164,7 +162,7 @@ class Discord {
             // Now playing - Video title -> Video link -> Video Duration -> Requested by
             output += "__Now Playing:__\n";
             if (queue.recentPopped.isLive) output += "[" + queue.recentPopped.title + "](" + queue.recentPopped.link + ") | `" + "LIVE" + " Requested by: " + queue.recentPopped.requestedBy + "`\n\n";
-            else output += "[" + queue.recentPopped.title + "](" + queue.recentPopped.link + ") | `" + yt.secToMinSec(queue.recentPopped.duration) + " Requested by: " + queue.recentPopped.requestedBy + "`\n\n";
+            else output += "[" + queue.recentPopped.title + "](" + queue.recentPopped.link + ") | `" + this.#secToMinSec(queue.recentPopped.duration) + " Requested by: " + queue.recentPopped.requestedBy + "`\n\n";
             output += "__Up Next:__\n";
         }
 
@@ -173,13 +171,13 @@ class Discord {
             if (i > array.length-1) break;
 
             if (array[i].isLive) output += "`" + (i+1) + ".`  " + "[" + array[i].title + "](" + array[i].link + ") | `" + "LIVE" + " Requested by: " + array[i].requestedBy + "`\n\n";
-            else output += "`" + (i+1) + ".`  " + "[" + array[i].title + "](" + array[i].link + ") | `" + yt.secToMinSec(array[i].duration) + " Requested by: " + array[i].requestedBy + "`\n\n";
+            else output += "`" + (i+1) + ".`  " + "[" + array[i].title + "](" + array[i].link + ") | `" + this.#secToMinSec(array[i].duration) + " Requested by: " + array[i].requestedBy + "`\n\n";
         }
         output += "\n";
 
         // Queue information - # songs in queue | #:## total length
-        if (queue.length() === 1) output += `**${queue.length()} song in queue | ${yt.secToMinSec(yt.getQueueDuration(queue))} total length**`
-        else output += `**${queue.length()} songs in queue | ${yt.secToMinSec(yt.getQueueDuration(queue))} total length**`
+        if (queue.length() === 1) output += `**${queue.length()} song in queue | ${this.#secToMinSec(this.#getQueueDuration(queue))} total length**`
+        else output += `**${queue.length()} songs in queue | ${this.#secToMinSec(this.#getQueueDuration(queue))} total length**`
 
         return String(output);
     }
@@ -192,7 +190,6 @@ class Discord {
      */
     embedNowPlaying() {
         const { musicPlayer } = require("../index.js");
-        const yt = new YouTube();
 
         const output = new EmbedBuilder()
             .setColor('#FF3741')
@@ -208,8 +205,6 @@ class Discord {
      * @returns Contents for the now playing embed
      */
     generateNPDescription(element) {
-        const yt = new YouTube();
-
         // Current time in seconds
         const currentTime = Math.floor(element.stream.playbackDuration/1000, 1);
         // Total time in seconds
@@ -230,11 +225,42 @@ class Discord {
         output += "`\n\n";
 
         // Time
-        output += "`" + yt.secToMinSec(currentTime) + " / " + yt.secToMinSec(totalTime) + "`";
+        output += "`" + this.#secToMinSec(currentTime) + " / " + this.#secToMinSec(totalTime) + "`";
         output += "\n\n";
 
         // Requested by
         output += "`Requested by:` " + element.requestedBy;
+        return output;
+    }
+
+    /**
+     * Method converts raw seconds into min:seconds
+     * 
+     * @param {Integer} seconds Duration of a video
+     * @returns Formatted of mm:ss
+     */
+    #secToMinSec(input) {
+        const toMin = input/60;
+        const min = Math.floor(toMin);
+        const seconds = Math.floor((toMin-min)*60);
+        if (seconds < 10) return `${min}:0${seconds}`;
+        else return `${min}:${seconds}`;
+    }
+
+    /**
+     * Method gets the duration of the queue
+     * 
+     * @param {Queue} queue Queue that contains song links
+     * @returns Duration of queue in seconds
+     */
+    #getQueueDuration(queue) {
+        let array = queue.getArray();
+        array.push(queue.recentPopped); // Include what is currently playing
+        let output = 0;
+        // Store everything in one go?
+        for (let i = 0; i < array.length; i++) {
+            output += Number(array[i].duration);
+        }
         return output;
     }
 }

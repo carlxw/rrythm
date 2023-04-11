@@ -16,7 +16,7 @@ class YouTube {
         const YouTubeStream = require("./YouTubeStream.js");
         
         argument = argument.trim();
-        let [ info ] = await this.getInfo(argument);
+        let [ info ] = await this.#getInfo(argument);
 
         let link;
         if (play.yt_validate(argument) === "video") link = argument;
@@ -50,29 +50,15 @@ class YouTube {
     }
 
     /**
-     * Method converts raw seconds into min:seconds
-     * 
-     * @param {Integer} seconds Duration of a video
-     * @returns Formatted of mm:ss
-     */
-    secToMinSec(input) {
-        const toMin = input/60;
-        const min = Math.floor(toMin);
-        const seconds = Math.floor((toMin-min)*60);
-        if (seconds < 10) return `${min}:0${seconds}`;
-        else return `${min}:${seconds}`;
-    }
-    
-    /**
      * Method accquires video information using play-dl
      * 
      * @param {String} input Search keyword or URL
      * @returns Array of data
      */
-    async getInfo(input){
+    async #getInfo(input){
         // Simple URL Detection
         if (input.includes("www.") || input.includes(".com") || input.includes("https")) {
-            input = this.detect_process_ab(input);
+            input = this.#detect_process_ab(input);
         }
 
         let yt_info = await play.search(input, {
@@ -100,30 +86,13 @@ class YouTube {
     }
 
     /**
-     * Method gets the duration of the queue
-     * 
-     * @param {Queue} queue Queue that contains song links
-     * @returns Duration of queue in seconds
-     */
-    getQueueDuration(queue) {
-        let array = queue.getArray();
-        array.push(queue.recentPopped); // Include what is currently playing
-        let output = 0;
-        // Store everything in one go?
-        for (let i = 0; i < array.length; i++) {
-            output += Number(array[i].duration);
-        }
-        return output;
-    }
-
-    /**
      * 2023-04-02: AdBlock messes with the URL by adding a "&ab_channel=" to the URL
      * which messes up with the bot's search algorithm. 
      * 
      * @param {String} link URL with possibility of containning AdBlock link
      * @returns Processed link if it does contain "&ab_channel="
      */
-    detect_process_ab(link) {
+    #detect_process_ab(link) {
         if (!link.includes("&ab_channel=")) return link;
 
         // The link contains AdBlock URL parameter
