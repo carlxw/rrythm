@@ -50,24 +50,6 @@ class YouTube {
     }
 
     /**
-     * Method accquires video information using play-dl
-     * 
-     * @param {String} input Search keyword or URL
-     * @returns Array of data
-     */
-    async #getInfo(input){
-        // Simple URL Detection
-        if (input.includes("www.") || input.includes(".com") || input.includes("https")) {
-            input = this.#detect_process_ab(input);
-        }
-
-        let yt_info = await play.search(input, {
-            limit: 1
-        })
-        return yt_info;
-    }
-
-    /**
      * Using YTDL, returns something that is playable by discord.js/voice AudioPlayer
      * 
      * @param {String} url A URL
@@ -83,6 +65,24 @@ class YouTube {
         return createAudioResource(source.stream, {
             inputType: source.type
         });
+    }
+
+    /**
+     * Method accquires video information using play-dl
+     * 
+     * @param {String} input Search keyword or URL
+     * @returns Array of data
+     */
+    async #getInfo(input){
+        // Simple URL Detection
+        if (input.includes("www.") || input.includes(".com") || input.includes("https")) {
+            input = this.#detect_process_ab(input);
+        }
+
+        let yt_info = await play.search(input, {
+            limit: 1
+        })
+        return yt_info;
     }
 
     /**

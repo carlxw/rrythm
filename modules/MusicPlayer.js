@@ -7,6 +7,57 @@ const yt = new YouTube();
 const discord = new Discord();
 
 class MusicPlayer {
+    // Auto disconnect that activates when there is nothing in queue
+    #startTimer() {
+        this.timer = setTimeout(() => { this.destroy() }, 2*60000);
+        console.log("Disconnect timer started");
+    }
+
+    /**
+     * Plays audio, private method
+     */
+    async #playAudio() {
+        // Self-destruct if bot is alone in a voice call
+        if (!this.message.member.voice.channel) {
+            this.destroy();
+            this.message.channel.send({embeds: [discord.embedText("**Successfully disconnected** 📭")]});
+            return;
+        }
+        
+        if (this.loop) {
+            const loopedResource = await yt.getStream(this.queue.recentPopped.link); 
+            this.player.play(loopedResource);
+        }
+        // For skip command
+        else if (this.queue.isEmpty()) {
+            this.player.stop();
+            this.#startTimer();
+        }
+        else {
+            const stream = await yt.getStream(this.queue.pop().link)
+            this.queue.recentPopped.stream = stream;
+            this.player.play(stream);
+        }
+    }
+
+    /**
+     * Creates a voice channel connection
+     *
+     * @param {String (ID)} message User that called bot
+     * @returns connection to the voice channel
+     */
+    #createConnection(message) {  
+        const { joinVoiceChannel } = require("@discordjs/voice");
+        this.connection = joinVoiceChannel({
+            channelId: message.member.voice.channel.id,
+            guildId: message.guild.id,
+            adapterCreator: message.guild.voiceAdapterCreator,
+            selfMute: false,
+            selfDeaf: false
+        });
+        this.connection.subscribe(this.player);
+    }
+    
     create(message) {
         this.player = DiscordVoice.createAudioPlayer();
         this.queue = new Queue();
@@ -40,12 +91,6 @@ class MusicPlayer {
         });
     }
 
-    // Auto disconnect that activates when there is nothing in queue
-    #startTimer() {
-        this.timer = setTimeout(() => { this.destroy() }, 2*60000);
-        console.log("Disconnect timer started");
-    }
-
     destroy() {
         console.log("Disconnected")
         if (this.player) this.player.stop();
@@ -56,24 +101,6 @@ class MusicPlayer {
         this.loop = null;
         if (this.connection) this.connection.destroy();
         this.connection = null;
-    }
-
-    /**
-     * Creates a voice channel connection
-     *
-     * @param {String (ID)} message User that called bot
-     * @returns connection to the voice channel
-     */
-    #createConnection(message) {  
-        const { joinVoiceChannel } = require("@discordjs/voice");
-        this.connection = joinVoiceChannel({
-            channelId: message.member.voice.channel.id,
-            guildId: message.guild.id,
-            adapterCreator: message.guild.voiceAdapterCreator,
-            selfMute: false,
-            selfDeaf: false
-        });
-        this.connection.subscribe(this.player);
     }
 
     /**
@@ -134,33 +161,6 @@ class MusicPlayer {
     }
 
     /**
-     * Plays audio, private method
-     */
-    async #playAudio() {
-        // Self-destruct if bot is alone in a voice call
-        if (!this.message.member.voice.channel) {
-            this.destroy();
-            this.message.channel.send({embeds: [discord.embedText("**Successfully disconnected** 📭")]});
-            return;
-        }
-        
-        if (this.loop) {
-            const loopedResource = await yt.getStream(this.queue.recentPopped.link); 
-            this.player.play(loopedResource);
-        }
-        // For skip command
-        else if (this.queue.isEmpty()) {
-            this.player.stop();
-            this.#startTimer();
-        }
-        else {
-            const stream = await yt.getStream(this.queue.pop().link)
-            this.queue.recentPopped.stream = stream;
-            this.player.play(stream);
-        }
-    }
-
-    /**
      * Skips to next song in queue
      */
     async skip() {
@@ -169,7 +169,6 @@ class MusicPlayer {
 
     /**
      * Pauses the player
-     * 
      * @returns boolean
      */
     pause() {
