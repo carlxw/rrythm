@@ -1,29 +1,86 @@
-# rrythm
+# Rrythm Discord Music Bot
+> node.js Rythm (note the spelling) clone, replicating essential fetaures for in-call music entertainment
 
-## What Is It?
-rrythm first started off as a clone to Discord's famous [Rythm music bot](https://rythm.fm/). After starting a version 2 of the project, I moved away from the idea of just making this project a clone by adding my interpertation of what a modernized version would look like, had Rythm never shut down in the first place. This is my first major project where I overcame many milestones and adversities, which greatly kickstarted my passion into programming and creating things in general.
+## Prerequisites
+Install NPM packages
+```
+npm i
+```
+Start the program
+```
+node .
+```
+Run the program through a Python script to allow auto-restart on crash/disconnect
+```
+python3 Launch.py
+```
 
-## Why Did I Make This?
-Ever since Rythm was shut down (during a global pandemic), I noticed that all of my friends stopped hanging around in voice channels as much anymore. In the past, they would hang around in voice channels until very late, listening to music using the bot. In hopes for a programming challenge and to bring back the past, I decided to tackle on making a Discord bot without much prior knowledge to the process. 
+## Docs/Usage
+### `!clear`
+Clears the music player queue
 
-## Features Of This Project
-* Modular code organization and structure for easy maintenance accomplished through `fs`
-* Interactive Discord bot that is capable of playing music using a media stream from YouTube  
-* Created classes (i.e., `MusicPlayer`, `Discord`, `YouTubeStream`) to enable reusable code to be more accessible
+### `!disconnect` or `!dc`
+Disconnects the bot from the voice call
 
-## Things I Learned While Making This Project
-* How to read and follow documentation
-* How to organize code and create a GitHub repository
-* The process of cloing an existing application
-* How to host this on my own Raspberry Pi
-* How to use getters to read object data for logic flow
+### `!loop`
+Loop the currently playing song (not the queue)
 
-## Packages I used
-* Discord.js
-* Discord.js/voice (and other packages for audio optimization)
-* play-dl
+### `!nowplaying` or `!np`
+Displays the song that is currently playing
 
-## Future Ideas
-* A command to shuffle the queue, similar to what Rythm could do
-* Lyrics feature
-* Implement slash commands, as it is the modern way to interact with Discord bots
+### `!pause`
+Pause the music player
+
+### `!play` or `!p` (multiple uses)
+1. Without any parameters - Toggle music player play/pause
+```
+!play
+```
+
+2. With a `YouTube video URL` as a parameter - Add the song to the queue
+```
+!play https://www.youtube.com/watch?v=dQw4w9WgXcQ
+```
+
+3. With a `search keyword` - Adds the returned search result to the queue
+```
+!play joji glimpse of us
+```
+
+4. With a playlist URL
+
+### `!playtop` or `!ptop`
+With a `search keyword` or `YouTube URL`, add the returned search result to the top of the queue
+```
+!playtop https://www.youtube.com/watch?v=dQw4w9WgXcQ
+!playtop joji glimpse of us
+```
+
+### `!queue` or `!q`   
+Displays the list of songs that are currently in queue
+
+### `!remove`
+Remove a queued video, based on a given index, from the music player queue. 
+<br>
+The following example demonstrates removing the 4th item from the queue
+```
+!remove 4
+```
+
+### `!skip` or `!s`
+Skip the currently playing song
+
+## Technologies Used
+* [Discord.js](https://discord.js.org/)
+* [Discord.js/voice](https://discordjs.guide/voice/) and dependencies
+* [play-dl](https://www.npmjs.com/package/play-dl)
+
+## Feature Roadmap
+- [ ] Investigate playback stability
+- [ ] Add a shuffle feature
+- [ ] Investigate playlist stability
+- [ ] Implement lyrics lookup
+- [ ] Incorporate slash commands into bot usage
+
+# Demo
+Coming soon...
