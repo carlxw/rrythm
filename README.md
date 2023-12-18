@@ -1,6 +1,10 @@
 # Rrythm Discord Music Bot
 > node.js Rythm (note the spelling) clone, replicating essential fetaures for in-call music entertainment
 
+![Screenshot1](./img/Rrythm_1.png)
+![Screenshot2](./img/Rrythm_2.png)
+![Screenshot3](./img/Rrythm_3.png)
+
 ## Prerequisites
 Install NPM packages
 ```
@@ -81,6 +85,7 @@ Skip the currently playing song
 - [ ] Investigate playlist stability
 - [ ] Implement lyrics lookup
 - [ ] Incorporate slash commands into bot usage
+- [ ] Remove Discord tag retrieval due to depreciation
 
 # Demo
 Coming soon...
