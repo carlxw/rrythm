@@ -11,5 +11,6 @@
     "removed_msg1": "**Removed** `",
     "removed_msg2": "✅",
     "failed_remove_msg": "❌ Failed to remove item.",
-    "skipped_msg": "**Skipped** ⏩"
+    "skipped_msg": "**Skipped** ⏩",
+    "shuffle_msg": "**Shuffled queue 👌**"
 }

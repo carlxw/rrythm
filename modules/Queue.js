@@ -88,6 +88,15 @@ class Queue {
         this.items = [];
         this.tail = 0;
     }
+
+    // Shuffle the list
+    // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+    shuffle() {
+        for (let i = this.items.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.items[i], this.items[j]] = [this.items[j], this.items[i]];
+        }
+    }
 }
 
 module.exports = Queue;

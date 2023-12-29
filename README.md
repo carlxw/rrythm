@@ -74,6 +74,9 @@ The following example demonstrates removing the 4th item from the queue
 ### `!skip` or `!s`
 Skip the currently playing song
 
+### !`shuffle`
+Shuffles the elements inside of the queue
+
 ## Technologies Used
 * [Discord.js](https://discord.js.org/)
 * [Discord.js/voice](https://discordjs.guide/voice/) and dependencies
@@ -81,11 +84,14 @@ Skip the currently playing song
 
 ## Feature Roadmap
 - [ ] Investigate playback stability
-- [ ] Add a shuffle feature
-- [ ] Investigate playlist stability
+- [x] Add a shuffle feature
+- [ ] Investigate playlist stability (linked list queue implementation?)
 - [ ] Implement lyrics lookup
 - [ ] Incorporate slash commands into bot usage
 - [ ] Remove Discord tag retrieval due to depreciation
+- [ ] Write unit tests for the commands to verify functionality
+- [ ] Refactor modules (i.e., move class variables inside create() into constructor)
+- [ ] Update to the latest Discord.js version
 
 # Demo
 Coming soon...
